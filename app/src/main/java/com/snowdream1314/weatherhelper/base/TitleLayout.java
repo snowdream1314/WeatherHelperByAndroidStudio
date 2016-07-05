@@ -1,0 +1,17 @@
+package com.snowdream1314.weatherhelper.base;
+
+import android.view.View;
+
+/**
+ * Created by xxq on 2016/7/5.
+ */
+public interface TitleLayout {
+    public void setTitleLayoutTitle(View view, String title);
+    public void setTitleLayoutSubTitle(View view, String title);
+    public void showBackButton(View view);
+    public void showBackButton(View view, View.OnClickListener clickListener);
+    public void showLeftButton(View view, View.OnClickListener clickListener);
+    public void showRightButton(View view, int resId, View.OnClickListener clickListener);
+    public void showRightText(View view, String text, View.OnClickListener clickListener);
+    public void showCirclePageIndicator(View view);
+}
