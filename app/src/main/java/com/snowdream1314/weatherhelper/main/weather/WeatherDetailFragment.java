@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.snowdream1314.weatherhelper.R;
+import com.snowdream1314.weatherhelper.bean.AddressComponent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,12 +68,16 @@ public class WeatherDetailFragment extends Fragment {
             fore_date3,fore_date3_weather,fore_date3_tempLow,fore_date3_tempHigh,fore_date3_fx,fore_date3_fl,
             fore_date4,fore_date4_weather,fore_date4_tempLow,fore_date4_tempHigh,fore_date4_fx,fore_date4_fl;
 
+    private String cityName;
+    private AddressComponent addressComponent;
+
     public WeatherDetailFragment() {
         // Required empty public constructor
     }
 
-    public static WeatherDetailFragment instance() {
+    public static WeatherDetailFragment instance(AddressComponent addressComponent) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
+        fragment.addressComponent = addressComponent;
         return fragment;
     }
 
@@ -140,6 +145,17 @@ public class WeatherDetailFragment extends Fragment {
         currentDate = (TextView) rootView.findViewById(R.id.date);
 //		switchCity = (Button) rootView.findViewById(R.id.switch_city);
 //		refreshWeather = (Button) rootView.findViewById(R.id.refresh_weather);
+    }
+
+    public String getTitle() {
+        return (addressComponent.getCity() + addressComponent.getDistrict());
+    }
+
+    public String getSubTitle() {
+        if (addressComponent.getStreet() != null) {
+            return addressComponent.getStreet();
+        }
+        return "";
     }
 
 }
