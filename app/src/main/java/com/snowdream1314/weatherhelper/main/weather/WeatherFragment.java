@@ -22,16 +22,12 @@ import com.baidu.location.Poi;
 import com.snowdream1314.weatherhelper.R;
 import com.snowdream1314.weatherhelper.base.TitleLayoutFragment;
 import com.snowdream1314.weatherhelper.bean.AddressComponent;
-import com.snowdream1314.weatherhelper.util.HttpCallbackListener;
-import com.snowdream1314.weatherhelper.util.HttpUtil;
 import com.snowdream1314.weatherhelper.util.WHRequest;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,7 +64,8 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
             mLocationClient.start();
 
             showLeftButton(view, clickListener);
-            showRightButton(view, R.mipmap.btn_more, clickListener);
+            showShareButton(view, clickListener);
+            showFeedsButton(view, clickListener);
 
             viewPager = (ViewPager) rootView.findViewById(R.id.vp_weather);
             WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
@@ -172,26 +169,27 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
     @Override
     public void requestSuccess(WHRequest req, String data) {
         Log.i("requestSuccess", data);
-//        try {
-//            JSONObject jsonObject = new JSONObject(data);
-//            JSONObject result = jsonObject.getJSONObject("result");
-//
-//            AddressComponent addressComponent = new AddressComponent();
-//
-//            addressComponent.setCity(result.getJSONObject("addressComponent").getString("city"));
-//            addressComponent.setDistrict(result.getJSONObject("addressComponent").getString("district"));
-//            addressComponent.setStreet(result.getJSONObject("addressComponent").getString("street"));
-//
-//            WeatherDetailFragment fragment = WeatherDetailFragment.instance(addressComponent);
-//            fragments.add(fragment);
-//
-//            WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
-//            viewPager.setAdapter(adapter);
-//            viewPager.addOnPageChangeListener(pageChangeListener);
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            JSONObject jsonObject = new JSONObject(data);
+            JSONObject result = jsonObject.getJSONObject("result");
+
+            AddressComponent addressComponent = new AddressComponent();
+
+            addressComponent.setCity(result.getJSONObject("addressComponent").getString("city"));
+            addressComponent.setDistrict(result.getJSONObject("addressComponent").getString("district"));
+            addressComponent.setStreet(result.getJSONObject("addressComponent").getString("street"));
+
+            WeatherDetailFragment fragment = WeatherDetailFragment.instance(addressComponent);
+            fragments.add(fragment);
+
+            WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
+            viewPager.setAdapter(adapter);
+            viewPager.addOnPageChangeListener(pageChangeListener);
+            setTitleLayoutTitle(rootView, addressComponent.getCity());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -199,43 +197,44 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
         Log.i("requestFail", message);
     }
 
-    private void query(final String address) {
-        HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
-            @Override
-            public void onFinish(String response) {
-                Log.i("response", response);
-
-                if (response != null && response.length() != 0) {
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        JSONObject result = jsonObject.getJSONObject("result");
-
-                        AddressComponent addressComponent = new AddressComponent();
-
-                        addressComponent.setCity(result.getJSONObject("addressComponent").getString("city"));
-                        addressComponent.setDistrict(result.getJSONObject("addressComponent").getString("district"));
-                        addressComponent.setStreet(result.getJSONObject("addressComponent").getString("street"));
-
-                        WeatherDetailFragment fragment = WeatherDetailFragment.instance(addressComponent);
-                        fragments.add(fragment);
-
-                        WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
-                        viewPager.setAdapter(adapter);
-                        viewPager.addOnPageChangeListener(pageChangeListener);
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-
-            @Override
-            public void onError(Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
+//    private void query(final String address) {
+//        HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
+//            @Override
+//            public void onFinish(String response) {
+//                Log.i("response", response);
+//
+//                if (response != null && response.length() != 0) {
+//                    try {
+//                        JSONObject jsonObject = new JSONObject(response);
+//                        JSONObject result = jsonObject.getJSONObject("result");
+//
+//                        AddressComponent addressComponent = new AddressComponent();
+//
+//                        addressComponent.setCity(result.getJSONObject("addressComponent").getString("city"));
+//                        addressComponent.setDistrict(result.getJSONObject("addressComponent").getString("district"));
+//                        addressComponent.setStreet(result.getJSONObject("addressComponent").getString("street"));
+//
+//                        WeatherDetailFragment fragment = WeatherDetailFragment.instance(addressComponent);
+//                        fragments.add(fragment);
+//
+//                        WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
+//                        viewPager.setAdapter(adapter);
+//                        viewPager.addOnPageChangeListener(pageChangeListener);
+//                        viewPager.setCurrentItem(0);
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//                e.printStackTrace();
+//            }
+//        });
+//    }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override

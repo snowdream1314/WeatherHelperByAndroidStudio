@@ -3,6 +3,7 @@ package com.snowdream1314.weatherhelper.main.weather;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.snowdream1314.weatherhelper.R;
+import com.snowdream1314.weatherhelper.base.TitleLayoutFragment;
 import com.snowdream1314.weatherhelper.bean.AddressComponent;
 
 /**

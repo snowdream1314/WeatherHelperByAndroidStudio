@@ -80,6 +80,20 @@ public class TitleLayoutFragment extends Fragment implements TitleLayout{
     }
 
     @Override
+    public void showShareButton(View view, View.OnClickListener clickListener) {
+        ImageButton share = (ImageButton) view.findViewById(R.id.ib_share);
+        share.setOnClickListener(clickListener);
+        share.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showFeedsButton(View view, View.OnClickListener clickListener) {
+        ImageButton feeds = (ImageButton) view.findViewById(R.id.ib_feeds);
+        feeds.setOnClickListener(clickListener);
+        feeds.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void showCirclePageIndicator(View view) {
         circlePageIndicator = (CirclePageIndicator) view.findViewById(R.id.cpi);
         circlePageIndicator.setVisibility(View.VISIBLE);

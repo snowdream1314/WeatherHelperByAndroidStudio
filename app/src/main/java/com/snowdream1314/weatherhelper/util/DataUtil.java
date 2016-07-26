@@ -81,7 +81,6 @@ public class DataUtil {
                 String result = null;
                 try {
                     response = client.newCall(request).execute();
-                    Log.i("result", response.body().string());
                     if (response != null && response.isSuccessful()) {
                         result = response.body().string();
                         Log.i("result", result);
