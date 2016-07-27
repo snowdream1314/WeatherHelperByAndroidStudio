@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.snowdream1314.weatherhelper.main.weather.WeatherFragment"
-    >
+    android:background="@mipmap/bg0_fine_day">
 
     <!-- TODO: Update blank fragment layout -->
 

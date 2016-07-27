@@ -1,7 +1,6 @@
 package com.snowdream1314.weatherhelper.main.weather;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -197,44 +195,6 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
         Log.i("requestFail", message);
     }
 
-//    private void query(final String address) {
-//        HttpUtil.sendHttpRequest(address, new HttpCallbackListener() {
-//            @Override
-//            public void onFinish(String response) {
-//                Log.i("response", response);
-//
-//                if (response != null && response.length() != 0) {
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(response);
-//                        JSONObject result = jsonObject.getJSONObject("result");
-//
-//                        AddressComponent addressComponent = new AddressComponent();
-//
-//                        addressComponent.setCity(result.getJSONObject("addressComponent").getString("city"));
-//                        addressComponent.setDistrict(result.getJSONObject("addressComponent").getString("district"));
-//                        addressComponent.setStreet(result.getJSONObject("addressComponent").getString("street"));
-//
-//                        WeatherDetailFragment fragment = WeatherDetailFragment.instance(addressComponent);
-//                        fragments.add(fragment);
-//
-//                        WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
-//                        viewPager.setAdapter(adapter);
-//                        viewPager.addOnPageChangeListener(pageChangeListener);
-//                        viewPager.setCurrentItem(0);
-//
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onError(Exception e) {
-//                e.printStackTrace();
-//            }
-//        });
-//    }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
