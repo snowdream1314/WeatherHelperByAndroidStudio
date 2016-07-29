@@ -3,17 +3,25 @@ package com.snowdream1314.weatherhelper.main;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.snowdream1314.weatherhelper.R;
+import com.snowdream1314.weatherhelper.constant.WHConstant;
 import com.snowdream1314.weatherhelper.main.usercenter.UserCenterFragment;
 import com.snowdream1314.weatherhelper.main.weather.WeatherFragment;
+import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
+import com.snowdream1314.weatherhelper.util.MySharedPreference;
+import com.snowdream1314.weatherhelper.util.Utility;
+
+import java.io.InputStream;
 
 public class MainActivity extends FragmentActivity {
 
     private FragmentTabHost tabHost;
+    private CoolWeatherDB coolWeatherDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,7 @@ public class MainActivity extends FragmentActivity {
         tabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
         initTabHost();
+
     }
 
     private void initTabHost() {
@@ -46,4 +55,5 @@ public class MainActivity extends FragmentActivity {
         return view;
 
     }
+
 }

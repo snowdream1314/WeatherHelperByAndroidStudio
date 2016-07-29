@@ -14,7 +14,8 @@ import java.util.Map;
 public class WHRequest implements DataUtil.NetReceiveDelete{
 
     public enum Req_Tag{
-        Tag_City
+        Tag_City,
+        Tag_Weather
     }
 
     public interface WHRequestDelegate {
@@ -42,6 +43,12 @@ public class WHRequest implements DataUtil.NetReceiveDelete{
         params.put("location", latitude + "," + longitude);
         params.put("key", WHConstant.BDAPI_KEY);
         request(WHConstant.GeoCoder_Url, params, Req_Tag.Tag_City);
+    }
+
+    public void queryWeather(String cityCode) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("citykey", cityCode);
+        request(WHConstant.Weather_APi, params, Req_Tag.Tag_Weather);
     }
 
 

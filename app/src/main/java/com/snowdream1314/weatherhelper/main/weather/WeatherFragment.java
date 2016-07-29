@@ -20,10 +20,15 @@ import com.baidu.location.Poi;
 import com.snowdream1314.weatherhelper.R;
 import com.snowdream1314.weatherhelper.base.TitleLayoutFragment;
 import com.snowdream1314.weatherhelper.bean.AddressComponent;
+import com.snowdream1314.weatherhelper.constant.WHConstant;
+import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
+import com.snowdream1314.weatherhelper.util.MySharedPreference;
+import com.snowdream1314.weatherhelper.util.Utility;
 import com.snowdream1314.weatherhelper.util.WHRequest;
 
 import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,12 +45,41 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
     public LocationClient mLocationClient = null;
     public BDLocationListener mLocationListener = new MyLocationListener();
 
+    private CoolWeatherDB coolWeatherDB;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLocationClient = new LocationClient(getContext());
         mLocationClient.registerLocationListener(mLocationListener);
+        coolWeatherDB = CoolWeatherDB.getInstance(getContext());
+
+        MySharedPreference sp = new MySharedPreference(getContext());
+        if (!sp.getKeyBoolean(WHConstant.SharePreference_FirstLoadDB)) {
+            sp.setKeyBoolean(WHConstant.SharePreference_FirstLoadDB, true);
+            initCoolWeatherDB();
+        }
+    }
+
+    private void initCoolWeatherDB() {
+        coolWeatherDB = CoolWeatherDB.getInstance(getContext());
+        Log.i("city_list",readXMLFromRaw(R.raw.city_list));
+        Utility.handleCitiesResponse(coolWeatherDB, readXMLFromRaw(R.raw.city_list));
+    }
+
+    private String readXMLFromRaw(int file) {
+        try {
+            InputStream is  = getResources().openRawResource(file);
+            byte [] buffer = new byte[is.available()] ;
+            is.read(buffer);
+            is.close();
+            String xml = new String(buffer);
+            return xml;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -157,10 +191,16 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
                 }
             }
             Log.i("BaiduLocationApiDem", sb.toString());
+//            try {
+//                Log.i("try_city", coolWeatherDB.loadCity("杭州").getCityCode());
+//                Log.i("load_city", coolWeatherDB.loadCity(location.getCity().replace("市","")).toString());
+//
+//                Log.i("city_code", coolWeatherDB.loadCity(location.getCity().replace("市","")).getCityCode());
+//
+//            }catch (Exception e) {
+//                e.printStackTrace();
+//            }
 
-            WHRequest request = new WHRequest(getContext());
-            request.setDelegate(WeatherFragment.this);
-            request.queryLocationCity(location.getLatitude(), location.getLongitude());
         }
     }
 

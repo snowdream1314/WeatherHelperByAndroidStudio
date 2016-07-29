@@ -2,13 +2,12 @@ package com.snowdream1314.weatherhelper.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.snowdream1314.weatherhelper.bean.City;
-import com.snowdream1314.weatherhelper.bean.CoolWeatherDB;
-import com.snowdream1314.weatherhelper.bean.Country;
 import com.snowdream1314.weatherhelper.bean.JsonBean;
-import com.snowdream1314.weatherhelper.bean.Province;
+import com.snowdream1314.weatherhelper.bean.RespWeather;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -25,138 +24,10 @@ public class Utility {
 
 	private static String xmlData;
 	private static String xmlDatas;
-	private static WeatherZhiShu weatherZhiShu;
-	private static List<WeatherZhiShu> zhiShus;
-	private static Weather weather;
-	private static List<Weather> weatherList;
 	private static List<String> weatherDatas;
-	//	private static String updateTime,cityName,shidu,pm25,suggest,quality,fengXiang,fengLi,
-//						  tempNow,aqi,sunrise_1,sunset_1,MajorPollutants;
-	//天气生活指数类
-	public static class WeatherZhiShu {
-		private String name;
-		private String value;
-		private String detail;
 
-		public String getName() {
-			return name;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public String getDetail() {
-			return detail;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public void setValue(String value) {
-			this.value = value;
-		}
-
-		public void setDetail(String detail) {
-			this.detail = detail;
-		}
-	}
-
-	//天气预报类
-	public static class Weather {
-		private String date;
-		private String high;
-		private String low;
-		private day day;
-		private night night;
-
-		public String getDate() {
-			return date;
-		}
-		public void setDate(String date) {
-			this.date = date;
-		}
-
-		public String getHigh() {
-			return high;
-		}
-		public void setHigh(String high) {
-			this.high = high;
-		}
-
-		public String getLow() {
-			return low;
-		}
-		public void setLow(String low) {
-			this.low = low;
-		}
-
-		public day getDay() {
-			return day;
-		}
-
-		public night getNight() {
-			return night;
-		}
-
-		public static class day {
-			private String type;
-			private String fengxiang;
-			private String fengli;
-
-			public String getType () {
-				return type;
-			}
-			public void setType(String type) {
-				this.type =type;
-			}
-
-			public String getFengXiang () {
-				return fengxiang;
-			}
-			public void setFengXiang(String fengxiang) {
-				this.fengxiang =fengxiang;
-			}
-
-			public String getFengLi () {
-				return fengli;
-			}
-			public void setFengLi(String fengli) {
-				this.fengli =fengli;
-			}
-		}
-
-		public static class night {
-			private String type;
-			private String fengxiang;
-			private String fengli;
-
-			public String getType () {
-				return type;
-			}
-			public void setType(String type) {
-				this.type =type;
-			}
-
-			public String getFengXiang () {
-				return fengxiang;
-			}
-			public void setFengXiang(String fengxiang) {
-				this.fengxiang =fengxiang;
-			}
-
-			public String getFengLi () {
-				return fengli;
-			}
-			public void setFengLi(String fengli) {
-				this.fengli =fengli;
-			}
-		}
-	}
-
-	//解析处理服务器返回的省级数据
-	public synchronized static boolean handleProvincesResponse(CoolWeatherDB coolWeatherDB, String response) {
+    //解析本地城市列表
+	public synchronized static boolean handleCitiesResponse(CoolWeatherDB coolWeatherDB, String response) {
 		parseXMLWithPull(response.toString());
 		if (xmlDatas.length() > 0) {
 			String[] items = xmlDatas.split(";");
@@ -164,88 +35,15 @@ public class Utility {
 				for (String item : items) {
 					String[] array = item.split(",");
 					//只处理国内的
-					if (array[0].startsWith("101") && array[0].substring(5, 7).equals("01")) {
-						if (array[0].endsWith("00")) {
-							Province province = new Province();
-							province.setProvinceCode(array[0].substring(3, 5));
-							province.setProvinceName(array[3]);
-							//将解析出来的数据存储到Province表
-							coolWeatherDB.saveProvince(province);
-						} else if (array[0].endsWith("01")) {
-							Province province = new Province();
-							province.setProvinceCode(array[0].substring(3, 5));
-							province.setProvinceName(array[3]);
-							//将解析出来的数据存储到Province表
-							coolWeatherDB.saveProvince(province);
-						}
-					}
-				}
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public synchronized static boolean handleCitiesResponse(CoolWeatherDB coolWeatherDB, String response, String provinceCode, int provinceId) {
-		parseXMLWithPull(response.toString());
-		if (xmlDatas.length() > 0) {
-			String[] items = xmlDatas.split(";");
-			if (items != null && items.length > 0) {
-				for (String item : items) {
-					String[] array = item.split(",");
-					//只处理国内的
-					if (array[0].substring(3).startsWith(provinceCode) && array[0].endsWith("00") && array[0].substring(5, 7).equals("01")) {
-						//直辖市
+					if (array[0].startsWith("101")) {
 						City city= new City();
 						city.setCityCode(array[0]);
 						city.setCityNum(array[0].substring(5, 7));
 						city.setCityName(array[1]);
 						city.setCityPyName(array[2]);
-						city.setProvinceId(provinceId);
+						city.setProvinceName(array[3]);
 						//将解析出来的数据存储到City表
 						coolWeatherDB.saveCity(city);
-					} else if (array[0].substring(3).startsWith(provinceCode) && array[0].endsWith("01")) {
-						City city= new City();
-						city.setCityCode(array[0]);
-						city.setCityNum(array[0].substring(5, 7));
-						city.setCityName(array[1]);
-						city.setCityPyName(array[2]);
-						city.setProvinceId(provinceId);
-						//将解析出来的数据存储到City表
-						coolWeatherDB.saveCity(city);
-					}
-				}
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public synchronized static boolean handleCountriesResponse(CoolWeatherDB coolWeatherDB, String response, String cityNum, String provinceCode, int cityId) {
-		if (xmlDatas.length() > 0) {
-			String[] items = xmlDatas.split(";");
-			if (items != null && items.length > 0) {
-				for (String item : items) {
-					String[] array = item.split(",");
-					//只处理国内的
-					if (array[0].substring(3).startsWith(provinceCode)) {
-						if ( array[0].endsWith("00")) {
-							Country country= new Country();
-							country.setCountryCode(array[0]);
-							country.setCountryName(array[1]);
-							country.setCountryPyName(array[2]);
-							country.setCityId(cityId);
-							//将解析出来的数据存储到Country表
-							coolWeatherDB.saveCountry(country);
-						} else if ( array[0].substring(5).startsWith(cityNum)){
-							Country country= new Country();
-							country.setCountryCode(array[0]);
-							country.setCountryName(array[1]);
-							country.setCountryPyName(array[2]);
-							country.setCityId(cityId);
-							//将解析出来的数据存储到Country表
-							coolWeatherDB.saveCountry(country);
-						}
 					}
 				}
 				return true;
@@ -303,21 +101,6 @@ public class Utility {
 	//解析服务器返回的XML天气数据
 	public static void handleWeatherXMLResponse(Context context, String response, SharedPreferences pref) {
 		try {
-			String cityName = "";
-			String updateTime="";
-			String fengLi="";
-			String fengXiang="";
-			String tempNow = "";
-			String aqi = "";
-			String shidu="";
-			String sunrise_1="";
-			String sunset_1="";
-			String pm25="";
-			String suggest="";
-			String quality="";
-			String MajorPollutants="";
-			zhiShus = new ArrayList<WeatherZhiShu>();
-			weatherList = new ArrayList<Weather>();
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 			XmlPullParser xmlPullParser = factory.newPullParser();
 			xmlPullParser.setInput(new StringReader(response));
@@ -327,14 +110,15 @@ public class Utility {
 				switch (eventType) {
 					//开始解析XML节点
 					case XmlPullParser.START_DOCUMENT:
-//	                zhiShus = new ArrayList<WeatherZhiShu>();
-//	                weatherList = new ArrayList<Weather>();
+                        RespWeather weather = new RespWeather();
 						weatherDatas = new ArrayList<String>();
 						break;
 					case XmlPullParser.START_TAG:
 						if ("city".equals(nodeName)) {
 							cityName = xmlPullParser.nextText();
 							weatherDatas.add(cityName);
+                            eventType = xmlPullParser.next();
+
 						}
 						if ("updatetime".equals(nodeName)) {
 							updateTime = xmlPullParser.nextText();
@@ -431,19 +215,11 @@ public class Utility {
 						break;
 
 					case XmlPullParser.END_TAG:
-//					if ("weather".equals(nodeName)) {
-//						weatherList.add(weather);
-//						weather = null;
-//					}
-//					if ("zhishu".equals(nodeName)) {
-//						zhiShus.add(weatherZhiShu);
-//						weatherZhiShu = null;
-//					}
 						if ("resp".equals(nodeName)) {
 							//将获得的数据存入SharedPreferences
 //						saveWeatherXml(context, cityName, updateTime, tempNow, fengLi, fengXiang, shidu, sunrise_1,
 //								sunset_1, aqi, pm25, suggest, quality, MajorPollutants, weatherList, zhiShus);
-							saveWeatherXml(context, pref, weatherDatas, weatherList, zhiShus);
+							saveWeatherXml(context, pref, weatherDatas);
 						}
 						break;
 
@@ -452,42 +228,13 @@ public class Utility {
 				}
 				eventType = xmlPullParser.next();
 			}
-			//DOM法解析多层XML
-//			DocumentBuilderFactory factoryDom = DocumentBuilderFactory.newInstance();  //取得DocumentBuilderFactory实例
-//	        DocumentBuilder builder = factoryDom.newDocumentBuilder(); //从factory获取DocumentBuilder实例
-//	        InputStream inStream = new ByteArrayInputStream(response.getBytes());
-//	        Document doc = builder.parse(inStream);   //解析输入流 得到Document实例
-//	        Element rootElement = doc.getDocumentElement();
-//	        NodeList items = rootElement.getElementsByTagName("weather");
-//	        for (int i=0; i<items.getLength(); i++) {
-//	        	weather =new Weather();
-//	        	Element weatherNode = (Element) items.item(i);
-//	        	weather.setDate(weatherNode.getFirstChild().getNodeValue());
-//	        	NodeList childNodes = weatherNode.getChildNodes();
-//	        	for (int j=0; j<childNodes.getLength(); j++) {
-//	        		weather.setHigh(childNodes.item(1).getNodeValue());
-//	        		weather.setLow(childNodes.item(2).getNodeValue());
-//	        		weather.getDay().setType(childNodes.item(3).getChildNodes().item(0).getNodeValue());
-//	        		weather.getDay().setFengXiang(childNodes.item(3).getChildNodes().item(1).getNodeValue());
-//	        		weather.getDay().setFengLi(childNodes.item(3).getChildNodes().item(2).getNodeValue());
-//	        		weather.getNight().setType(childNodes.item(4).getChildNodes().item(0).getNodeValue());
-//	        		weather.getNight().setFengXiang(childNodes.item(4).getChildNodes().item(1).getNodeValue());
-//	        		weather.getNight().setFengLi(childNodes.item(4).getChildNodes().item(2).getNodeValue());
-//	        	}
-//	        	weatherList.add(weather);
-//	        }
-//	        saveWeatherXml(context, weatherDatas, weatherList, zhiShus);
-//	        inStream.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	//将服务器返回的所有XML天气信息存储到SharedPreferences文件中
-//	public static void saveWeatherXml(Context context, String cityName, String updateTime, String tempNow, String fengLi,
-//			String fengXiang, String shidu, String sunrise_1, String sunset_1, String aqi, String pm25, String suggest,String quality,
-//			String MajorPollutants, List<Weather> weatherList, List<WeatherZhiShu> zhiShus) {
-	public static void saveWeatherXml(Context context, SharedPreferences pref, List<String> weatherDatas, List<Weather> weatherList, List<WeatherZhiShu> zhiShus) {
+	public static void saveWeatherXml(Context context, SharedPreferences pref, List<String> weatherDatas) {
 //		SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
 		SharedPreferences.Editor editor = pref.edit();
 //		editor.putString("city_name", weatherDatas.get(0));
@@ -504,36 +251,6 @@ public class Utility {
 		editor.putString("quality", weatherDatas.get(11));
 		editor.putString("MajorPollutants", weatherDatas.get(12));
 		editor.commit();
-//		editor.putString("city_name", cityName);
-//		editor.putString("updatetime", updateTime);
-//		editor.putString("tempNow", tempNow);
-//		editor.putString("feng_li", fengLi);
-//		editor.putString("feng_xiang", fengXiang);
-//		editor.putString("shidu", shidu);
-//		editor.putString("sunrise_1", sunrise_1);
-//		editor.putString("sunset_1", sunset_1);
-//		editor.putString("aqi", aqi);
-//		editor.putString("pm25", pm25);
-//		editor.putString("suggest", suggest);
-//		editor.putString("quality", quality);
-//		editor.putString("MajorPollutants", MajorPollutants);
-//		for (int i=0; i<5; i++) {
-//			editor.putString("date".concat("_" + Integer.toString(i)), weatherList.get(i).getDate());
-//			editor.putString("highTemp".concat("_" + Integer.toString(i)), weatherList.get(i).getHigh());
-//			editor.putString("lowTemp".concat("_" + Integer.toString(i)), weatherList.get(i).getLow());
-//			editor.putString("dayType".concat("_" + Integer.toString(i)), weatherList.get(i).getDay().getType());
-//			editor.putString("dayFengXiang".concat("_" + Integer.toString(i)), weatherList.get(i).getDay().getFengXiang());
-//			editor.putString("dayFengLi".concat("_" + Integer.toString(i)), weatherList.get(i).getDay().getFengLi());
-//			editor.putString("nightType".concat("_" + Integer.toString(i)), weatherList.get(i).getNight().getType());
-//			editor.putString("nightFengXiang".concat("_" + Integer.toString(i)), weatherList.get(i).getNight().getFengXiang());
-//			editor.putString("nightFengLi".concat("_" + Integer.toString(i)), weatherList.get(i).getNight().getFengLi());
-//		}
-//		for (int i=0; i<11; i++) {
-//			editor.putString("weatherZhiShu_name".concat("_" + Integer.toString(i)), zhiShus.get(i).getName());
-//			editor.putString("weatherZhiShu_value".concat("_" + Integer.toString(i)), zhiShus.get(i).getValue());
-//			editor.putString("weatherZhiShu_detail".concat("_" + Integer.toString(i)), zhiShus.get(i).getDetail());
-//		}
-//		editor.commit();
 	}
 
 	//解析服务器返回的JSON数据，并存储到本地

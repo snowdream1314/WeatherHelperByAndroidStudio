@@ -1,6 +1,6 @@
 package com.snowdream1314.weatherhelper.bean;
 
-public class ChoosedCountryList {
+public class ChoosedCity {
 	
 	private String name;
 	private String code;
