@@ -107,22 +107,24 @@ public class Utility {
 			int eventType = xmlPullParser.getEventType();
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 				String nodeName = xmlPullParser.getName();
+                RespWeather weather = new RespWeather();
 				switch (eventType) {
 					//开始解析XML节点
 					case XmlPullParser.START_DOCUMENT:
-                        RespWeather weather = new RespWeather();
 						weatherDatas = new ArrayList<String>();
 						break;
 					case XmlPullParser.START_TAG:
 						if ("city".equals(nodeName)) {
+                            eventType = xmlPullParser.next();
+                            weather.setCity(xmlPullParser.getText());
 //							cityName = xmlPullParser.nextText();
 //							weatherDatas.add(cityName);
 						}
-						if ("updatetime".equals(nodeName)) {
+						else if ("updatetime".equals(nodeName)) {
 //							updateTime = xmlPullParser.nextText();
 //							weatherDatas.add(updateTime);
 						}
-						if ("wendu".equals(nodeName)) {
+						else if ("wendu".equals(nodeName)) {
 //							tempNow = xmlPullParser.nextText();
 //							weatherDatas.add(tempNow.concat("°"));
 						}
