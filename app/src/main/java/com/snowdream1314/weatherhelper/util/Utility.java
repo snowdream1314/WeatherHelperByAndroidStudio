@@ -115,58 +115,56 @@ public class Utility {
 						break;
 					case XmlPullParser.START_TAG:
 						if ("city".equals(nodeName)) {
-							cityName = xmlPullParser.nextText();
-							weatherDatas.add(cityName);
-                            eventType = xmlPullParser.next();
-
+//							cityName = xmlPullParser.nextText();
+//							weatherDatas.add(cityName);
 						}
 						if ("updatetime".equals(nodeName)) {
-							updateTime = xmlPullParser.nextText();
-							weatherDatas.add(updateTime);
+//							updateTime = xmlPullParser.nextText();
+//							weatherDatas.add(updateTime);
 						}
 						if ("wendu".equals(nodeName)) {
-							tempNow = xmlPullParser.nextText();
-							weatherDatas.add(tempNow.concat("°"));
+//							tempNow = xmlPullParser.nextText();
+//							weatherDatas.add(tempNow.concat("°"));
 						}
 						if ("fengli".equals(nodeName)) {
-							fengLi = xmlPullParser.nextText();
-							weatherDatas.add(fengLi);
+//							fengLi = xmlPullParser.nextText();
+//							weatherDatas.add(fengLi);
 						}
 						if ("shidu".equals(nodeName)) {
-							shidu = xmlPullParser.nextText();
-							weatherDatas.add(shidu);
+//							shidu = xmlPullParser.nextText();
+//							weatherDatas.add(shidu);
 						}
 						if ("fengxiang".equals(nodeName)) {
-							fengXiang = xmlPullParser.nextText();
-							weatherDatas.add(fengXiang);
+//							fengXiang = xmlPullParser.nextText();
+//							weatherDatas.add(fengXiang);
 						}
 						if ("sunrise_1".equals(nodeName)) {
-							sunrise_1 = xmlPullParser.nextText();
-							weatherDatas.add(sunrise_1);
+//							sunrise_1 = xmlPullParser.nextText();
+//							weatherDatas.add(sunrise_1);
 						}
 						if ("sunset_1".equals(nodeName)) {
-							sunset_1 = xmlPullParser.nextText();
-							weatherDatas.add(sunset_1);
+//							sunset_1 = xmlPullParser.nextText();
+//							weatherDatas.add(sunset_1);
 						}
 						if ("aqi".equals(nodeName)) {
-							aqi = xmlPullParser.nextText();
-							weatherDatas.add(aqi);
+//							aqi = xmlPullParser.nextText();
+//							weatherDatas.add(aqi);
 						}
 						if ("pm25".equals(nodeName)) {
-							pm25 = xmlPullParser.nextText();
-							weatherDatas.add(pm25);
+//							pm25 = xmlPullParser.nextText();
+//							weatherDatas.add(pm25);
 						}
 						if ("suggest".equals(nodeName)) {
-							suggest = xmlPullParser.nextText();
-							weatherDatas.add(suggest);
+//							suggest = xmlPullParser.nextText();
+//							weatherDatas.add(suggest);
 						}
 						if ("quality".equals(nodeName)) {
-							quality = xmlPullParser.nextText();
-							weatherDatas.add(quality);
+//							quality = xmlPullParser.nextText();
+//							weatherDatas.add(quality);
 						}
 						if ("MajorPollutants".equals(nodeName)) {
-							MajorPollutants = xmlPullParser.nextText();
-							weatherDatas.add(MajorPollutants);
+//							MajorPollutants = xmlPullParser.nextText();
+//							weatherDatas.add(MajorPollutants);
 						}
 
 //					if ("weather".equals(nodeName)) {

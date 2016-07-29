@@ -21,51 +21,51 @@ public class RespWeather {
     private List<RespWeatherForecastWeather> forecastWeathers;
     private List<RespWeatherZhishu> zhishus;
 
-    private String getCity() { return city; }
+    public String getCity() { return city; }
 
-    private void setCity(String city) { this.city = city; }
+    public void setCity(String city) { this.city = city; }
 
-    private String getUpdatetime() { return updatetime; }
+    public String getUpdatetime() { return updatetime; }
 
-    private void setUpdatetime(String updatetime) { this.updatetime = updatetime; }
+    public void setUpdatetime(String updatetime) { this.updatetime = updatetime; }
 
-    private String getWendu() { return wendu; }
+    public String getWendu() { return wendu; }
 
-    private void setWendu(String wendu) { this.wendu = wendu; }
+    public void setWendu(String wendu) { this.wendu = wendu; }
 
-    private String getFengli() { return fengli; }
+    public String getFengli() { return fengli; }
 
-    private void setFengli(String fengli) { this.fengli = fengli; }
+    public void setFengli(String fengli) { this.fengli = fengli; }
 
-    private String getShidu() { return shidu; }
+    public String getShidu() { return shidu; }
 
-    private void setShidu(String shidu) { this.shidu = shidu; }
+    public void setShidu(String shidu) { this.shidu = shidu; }
 
-    private String getFengxiang() { return fengxiang; }
+    public String getFengxiang() { return fengxiang; }
 
-    private void setFengxiang(String fengxiang) { this.fengxiang = fengxiang; }
+    public void setFengxiang(String fengxiang) { this.fengxiang = fengxiang; }
 
-    private String getSunrise() { return  sunrise; }
+    public String getSunrise() { return  sunrise; }
 
-    private void setSunrise(String sunrise) { this.sunrise = sunrise; }
+    public void setSunrise(String sunrise) { this.sunrise = sunrise; }
 
-    private String getSunset() { return sunset; }
+    public String getSunset() { return sunset; }
 
-    private void setSunset(String sunset) { this.sunset = sunset; }
+    public void setSunset(String sunset) { this.sunset = sunset; }
 
-    private RespWeatherEnvironment getEnvironment() { return environment; }
+    public RespWeatherEnvironment getEnvironment() { return environment; }
 
-    private void setEnvironment(RespWeatherEnvironment environment) { this.environment = environment; }
+    public void setEnvironment(RespWeatherEnvironment environment) { this.environment = environment; }
 
-    private RespWeatherYesterday getYesterday() { return yesterday; }
+    public RespWeatherYesterday getYesterday() { return yesterday; }
 
-    private void setYesterday(RespWeatherYesterday yesterday) { this.yesterday = yesterday; }
+    public void setYesterday(RespWeatherYesterday yesterday) { this.yesterday = yesterday; }
 
-    private List<RespWeatherForecastWeather> getForecastWeathers() { return forecastWeathers; }
+    public List<RespWeatherForecastWeather> getForecastWeathers() { return forecastWeathers; }
 
-    private void setForecastWeathers(List<RespWeatherForecastWeather> forecastWeathers) { this.forecastWeathers = forecastWeathers; }
+    public void setForecastWeathers(List<RespWeatherForecastWeather> forecastWeathers) { this.forecastWeathers = forecastWeathers; }
 
-    private List<RespWeatherZhishu> getZhishus() { return zhishus; }
+    public List<RespWeatherZhishu> getZhishus() { return zhishus; }
 
-    private void setZhishus(List<RespWeatherZhishu> zhishus) { this.zhishus = zhishus; }
+    public void setZhishus(List<RespWeatherZhishu> zhishus) { this.zhishus = zhishus; }
 }

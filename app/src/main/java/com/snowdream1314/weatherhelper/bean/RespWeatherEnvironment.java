@@ -16,47 +16,47 @@ public class RespWeatherEnvironment {
     private String no2;
     private String time;
 
-    private String getAqi() { return aqi; }
+    public String getAqi() { return aqi; }
 
-    private void setAqi(String aqi) { this.aqi = aqi; }
+    public void setAqi(String aqi) { this.aqi = aqi; }
 
-    private String getPm25() { return pm25; }
+    public String getPm25() { return pm25; }
 
-    private void setPm25(String pm25) { this.pm25 = pm25; }
+    public void setPm25(String pm25) { this.pm25 = pm25; }
 
-    private String getSuggest() { return suggest; }
+    public String getSuggest() { return suggest; }
 
-    private void setSuggest(String suggest) { this.suggest = suggest; }
+    public void setSuggest(String suggest) { this.suggest = suggest; }
 
-    private String getQuality() { return quality; }
+    public String getQuality() { return quality; }
 
-    private void setQuality(String quality) { this.quality = quality; }
+    public void setQuality(String quality) { this.quality = quality; }
 
-    private String getMajorPollutants() { return MajorPollutants; }
+    public String getMajorPollutants() { return MajorPollutants; }
 
-    private void setMajorPollutants(String MajorPollutants) { this.MajorPollutants = MajorPollutants; }
+    public void setMajorPollutants(String MajorPollutants) { this.MajorPollutants = MajorPollutants; }
 
-    private String getO3() { return o3; }
+    public String getO3() { return o3; }
 
-    private void setO3(String o3) { this.o3 = o3; }
+    public void setO3(String o3) { this.o3 = o3; }
 
-    private String getCo() { return co; }
+    public String getCo() { return co; }
 
-    private void setCo(String co) { this.co = co; }
+    public void setCo(String co) { this.co = co; }
 
-    private String getPm10() { return pm10; }
+    public String getPm10() { return pm10; }
 
-    private void setPm10(String pm10) { this.pm10 = pm10; }
+    public void setPm10(String pm10) { this.pm10 = pm10; }
 
-    private String getSo2() { return so2; }
+    public String getSo2() { return so2; }
 
-    private void setSo2(String so2) { this.so2 = so2; }
+    public void setSo2(String so2) { this.so2 = so2; }
 
-    private String getNo2() { return no2; }
+    public String getNo2() { return no2; }
 
-    private void setNo2(String no2) { this.no2 = no2; }
+    public void setNo2(String no2) { this.no2 = no2; }
 
-    private String getTime() { return time; }
+    public String getTime() { return time; }
 
-    private void setTime(String time) { this.time = time; }
+    public void setTime(String time) { this.time = time; }
 }

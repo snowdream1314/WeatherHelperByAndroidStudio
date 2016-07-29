@@ -9,16 +9,16 @@ public class RespWeatherZhishu {
     private String value;
     private String detail;
 
-    private String getName() { return name; }
+    public String getName() { return name; }
 
-    private void setName(String name) { this.name = name; }
+    public void setName(String name) { this.name = name; }
 
-    private String getValue() { return value; }
+    public String getValue() { return value; }
 
-    private void setValue(String value) { this.value = value; }
+    public void setValue(String value) { this.value = value; }
 
-    private String getDetail() { return detail; }
+    public String getDetail() { return detail; }
 
-    private void setDetail(String detail) { this.detail = detail; }
+    public void setDetail(String detail) { this.detail = detail; }
 
 }
