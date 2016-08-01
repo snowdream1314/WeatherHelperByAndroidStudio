@@ -135,8 +135,6 @@ public class Utility {
 //                            eventType = xmlPullParser.next();
 //                            weather.setCity(xmlPullParser.getText());
                             weather.setCity(xmlPullParser.nextText());
-//							cityName = xmlPullParser.nextText();
-//							weatherDatas.add(cityName);
 						}
 						else if ("updatetime".equals(nodeName)) {
 //							eventType = xmlPullParser.next();
