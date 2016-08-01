@@ -191,42 +191,45 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
                 }
             }
             Log.i("BaiduLocationApiDem", sb.toString());
-//            try {
-//                Log.i("try_city", coolWeatherDB.loadCity("杭州").getCityCode());
-//                Log.i("load_city", coolWeatherDB.loadCity(location.getCity().replace("市","")).toString());
-//
-//                Log.i("city_code", coolWeatherDB.loadCity(location.getCity().replace("市","")).getCityCode());
-//
-//            }catch (Exception e) {
-//                e.printStackTrace();
-//            }
-
+            String cityCode = coolWeatherDB.loadCity(location.getCity().replace("市","")).getCityCode();
+            setTitleLayoutTitle(rootView, location.getCity() + location.getDistrict());
+            setTitleLayoutSubTitle(rootView, location.getStreet() + location.getStreetNumber().split("号")[0] + "号");
+            WHRequest request = new WHRequest(getContext());
+            request.setDelegate(WeatherFragment.this);
+            request.queryWeather(cityCode);
         }
     }
 
     @Override
     public void requestSuccess(WHRequest req, String data) {
         Log.i("requestSuccess", data);
-        try {
-            JSONObject jsonObject = new JSONObject(data);
-            JSONObject result = jsonObject.getJSONObject("result");
 
-            AddressComponent addressComponent = new AddressComponent();
+        if (req.tag == WHRequest.Req_Tag.Tag_Weather) {
+            Log.i("weather_data", data);
 
-            addressComponent.setCity(result.getJSONObject("addressComponent").getString("city"));
-            addressComponent.setDistrict(result.getJSONObject("addressComponent").getString("district"));
-            addressComponent.setStreet(result.getJSONObject("addressComponent").getString("street"));
+            try {
+        //            JSONObject jsonObject = new JSONObject(data);
+        //            JSONObject result = jsonObject.getJSONObject("result");
+        //
+        //            AddressComponent addressComponent = new AddressComponent();
+        //
+        //            addressComponent.setCity(result.getJSONObject("addressComponent").getString("city"));
+        //            addressComponent.setDistrict(result.getJSONObject("addressComponent").getString("district"));
+        //            addressComponent.setStreet(result.getJSONObject("addressComponent").getString("street"));
+        //
+        //            WeatherDetailFragment fragment = WeatherDetailFragment.instance(addressComponent);
+        //            fragments.add(fragment);
+                WeatherDetailFragment fragment = WeatherDetailFragment.instance(Utility.handleWeatherXMLResponse(getContext(), data));
+                fragments.add(fragment);
 
-            WeatherDetailFragment fragment = WeatherDetailFragment.instance(addressComponent);
-            fragments.add(fragment);
+                WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
+                viewPager.setAdapter(adapter);
+                viewPager.addOnPageChangeListener(pageChangeListener);
 
-            WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
-            viewPager.setAdapter(adapter);
-            viewPager.addOnPageChangeListener(pageChangeListener);
-            setTitleLayoutTitle(rootView, addressComponent.getCity());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -251,8 +254,6 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
 
         @Override
         public void onPageSelected(int position) {
-            setTitleLayoutTitle(rootView, fragments.get(position).getTitle());
-            setTitleLayoutSubTitle(rootView, "周二" + String.valueOf(position));
         }
 
         @Override

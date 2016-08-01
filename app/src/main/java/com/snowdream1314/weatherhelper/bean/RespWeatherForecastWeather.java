@@ -9,8 +9,8 @@ public class RespWeatherForecastWeather {
     private String high;
     private String low;
 
-    private day day;
-    private night night;
+    private day day = new day();
+    private night night = new night();
 
     public String getDate() { return date; }
 

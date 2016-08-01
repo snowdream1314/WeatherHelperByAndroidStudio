@@ -17,6 +17,7 @@ public class RespWeather {
     private String sunset;
 
     private RespWeatherEnvironment environment;
+    private RespWeatherAlarm alarm;
     private RespWeatherYesterday yesterday;
     private List<RespWeatherForecastWeather> forecastWeathers;
     private List<RespWeatherZhishu> zhishus;
@@ -56,6 +57,10 @@ public class RespWeather {
     public RespWeatherEnvironment getEnvironment() { return environment; }
 
     public void setEnvironment(RespWeatherEnvironment environment) { this.environment = environment; }
+
+    public RespWeatherAlarm getAlarm() { return alarm; }
+
+    public void setAlarm(RespWeatherAlarm alarm) { this.alarm = alarm; }
 
     public RespWeatherYesterday getYesterday() { return yesterday; }
 

@@ -8,6 +8,11 @@ import com.google.gson.Gson;
 import com.snowdream1314.weatherhelper.bean.City;
 import com.snowdream1314.weatherhelper.bean.JsonBean;
 import com.snowdream1314.weatherhelper.bean.RespWeather;
+import com.snowdream1314.weatherhelper.bean.RespWeatherAlarm;
+import com.snowdream1314.weatherhelper.bean.RespWeatherEnvironment;
+import com.snowdream1314.weatherhelper.bean.RespWeatherForecastWeather;
+import com.snowdream1314.weatherhelper.bean.RespWeatherYesterday;
+import com.snowdream1314.weatherhelper.bean.RespWeatherZhishu;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -99,7 +104,19 @@ public class Utility {
 	}
 
 	//解析服务器返回的XML天气数据
-	public static void handleWeatherXMLResponse(Context context, String response, SharedPreferences pref) {
+	public static RespWeather handleWeatherXMLResponse(Context context, String response) {
+        RespWeather weather = new RespWeather();
+        RespWeatherAlarm alarm = new RespWeatherAlarm();;
+        RespWeatherYesterday yesterday = new RespWeatherYesterday();
+        RespWeatherEnvironment environment = new RespWeatherEnvironment();;
+        RespWeatherForecastWeather forecastWeather = new RespWeatherForecastWeather();
+        List<RespWeatherForecastWeather> forecastWeathers = new ArrayList<RespWeatherForecastWeather>();
+        RespWeatherZhishu zhishu = new RespWeatherZhishu();
+        List<RespWeatherZhishu> zhishus = new ArrayList<RespWeatherZhishu>();
+        RespWeatherYesterday.day_1 day_1 = yesterday.getDay_1();
+        RespWeatherYesterday.night_1 night_1 = yesterday.getNight_1();
+        RespWeatherForecastWeather.day day = forecastWeather.getDay();
+        RespWeatherForecastWeather.night night= forecastWeather.getNight();
 		try {
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 			XmlPullParser xmlPullParser = factory.newPullParser();
@@ -107,121 +124,319 @@ public class Utility {
 			int eventType = xmlPullParser.getEventType();
 			while (eventType != XmlPullParser.END_DOCUMENT) {
 				String nodeName = xmlPullParser.getName();
-                RespWeather weather = new RespWeather();
 				switch (eventType) {
 					//开始解析XML节点
 					case XmlPullParser.START_DOCUMENT:
+                        Log.i("START_DOCUMENT", "START_DOCUMENT");
 						weatherDatas = new ArrayList<String>();
 						break;
 					case XmlPullParser.START_TAG:
 						if ("city".equals(nodeName)) {
-                            eventType = xmlPullParser.next();
-                            weather.setCity(xmlPullParser.getText());
+//                            eventType = xmlPullParser.next();
+//                            weather.setCity(xmlPullParser.getText());
+                            weather.setCity(xmlPullParser.nextText());
 //							cityName = xmlPullParser.nextText();
 //							weatherDatas.add(cityName);
 						}
 						else if ("updatetime".equals(nodeName)) {
+//							eventType = xmlPullParser.next();
+//							weather.setUpdatetime(xmlPullParser.getText());
+                            weather.setUpdatetime(xmlPullParser.nextText());
 //							updateTime = xmlPullParser.nextText();
 //							weatherDatas.add(updateTime);
 						}
 						else if ("wendu".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            weather.setWendu(xmlPullParser.getText());
+                            weather.setWendu(xmlPullParser.nextText());
 //							tempNow = xmlPullParser.nextText();
 //							weatherDatas.add(tempNow.concat("°"));
 						}
-						if ("fengli".equals(nodeName)) {
+						else if ("fengli".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            weather.setFengli(xmlPullParser.getText());
+                            weather.setFengli(xmlPullParser.nextText());
 //							fengLi = xmlPullParser.nextText();
 //							weatherDatas.add(fengLi);
 						}
-						if ("shidu".equals(nodeName)) {
+						else if ("shidu".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            weather.setShidu(xmlPullParser.getText());
+                            weather.setShidu(xmlPullParser.nextText());
 //							shidu = xmlPullParser.nextText();
 //							weatherDatas.add(shidu);
 						}
-						if ("fengxiang".equals(nodeName)) {
+						else if ("fengxiang".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            weather.setFengxiang(xmlPullParser.getText());
+                            weather.setFengxiang(xmlPullParser.nextText());
 //							fengXiang = xmlPullParser.nextText();
 //							weatherDatas.add(fengXiang);
 						}
-						if ("sunrise_1".equals(nodeName)) {
+						else if ("sunrise_1".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            weather.setSunrise(xmlPullParser.getText());
+                            weather.setSunrise(xmlPullParser.nextText());
 //							sunrise_1 = xmlPullParser.nextText();
 //							weatherDatas.add(sunrise_1);
 						}
-						if ("sunset_1".equals(nodeName)) {
+						else if ("sunset_1".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            weather.setSunset(xmlPullParser.getText());
+                            weather.setSunset(xmlPullParser.nextText());
 //							sunset_1 = xmlPullParser.nextText();
 //							weatherDatas.add(sunset_1);
 						}
-						if ("aqi".equals(nodeName)) {
+                        else if ("environment".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            environment = new RespWeatherEnvironment();
+                        }
+						else if ("aqi".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            environment.setAqi(xmlPullParser.getText());
+                            environment.setAqi(xmlPullParser.nextText());
 //							aqi = xmlPullParser.nextText();
 //							weatherDatas.add(aqi);
 						}
-						if ("pm25".equals(nodeName)) {
+						else if ("pm25".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            environment.setPm25(xmlPullParser.getText());
+                            environment.setPm25(xmlPullParser.nextText());
 //							pm25 = xmlPullParser.nextText();
 //							weatherDatas.add(pm25);
 						}
-						if ("suggest".equals(nodeName)) {
+						else if ("suggest".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            environment.setSuggest(xmlPullParser.getText());
+                            environment.setSuggest(xmlPullParser.nextText());
 //							suggest = xmlPullParser.nextText();
 //							weatherDatas.add(suggest);
 						}
-						if ("quality".equals(nodeName)) {
+						else if ("quality".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+//                            environment.setQuality(xmlPullParser.getText());
+                            environment.setQuality(xmlPullParser.nextText());
 //							quality = xmlPullParser.nextText();
 //							weatherDatas.add(quality);
 						}
-						if ("MajorPollutants".equals(nodeName)) {
+						else if ("MajorPollutants".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            environment.setMajorPollutants(xmlPullParser.nextText());
 //							MajorPollutants = xmlPullParser.nextText();
 //							weatherDatas.add(MajorPollutants);
 						}
+                        else if ("o3".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            environment.setO3(xmlPullParser.nextText());
+                        }
+                        else if ("co".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            environment.setCo(xmlPullParser.nextText());
+                        }
+                        else if ("pm10".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            environment.setPm10(xmlPullParser.nextText());
+                        }
+                        else if ("so2".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            environment.setSo2(xmlPullParser.nextText());
+                        }
+                        else if ("no2".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            environment.setNo2(xmlPullParser.nextText());
+                        }
+                        else if ("time".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            environment.setTime(xmlPullParser.nextText());
+                        }
+                        else if ("alarm".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm = new RespWeatherAlarm();
+                        }
+                        else if ("cityKey".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setCityKey(xmlPullParser.nextText());
+                        }
+                        else if ("cityName".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setCityName(xmlPullParser.nextText());
+                        }
+                        else if ("alarmType".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setAlarmType(xmlPullParser.nextText());
+                        }
+                        else if ("alarmDegree".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setAlarmDegree(xmlPullParser.nextText());
+                        }
+                        else if ("alarmText".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setAlarmText(xmlPullParser.nextText());
+                        }
+                        else if ("alarm_details".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setAlarmDetails(xmlPullParser.nextText());
+                        }
+                        else if ("standard".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setStandard(xmlPullParser.nextText());
+                        }
+                        else if ("suggest".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setSuggest(xmlPullParser.nextText());
+                        }
+                        else if ("imgUrl".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setImgUrl(xmlPullParser.nextText());
+                        }
+                        else if ("time".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            alarm.setTime(xmlPullParser.nextText());
+                        }
 
-//					if ("weather".equals(nodeName)) {
-//						weather =new Weather();
-//					}
-//					if ("date".equals(nodeName)) {
-//						weather.setDate(xmlPullParser.nextText());
-//					}
-//					if ("high".equals(nodeName)) {
-//						weather.setHigh(xmlPullParser.nextText());
-//					}
-//					if ("low".equals(nodeName)) {
-//						weather.setLow(xmlPullParser.nextText());
-//					}
-//					if ("type".equals(nodeName)) {
-//						weather.getDay().setType(xmlPullParser.nextText());
-//					}
-//					if ("fengxiang".equals(nodeName)) {
-//						weather.getDay().setFengXiang(xmlPullParser.nextText());
-//					}
-//					if ("fengli".equals(nodeName)) {
-//						weather.getDay().setFengLi(xmlPullParser.nextText());
-//					}
-//					if ("type".equals(nodeName)) {
-//						weather.getNight().setType(xmlPullParser.nextText());
-//					}
-//					if ("fengxiang".equals(nodeName)) {
-//						weather.getNight().setFengXiang(xmlPullParser.nextText());
-//					}
-//					if ("fengli".equals(nodeName)) {
-//						weather.getNight().setFengLi(xmlPullParser.nextText());
-//					}
+                        else if ("yesterday".equals(nodeName)) {
+                            Log.i("yesterday", "yesterday");
+//                            eventType = xmlPullParser.next();
+                            yesterday = new RespWeatherYesterday();
+                        }
+                        else if ("date_1".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            yesterday.setDate_1(xmlPullParser.nextText());
+                        }
+                        else if ("high_1".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            yesterday.setHigh_1(xmlPullParser.nextText());
+                        }
+                        else if ("low_1".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            yesterday.setLow_1(xmlPullParser.nextText());
+                        }
+                        else if ("day_1".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            day_1 = new RespWeatherYesterday().getDay_1();
+                            night_1 = new RespWeatherYesterday().getNight_1();
+                        }
+                        else if ("type_1".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            String type_1 = xmlPullParser.nextText();
+                            day_1.setType_1(type_1);
+                            night_1.setType_1(type_1);
+                        }
+                        else if ("fx_1".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            String fx_1 = xmlPullParser.nextText();
+                            day_1.setFx_1(fx_1);
+                            night_1.setFx_1(fx_1);
+                        }
+                        else if ("fl_1".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            String fl_1 = xmlPullParser.nextText();
+                            day_1.setFl_1(fl_1);
+                            night_1.setFl_1(fl_1);
+                        }
 
-//					if ("zhishu".equals(nodeName)) {
-//						weatherZhiShu = new WeatherZhiShu();
-//					}
-//					if ("name".equals(nodeName)) {
-//						weatherZhiShu.setName(xmlPullParser.nextText());
-//					}
-//					if ("value".equals(nodeName)) {
-//						weatherZhiShu.setValue(xmlPullParser.nextText());
-//					}
-//					if ("detail".equals(nodeName)) {
-//						weatherZhiShu.setDetail(xmlPullParser.nextText());
-//					}
+                        else if ("weather".equals(nodeName)) {
+                            Log.i("forecast", "forecast");
+//                            eventType = xmlPullParser.next();
+                            forecastWeather = new RespWeatherForecastWeather();
+                        }
+                        else if ("date".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            forecastWeather.setDate(xmlPullParser.nextText());
+                        }
+                        else if ("high".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            forecastWeather.setHigh(xmlPullParser.nextText());
+                        }
+                        else if ("low".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            forecastWeather.setLow(xmlPullParser.nextText());
+                        }
+                        else if ("day".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            day = new RespWeatherForecastWeather().getDay();
+                            night = new RespWeatherForecastWeather().getNight();
+                        }
+                        else if ("type".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            String type = xmlPullParser.nextText();
+                            day.setType(type);
+                            night.setType(type);
+                        }
+                        else if ("fengxiang".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            String fengxiang = xmlPullParser.nextText();
+                            day.setFengxiang(fengxiang);
+                            night.setFengxiang(fengxiang);
+                        }
+                        else if ("fengli".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            String fengli = xmlPullParser.nextText();
+                            day.setFengli(fengli);
+                            night.setFengli(fengli);
+                        }
+
+                        else if ("zhishu".equals(nodeName)) {
+                            Log.i("zhishu", "zhishu");
+//                            eventType = xmlPullParser.next();
+                            zhishu = new RespWeatherZhishu();
+                        }
+                        else if ("name".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            zhishu.setName(xmlPullParser.nextText());
+                        }
+                        else if ("value".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            zhishu.setValue(xmlPullParser.nextText());
+                        }
+                        else if ("detail".equals(nodeName)) {
+//                            eventType = xmlPullParser.next();
+                            zhishu.setDetail(xmlPullParser.nextText());
+                        }
+
 						break;
 
 					case XmlPullParser.END_TAG:
-						if ("resp".equals(nodeName)) {
-							//将获得的数据存入SharedPreferences
-//						saveWeatherXml(context, cityName, updateTime, tempNow, fengLi, fengXiang, shidu, sunrise_1,
-//								sunset_1, aqi, pm25, suggest, quality, MajorPollutants, weatherList, zhiShus);
-							saveWeatherXml(context, pref, weatherDatas);
-						}
-						break;
+
+                        if ("environment".equals(nodeName)) {
+                            weather.setEnvironment(environment);
+                        }else if ("alarm".equals(nodeName)) {
+                            weather.setAlarm(alarm);
+                        }
+                        else if ("day_1".equals(nodeName)) {
+                            yesterday.setDay_1(day_1);
+                        }
+                        else if ("night_1".equals(nodeName)) {
+                            yesterday.setNight_1(night_1);
+                        }
+                        else if ("yesterday".equals(nodeName)) {
+                            weather.setYesterday(yesterday);
+                        }
+                        else if ("day".equals(nodeName)) {
+                            forecastWeather.setDay(day);
+                        }
+                        else if ("night".equals(nodeName)) {
+                            forecastWeather.setNight(night);
+                        }
+                        else if ("weather".equals(nodeName)) {
+                            forecastWeathers.add(forecastWeather);
+                        }
+                        else if ("forecast".equals(nodeName)) {
+                            weather.setForecastWeathers(forecastWeathers);
+                        }
+                        else if ("zhishu".equals(nodeName)) {
+                            zhishus.add(zhishu);
+                        }
+                        else if ("zhishus".equals(nodeName)) {
+                            weather.setZhishus(zhishus);
+                        }
+                        else if ("resp".equals(nodeName)) {
+                            //将获得的数据存入SharedPreferences
+//                            saveWeatherXml(context, pref, weatherDatas);
+//                            saveRespWeather(context, weather);
+                        }
+
+                        break;
 
 					default:
 						break;
@@ -231,7 +446,13 @@ public class Utility {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+        return weather;
 	}
+
+    private static void saveRespWeather(Context context, RespWeather weather) {
+        MySharedPreference preference = new MySharedPreference(context);
+        preference.setKeyStr("weather", JsonUtil.toJson(weather));
+    }
 
 	//将服务器返回的所有XML天气信息存储到SharedPreferences文件中
 	public static void saveWeatherXml(Context context, SharedPreferences pref, List<String> weatherDatas) {

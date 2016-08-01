@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.snowdream1314.weatherhelper.bean.RespWeather;
+
 /**
  * Created by xxq on 2016/7/29.
  */
