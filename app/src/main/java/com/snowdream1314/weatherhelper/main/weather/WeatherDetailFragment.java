@@ -76,15 +76,15 @@ public class WeatherDetailFragment extends Fragment implements WHRequest.WHReque
         todayWeatherImageView = (ImageView) rootView.findViewById(R.id.iv_today_weather);
         tomorrowWeatherImageView = (ImageView) rootView.findViewById(R.id.iv_tomorrow_weather);
 
-        weatherTextView.setText(weather.getForecastWeathers().get(0).getDay().getType());
+        weatherTextView.setText(weather.getForecastWeathers().get(0).getDays().get(0).getType());
         tempTextView.setText(weather.getForecastWeathers().get(0).getHigh().replace("高温","").replace("℃","°").replace(" ", ""));
         windLevelTextView.setText(weather.getFengli());
         humidityTextView.setText(weather.getShidu());
 
-        todayWeatherTextView.setText(weather.getForecastWeathers().get(0).getDay().getType());
+        todayWeatherTextView.setText(weather.getForecastWeathers().get(0).getDays().get(0).getType() + "转" + weather.getForecastWeathers().get(0).getDays().get(1).getType());
         todayTempTextView.setText(weather.getForecastWeathers().get(0).getHigh().replace("高温","").replace("℃","") + "/" + weather.getForecastWeathers().get(0).getLow().replace("低温",""));
 
-        tomorrowWeatherTextView.setText(weather.getForecastWeathers().get(1).getDay().getType());
+        tomorrowWeatherTextView.setText(weather.getForecastWeathers().get(1).getDays().get(0).getType() + "转" + weather.getForecastWeathers().get(1).getDays().get(1).getType());
         tomorrowTempTextView.setText(weather.getForecastWeathers().get(1).getHigh().replace("高温","").replace("℃","") + "/" + weather.getForecastWeathers().get(1).getLow().replace("低温",""));
     }
 

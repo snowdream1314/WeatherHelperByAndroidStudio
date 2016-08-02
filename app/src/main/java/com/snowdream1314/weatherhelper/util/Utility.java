@@ -114,9 +114,11 @@ public class Utility {
         RespWeatherZhishu zhishu = new RespWeatherZhishu();
         List<RespWeatherZhishu> zhishus = new ArrayList<RespWeatherZhishu>();
         RespWeatherYesterday.day_1 day_1 = yesterday.getDay_1();
-        RespWeatherYesterday.night_1 night_1 = yesterday.getNight_1();
+//        RespWeatherYesterday.night_1 night_1 = yesterday.getNight_1();
+        List<RespWeatherYesterday.day_1> day_1s = new ArrayList<RespWeatherYesterday.day_1>();
         RespWeatherForecastWeather.day day = forecastWeather.getDay();
         RespWeatherForecastWeather.night night= forecastWeather.getNight();
+        List<RespWeatherForecastWeather.day> days = new ArrayList<RespWeatherForecastWeather.day>();
 		try {
 			XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
 			XmlPullParser xmlPullParser = factory.newPullParser();
@@ -132,96 +134,48 @@ public class Utility {
 						break;
 					case XmlPullParser.START_TAG:
 						if ("city".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setCity(xmlPullParser.getText());
                             weather.setCity(xmlPullParser.nextText());
 						}
 						else if ("updatetime".equals(nodeName)) {
-//							eventType = xmlPullParser.next();
-//							weather.setUpdatetime(xmlPullParser.getText());
                             weather.setUpdatetime(xmlPullParser.nextText());
-//							updateTime = xmlPullParser.nextText();
-//							weatherDatas.add(updateTime);
 						}
 						else if ("wendu".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setWendu(xmlPullParser.getText());
                             weather.setWendu(xmlPullParser.nextText());
-//							tempNow = xmlPullParser.nextText();
-//							weatherDatas.add(tempNow.concat("°"));
 						}
 						else if ("fengli".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setFengli(xmlPullParser.getText());
                             weather.setFengli(xmlPullParser.nextText());
-//							fengLi = xmlPullParser.nextText();
-//							weatherDatas.add(fengLi);
 						}
 						else if ("shidu".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setShidu(xmlPullParser.getText());
                             weather.setShidu(xmlPullParser.nextText());
-//							shidu = xmlPullParser.nextText();
-//							weatherDatas.add(shidu);
 						}
 						else if ("fengxiang".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setFengxiang(xmlPullParser.getText());
                             weather.setFengxiang(xmlPullParser.nextText());
-//							fengXiang = xmlPullParser.nextText();
-//							weatherDatas.add(fengXiang);
 						}
 						else if ("sunrise_1".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setSunrise(xmlPullParser.getText());
                             weather.setSunrise(xmlPullParser.nextText());
-//							sunrise_1 = xmlPullParser.nextText();
-//							weatherDatas.add(sunrise_1);
 						}
 						else if ("sunset_1".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setSunset(xmlPullParser.getText());
                             weather.setSunset(xmlPullParser.nextText());
-//							sunset_1 = xmlPullParser.nextText();
-//							weatherDatas.add(sunset_1);
 						}
                         else if ("environment".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             environment = new RespWeatherEnvironment();
                         }
 						else if ("aqi".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            environment.setAqi(xmlPullParser.getText());
                             environment.setAqi(xmlPullParser.nextText());
-//							aqi = xmlPullParser.nextText();
-//							weatherDatas.add(aqi);
 						}
 						else if ("pm25".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            environment.setPm25(xmlPullParser.getText());
                             environment.setPm25(xmlPullParser.nextText());
-//							pm25 = xmlPullParser.nextText();
-//							weatherDatas.add(pm25);
 						}
 						else if ("suggest".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            environment.setSuggest(xmlPullParser.getText());
                             environment.setSuggest(xmlPullParser.nextText());
-//							suggest = xmlPullParser.nextText();
-//							weatherDatas.add(suggest);
 						}
 						else if ("quality".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            environment.setQuality(xmlPullParser.getText());
                             environment.setQuality(xmlPullParser.nextText());
-//							quality = xmlPullParser.nextText();
-//							weatherDatas.add(quality);
 						}
 						else if ("MajorPollutants".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             environment.setMajorPollutants(xmlPullParser.nextText());
-//							MajorPollutants = xmlPullParser.nextText();
-//							weatherDatas.add(MajorPollutants);
 						}
                         else if ("o3".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
@@ -312,31 +266,28 @@ public class Utility {
                         else if ("day_1".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             day_1 = new RespWeatherYesterday().getDay_1();
-                            night_1 = new RespWeatherYesterday().getNight_1();
                         }
                         else if ("type_1".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             String type_1 = xmlPullParser.nextText();
                             day_1.setType_1(type_1);
-                            night_1.setType_1(type_1);
                         }
                         else if ("fx_1".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             String fx_1 = xmlPullParser.nextText();
                             day_1.setFx_1(fx_1);
-                            night_1.setFx_1(fx_1);
                         }
                         else if ("fl_1".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             String fl_1 = xmlPullParser.nextText();
                             day_1.setFl_1(fl_1);
-                            night_1.setFl_1(fl_1);
                         }
 
                         else if ("weather".equals(nodeName)) {
                             Log.i("forecast", "forecast");
 //                            eventType = xmlPullParser.next();
                             forecastWeather = new RespWeatherForecastWeather();
+                            days = new ArrayList<RespWeatherForecastWeather.day>();
                         }
                         else if ("date".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
@@ -353,25 +304,28 @@ public class Utility {
                         else if ("day".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             day = new RespWeatherForecastWeather().getDay();
-                            night = new RespWeatherForecastWeather().getNight();
+//                            night = new RespWeatherForecastWeather().getNight();
+                        }
+                        else if ("night".equals(nodeName)) {
+                            day = new RespWeatherForecastWeather().getDay();
                         }
                         else if ("type".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             String type = xmlPullParser.nextText();
                             day.setType(type);
-                            night.setType(type);
+//                            night.setType(type);
                         }
                         else if ("fengxiang".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             String fengxiang = xmlPullParser.nextText();
                             day.setFengxiang(fengxiang);
-                            night.setFengxiang(fengxiang);
+//                            night.setFengxiang(fengxiang);
                         }
                         else if ("fengli".equals(nodeName)) {
 //                            eventType = xmlPullParser.next();
                             String fengli = xmlPullParser.nextText();
                             day.setFengli(fengli);
-                            night.setFengli(fengli);
+//                            night.setFengli(fengli);
                         }
 
                         else if ("zhishu".equals(nodeName)) {
@@ -402,21 +356,25 @@ public class Utility {
                             weather.setAlarm(alarm);
                         }
                         else if ("day_1".equals(nodeName)) {
-                            yesterday.setDay_1(day_1);
+                            day_1s.add(day_1);
                         }
                         else if ("night_1".equals(nodeName)) {
-                            yesterday.setNight_1(night_1);
+                            day_1s.add(day_1);
                         }
                         else if ("yesterday".equals(nodeName)) {
+                            yesterday.setDay_1s(day_1s);
                             weather.setYesterday(yesterday);
                         }
                         else if ("day".equals(nodeName)) {
-                            forecastWeather.setDay(day);
+                            days.add(day);
+//                            forecastWeather.setDay(day);
                         }
                         else if ("night".equals(nodeName)) {
-                            forecastWeather.setNight(night);
+                            days.add(day);
+//                            forecastWeather.setNight(night);
                         }
                         else if ("weather".equals(nodeName)) {
+                            forecastWeather.setDays(days);
                             forecastWeathers.add(forecastWeather);
                         }
                         else if ("forecast".equals(nodeName)) {

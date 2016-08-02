@@ -193,7 +193,8 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
             Log.i("BaiduLocationApiDem", sb.toString());
             String cityCode = coolWeatherDB.loadCity(location.getCity().replace("市","")).getCityCode();
             setTitleLayoutTitle(rootView, location.getCity() + location.getDistrict());
-            setTitleLayoutSubTitle(rootView, location.getStreet() + location.getStreetNumber().split("号")[0] + "号");
+            setTitleLayoutSubTitle(rootView, location.getStreet() + (location.getStreetNumber() != null ? (location.getStreetNumber().split("号")[0] + "号"):""));
+
             WHRequest request = new WHRequest(getContext());
             request.setDelegate(WeatherFragment.this);
             request.queryWeather(cityCode);
@@ -208,17 +209,6 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
             Log.i("weather_data", data);
 
             try {
-        //            JSONObject jsonObject = new JSONObject(data);
-        //            JSONObject result = jsonObject.getJSONObject("result");
-        //
-        //            AddressComponent addressComponent = new AddressComponent();
-        //
-        //            addressComponent.setCity(result.getJSONObject("addressComponent").getString("city"));
-        //            addressComponent.setDistrict(result.getJSONObject("addressComponent").getString("district"));
-        //            addressComponent.setStreet(result.getJSONObject("addressComponent").getString("street"));
-        //
-        //            WeatherDetailFragment fragment = WeatherDetailFragment.instance(addressComponent);
-        //            fragments.add(fragment);
                 WeatherDetailFragment fragment = WeatherDetailFragment.instance(Utility.handleWeatherXMLResponse(getContext(), data));
                 fragments.add(fragment);
 
