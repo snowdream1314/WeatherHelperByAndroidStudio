@@ -37,8 +37,6 @@ public class WeatherForecastView extends LinearLayout{
 
         }
 
-        LinearLayout weatherForecastListLayout = (LinearLayout) weatherForecastView.findViewById(R.id.ll_weather_forecast_list);
-
         LinearLayout linearLayout = null;
         for (RespWeatherForecastWeather forecastWeather : weather.getForecastWeathers()) {
             linearLayout = new LinearLayout(getContext());
