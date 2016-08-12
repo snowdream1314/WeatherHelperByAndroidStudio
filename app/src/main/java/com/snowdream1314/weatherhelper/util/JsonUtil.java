@@ -9,6 +9,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,6 +28,16 @@ public class JsonUtil {
         }
         Type type = new TypeToken<Map<String, Map<String, String[]>>>() {
         }.getType();
+        Gson gson = new Gson();
+        return gson.fromJson(json, type);
+    }
+
+    public static List<HashMap<String, String>> json2HashMapList(String json) {
+        if (StringUtil.isTrimBlank(json)) {
+            return null;
+        }
+
+        Type type = new TypeToken<List<HashMap<String, String>>>() {}.getType();
         Gson gson = new Gson();
         return gson.fromJson(json, type);
     }

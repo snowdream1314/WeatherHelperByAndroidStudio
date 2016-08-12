@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WeatherHelper.iml" filepath="$PROJECT_DIR$/WeatherHelper.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library-UltraPullToRefresh/library-UltraPullToRefresh.iml" filepath="$PROJECT_DIR$/library-UltraPullToRefresh/library-UltraPullToRefresh.iml" />
     </modules>
   </component>
 </project>

@@ -1,0 +1,10 @@
+[{"wind":"南风", "id":1, "icon":"trend_wind_1"},
+  {"wind":"西南风", "id":2, "icon":"trend_wind_2"},
+  {"wind":"西风", "id":3, "icon":"trend_wind_3"},
+  {"wind":"西北风", "id":4, "icon":"trend_wind_4"},
+  {"wind":"北风", "id":5, "icon":"trend_wind_5"},
+  {"wind":"东北风", "id":6, "icon":"trend_wind_6"},
+  {"wind":"东风","id":7, "icon":"trend_wind_7"},
+  {"wind":"东南风", "id":8, "icon":"trend_wind_8"},
+  {"wind":"微风级", "id":9, "icon":"main_icon_wind_no"}
+  ]
