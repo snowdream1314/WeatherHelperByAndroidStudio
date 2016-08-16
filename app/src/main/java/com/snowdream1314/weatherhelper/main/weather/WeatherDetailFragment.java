@@ -1,12 +1,16 @@
 package com.snowdream1314.weatherhelper.main.weather;
 
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,12 +22,14 @@ import com.snowdream1314.weatherhelper.base.PullRequestMoreFragment;
 import com.snowdream1314.weatherhelper.base.TitleLayoutFragment;
 import com.snowdream1314.weatherhelper.bean.AddressComponent;
 import com.snowdream1314.weatherhelper.bean.RespWeather;
+import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
 import com.snowdream1314.weatherhelper.util.JsonUtil;
 import com.snowdream1314.weatherhelper.util.Utility;
 import com.snowdream1314.weatherhelper.util.WHRequest;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -40,21 +46,31 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
     private CoolWeatherDB coolWeatherDB;
 
     private boolean initial = false;
+    private boolean initZhishu = false;
     private RespWeather weather;
 
     private TextView weatherTextView, tempTextView, windLevelTextView, humidityTextView, todayAQITextView, todayTempTextView, todayWeatherTextView,
-                        tomorrowAQITextView, tomorrowTempTextView, tomorrowWeatherTextView;
+                        tomorrowAQITextView, tomorrowTempTextView, tomorrowWeatherTextView, zhishuNameTextView, zhishuDatailTextView;
     private ImageView windImageView,todayWeatherImageView, tomorrowWeatherImageView;
 
-    private LinearLayout weatherLinearLayout;
+    private LinearLayout weatherLinearLayout, zhishuLinearLayout;
+
+    private String title, subTitle;
+    private String cityCode;
+    private int zhishuNum = -1;
+
+    private AlphaAnimation toLight, toDark;
 
     public WeatherDetailFragment() {
         // Required empty public constructor
     }
 
-    public static WeatherDetailFragment instance(RespWeather weather) {
+    public static WeatherDetailFragment instance(RespWeather weather, String title, String subTitle, String cityCode) {
         WeatherDetailFragment fragment = new WeatherDetailFragment();
         fragment.weather = weather;
+        fragment.title = title;
+        fragment.subTitle = subTitle;
+        fragment.cityCode = cityCode;
         return fragment;
     }
 
@@ -63,12 +79,23 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Log.e("detailfragment-->", "onCreateView");
 
         if(rootView == null) {
             rootView = inflater.inflate(R.layout.weather_detail_layout, null);
             coolWeatherDB = CoolWeatherDB.getInstance(getContext());
 
+            showLeftButton(rootView, clickListener);
+            showShareButton(rootView, clickListener);
+            showFeedsButton(rootView, clickListener);
+
+            setTitleLayoutTitle(rootView, title);
+            setTitleLayoutSubTitle(rootView, subTitle);
+
             initViews();
+            initViewsData();
+            initZhishu();
+
 
             //下拉刷新
             initRefreshLayout(rootView);
@@ -88,44 +115,44 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         todayAQITextView = (TextView) rootView.findViewById(R.id.tv_today_aqi);
         todayTempTextView = (TextView) rootView.findViewById(R.id.tv_today_temp);
         todayWeatherTextView = (TextView) rootView.findViewById(R.id.tv_today_weather);
-        tomorrowAQITextView = (TextView) rootView.findViewById(R.id.tv_tomorrow_aqi);
         tomorrowTempTextView = (TextView) rootView.findViewById(R.id.tv_tomorrow_temp);
         tomorrowWeatherTextView = (TextView) rootView.findViewById(R.id.tv_tomorrow_weather);
         weatherLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_weather_layout);
+        zhishuLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_zhishu);
+        zhishuDatailTextView = (TextView) rootView.findViewById(R.id.tv_zhishu_detail);
+        zhishuNameTextView = (TextView) rootView.findViewById(R.id.tv_zhishu_title);
 
         windImageView = (ImageView) rootView.findViewById(R.id.iv_trend_wind);
         todayWeatherImageView = (ImageView) rootView.findViewById(R.id.iv_today_weather);
         tomorrowWeatherImageView = (ImageView) rootView.findViewById(R.id.iv_tomorrow_weather);
 
-        initViewsData();
-
     }
 
     private void initViewsData() {
+
+        if (weather == null) return;
+
         weatherTextView.setText(weather.getForecastWeathers().get(0).getDays().get(0).getType());
-        tempTextView.setText(weather.getForecastWeathers().get(0).getHigh().replace("高温","").replace("℃","°").replace(" ", ""));
         windLevelTextView.setText(weather.getFengli());
         humidityTextView.setText(weather.getShidu());
-
-        weatherLinearLayout.setBackgroundResource(R.mipmap.bg_na);
+        tempTextView.setText(weather.getWendu() + "°");
 
         if(weather.getForecastWeathers().get(0).getDays().get(0).getType().equals(weather.getForecastWeathers().get(0).getDays().get(0).getType())) {
             todayWeatherTextView.setText(weather.getForecastWeathers().get(0).getDays().get(0).getType());
         }else {
             todayWeatherTextView.setText(weather.getForecastWeathers().get(0).getDays().get(0).getType() + "转" + weather.getForecastWeathers().get(0).getDays().get(1).getType());
         }
-        todayTempTextView.setText(weather.getForecastWeathers().get(0).getHigh().replace("高温","").replace("℃","") + "/" + weather.getForecastWeathers().get(0).getLow().replace("低温",""));
+        todayTempTextView.setText(weather.getForecastWeathers().get(0).getHigh().replace("高温","").replace("℃","") + " / " + weather.getForecastWeathers().get(0).getLow().replace("低温",""));
 
         if (weather.getForecastWeathers().get(1).getDays().get(0).getType().equals(weather.getForecastWeathers().get(1).getDays().get(1).getType())) {
             tomorrowWeatherTextView.setText(weather.getForecastWeathers().get(1).getDays().get(0).getType());
         }else {
             tomorrowWeatherTextView.setText(weather.getForecastWeathers().get(1).getDays().get(0).getType() + "转" + weather.getForecastWeathers().get(1).getDays().get(1).getType());
         }
-        tomorrowTempTextView.setText(weather.getForecastWeathers().get(1).getHigh().replace("高温","").replace("℃","") + "/" + weather.getForecastWeathers().get(1).getLow().replace("低温",""));
+        tomorrowTempTextView.setText(weather.getForecastWeathers().get(1).getHigh().replace("高温","").replace("℃","") + " / " + weather.getForecastWeathers().get(1).getLow().replace("低温",""));
 
         if (weather.getEnvironment() != null) {
-            todayAQITextView.setText(weather.getEnvironment().getQuality());
-            tomorrowAQITextView.setText(weather.getEnvironment().getQuality());
+            todayAQITextView.setText( " " + weather.getEnvironment().getAqi() + " " + weather.getEnvironment().getQuality() + " ");
         }
 
         setWeatherImageView();
@@ -133,37 +160,109 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
 
     private void setWeatherImageView() {
         try {
-            List<HashMap<String , String>> weatherMaps = new ArrayList<HashMap<String, String>>();
-            weatherMaps =  JsonUtil.json2HashMapList(readJsonFromRaw(R.raw.weather));
-            for(HashMap<String, String> map : weatherMaps) {
-                if (map.containsKey(weather.getForecastWeathers().get(0).getDays().get(0).getType())) {
-                    todayWeatherImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + map.get("icon"), null, null));
-                    weatherLinearLayout.setBackgroundResource(getResources().getIdentifier(getContext().getPackageName() + ":" + map.get("background_day"), null, null));
+            JSONArray jsonArray = new JSONArray(readJsonFromRaw(R.raw.weather));
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (jsonObject.getString("weather").equals(weather.getForecastWeathers().get(0).getDays().get(0).getType())) {
+                    Log.i("json_weather-->", jsonObject.getString("weather"));
+                    todayWeatherImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("icon"), null, null));
+                    weatherLinearLayout.setBackgroundResource(getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("background_day"), null, null));
 
                 }
-                if (map.containsKey(weather.getForecastWeathers().get(1).getDays().get(0).getType())) {
-                    tomorrowWeatherImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + map.get("icon"), null, null));
-                }
-            }
-
-            List<HashMap<String , String>> windMaps = new ArrayList<HashMap<String, String>>();
-            windMaps =  JsonUtil.json2HashMapList(readJsonFromRaw(R.raw.wind));
-            for( HashMap<String, String> map : windMaps) {
-                if(map.containsKey(weather.getFengxiang())) {
-                    windImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + map.get("icon"), null, null));
+                if (jsonObject.getString("weather").equals(weather.getForecastWeathers().get(1).getDays().get(0).getType())) {
+                    tomorrowWeatherImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("icon"), null, null));
                 }
             }
 
+            JSONArray winds = new JSONArray(readJsonFromRaw(R.raw.wind));
+            for(int i = 0; i < winds.length(); i++) {
+                JSONObject jsonObject = winds.getJSONObject(i);
+                if(jsonObject.getString("wind").equals(weather.getFengxiang())) {
+                    Log.i("json_wind-->", jsonObject.getString("wind"));
+                    windImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("icon"), null, null));
+                }
+            }
+
+            for (int i = 0; i < weather.getZhishus().size(); i++) {
+                Log.i("zhishu:", weather.getZhishus().get(i).getName() + "-->" + weather.getZhishus().get(i).getValue());
+            }
 
         }catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void initWindDirection() {
-        String wind = weather.getFengli();
+    private void initZhishu() {
+        if (weather == null) return;
+        if (weather.getZhishus().size() == 0) return;
 
+        if (!initZhishu) {
+            initZhishu = true;
+            zhishuNum = 0;
+            toLight = new AlphaAnimation(1, 0);//透明度动画
+            toLight.setDuration(2000);//动画持续时间
+            toLight.setFillAfter(true);//执行完停留在执行完的状态
+            toLight.setStartOffset(1000);//开始前等待时间
+            toLight.setRepeatCount(0);//动画重复次数
+
+            toDark = new AlphaAnimation(0, 1);
+            toDark.setDuration(1500);//动画持续时间
+            toDark.setFillAfter(true);//执行完停留在执行完的状态
+            toDark.setStartOffset(1000);//开始前等待时间
+            toDark.setRepeatCount(0);//动画重复次数
+
+            zhishuNameTextView.setText(weather.getZhishus().get(zhishuNum).getName() + "：" + weather.getZhishus().get(zhishuNum).getValue());
+            zhishuDatailTextView.setText(weather.getZhishus().get(zhishuNum).getDetail());
+            zhishuLinearLayout.setAnimation(toLight);
+            toLight.startNow();
+
+            toLight.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    zhishuNum += 1;
+                    if (zhishuNum == 11) zhishuNum = 0;
+                    zhishuLinearLayout.setAnimation(toDark);
+                    zhishuNameTextView.setText(weather.getZhishus().get(zhishuNum).getName() + "：" + weather.getZhishus().get(zhishuNum).getValue());
+                    zhishuDatailTextView.setText(weather.getZhishus().get(zhishuNum).getDetail());
+                    toDark.startNow();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
+            toDark.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    zhishuLinearLayout.setAnimation(toLight);
+                    toLight.startNow();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+        }
     }
+
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.i("click", "click");
+        }
+    };
 
     private void loadData(String cityCode) {
         if (!isLoading) {
@@ -176,7 +275,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
 
     @Override
     public void reloadData() {
-        loadData(getCityCode(weather.getCity()));
+        loadData(cityCode);
     }
 
 
@@ -198,11 +297,6 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         Log.i("requestFail", message);
     }
 
-
-    private String getCityCode(String cityName) {
-        return coolWeatherDB.loadCity(cityName).getCityCode();
-    }
-
     private String readJsonFromRaw(int file) {
         try {
             InputStream is  = getResources().openRawResource(file);
@@ -215,6 +309,13 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        toLight.cancel();
+        toDark.cancel();
     }
 
 }

@@ -114,7 +114,6 @@ public class Utility {
         RespWeatherZhishu zhishu = new RespWeatherZhishu();
         List<RespWeatherZhishu> zhishus = new ArrayList<RespWeatherZhishu>();
         RespWeatherYesterday.day_1 day_1 = yesterday.getDay_1();
-//        RespWeatherYesterday.night_1 night_1 = yesterday.getNight_1();
         List<RespWeatherYesterday.day_1> day_1s = new ArrayList<RespWeatherYesterday.day_1>();
         RespWeatherForecastWeather.day day = forecastWeather.getDay();
         RespWeatherForecastWeather.night night= forecastWeather.getNight();
@@ -142,14 +141,24 @@ public class Utility {
 						else if ("wendu".equals(nodeName)) {
                             weather.setWendu(xmlPullParser.nextText());
 						}
+
 						else if ("fengli".equals(nodeName)) {
-                            weather.setFengli(xmlPullParser.nextText());
+                            if (weather.getFengli() == null || "".equals(weather.getFengli())) {
+                                weather.setFengli(xmlPullParser.nextText());
+                            }
+                            else {
+                                day.setFengli(xmlPullParser.nextText());
+                            }
 						}
 						else if ("shidu".equals(nodeName)) {
                             weather.setShidu(xmlPullParser.nextText());
 						}
 						else if ("fengxiang".equals(nodeName)) {
-                            weather.setFengxiang(xmlPullParser.nextText());
+                            if (weather.getFengxiang() == null || "".equals(weather.getFengxiang())) {
+                                weather.setFengxiang(xmlPullParser.nextText());
+                            }else {
+                                day.setFengxiang(xmlPullParser.nextText());
+                            }
 						}
 						else if ("sunrise_1".equals(nodeName)) {
                             weather.setSunrise(xmlPullParser.nextText());
@@ -315,18 +324,18 @@ public class Utility {
                             day.setType(type);
 //                            night.setType(type);
                         }
-                        else if ("fengxiang".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-                            String fengxiang = xmlPullParser.nextText();
-                            day.setFengxiang(fengxiang);
-//                            night.setFengxiang(fengxiang);
-                        }
-                        else if ("fengli".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-                            String fengli = xmlPullParser.nextText();
-                            day.setFengli(fengli);
-//                            night.setFengli(fengli);
-                        }
+//                        else if ("fengxiang".equals(nodeName)) {
+////                            eventType = xmlPullParser.next();
+//                            String fengxiang = xmlPullParser.nextText();
+//                            day.setFengxiang(fengxiang);
+////                            night.setFengxiang(fengxiang);
+//                        }
+//                        else if ("fengli".equals(nodeName)) {
+////                            eventType = xmlPullParser.next();
+//                            String fengli = xmlPullParser.nextText();
+//                            day.setFengli(fengli);
+////                            night.setFengli(fengli);
+//                        }
 
                         else if ("zhishu".equals(nodeName)) {
                             Log.i("zhishu", "zhishu");

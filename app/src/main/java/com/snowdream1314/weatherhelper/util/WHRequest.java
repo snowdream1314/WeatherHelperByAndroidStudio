@@ -15,7 +15,9 @@ public class WHRequest implements DataUtil.NetReceiveDelete{
 
     public enum Req_Tag{
         Tag_City,
-        Tag_Weather
+        Tag_Weather,
+        Tag_Temperature
+
     }
 
     public interface WHRequestDelegate {
@@ -49,6 +51,12 @@ public class WHRequest implements DataUtil.NetReceiveDelete{
         Map<String, String> params = new HashMap<String, String>();
         params.put("citykey", cityCode);
         request(WHConstant.Weather_APi, params, Req_Tag.Tag_Weather);
+    }
+
+    public void queryTemperature(String cityCode) {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("citykey", cityCode);
+        request(WHConstant.Weather_Mini_Url, params, Req_Tag.Tag_Temperature);
     }
 
 

@@ -47,6 +47,9 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
 
     private CoolWeatherDB coolWeatherDB;
 
+    private String title, subTitle;
+    private String cityCode;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,10 +97,6 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
 
             initLocation();
             mLocationClient.start();
-
-            showLeftButton(view, clickListener);
-            showShareButton(view, clickListener);
-            showFeedsButton(view, clickListener);
 
             viewPager = (ViewPager) rootView.findViewById(R.id.vp_weather);
             WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
@@ -191,9 +190,9 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
                 }
             }
             Log.i("BaiduLocationApiDem", sb.toString());
-            String cityCode = coolWeatherDB.loadCity(location.getCity().replace("市","")).getCityCode();
-            setTitleLayoutTitle(rootView, location.getCity() + location.getDistrict());
-            setTitleLayoutSubTitle(rootView, location.getStreet() + (location.getStreetNumber() != null ? (location.getStreetNumber().split("号")[0] + "号"):""));
+            cityCode = coolWeatherDB.loadCity(location.getCity().replace("市","")).getCityCode();
+            title = location.getCity() + location.getDistrict();
+            subTitle = location.getStreet() + (location.getStreetNumber() != null ? (location.getStreetNumber().split("号")[0] + "号"):"");
 
             WHRequest request = new WHRequest(getContext());
             request.setDelegate(WeatherFragment.this);
@@ -209,7 +208,7 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
             Log.i("weather_data", data);
 
             try {
-                WeatherDetailFragment fragment = WeatherDetailFragment.instance(Utility.handleWeatherXMLResponse(getContext(), data));
+                WeatherDetailFragment fragment = WeatherDetailFragment.instance(Utility.handleWeatherXMLResponse(getContext(), data), title, subTitle, cityCode);
                 fragments.add(fragment);
 
                 WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);

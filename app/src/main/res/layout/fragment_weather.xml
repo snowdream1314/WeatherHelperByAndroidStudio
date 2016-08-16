@@ -8,8 +8,6 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <include layout="@layout/layout_title"/>
-
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_weather"
         android:layout_width="match_parent"
