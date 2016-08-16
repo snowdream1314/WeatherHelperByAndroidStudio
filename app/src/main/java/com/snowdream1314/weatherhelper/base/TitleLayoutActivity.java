@@ -22,6 +22,7 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
         TextView textView = (TextView) findViewById(R.id.tv_title);
         if (textView != null) {
             textView.setText(title);
+            textView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -30,6 +31,7 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
         TextView textView = (TextView) findViewById(R.id.tv_title);
         if (textView != null) {
             textView.setText(title);
+            textView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -79,14 +81,34 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
 
     @Override
     public void showShareButton(View view, View.OnClickListener clickListener) {
-        ImageButton share = (ImageButton) view.findViewById(R.id.ib_share);
+        showShareButton(view, 0, clickListener);
+    }
+
+    @Override
+    public void showShareButton(View view, int resId, View.OnClickListener clickListener) {
+        ImageButton share = (ImageButton) findViewById(R.id.ib_share);
+        if (resId == 0) {
+            share.setImageResource(R.drawable.selector_share_btn);
+        }else {
+            share.setImageResource(resId);
+        }
         share.setOnClickListener(clickListener);
         share.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showFeedsButton(View view, View.OnClickListener clickListener) {
-        ImageButton feeds = (ImageButton) view.findViewById(R.id.ib_feeds);
+        showFeedsButton(view, 0, clickListener);
+    }
+
+    @Override
+    public void showFeedsButton(View view, int resId, View.OnClickListener clickListener) {
+        ImageButton feeds = (ImageButton) findViewById(R.id.ib_feeds);
+        if (resId == 0) {
+            feeds.setImageResource(R.drawable.selector_feeds);
+        }else {
+            feeds.setImageResource(resId);
+        }
         feeds.setOnClickListener(clickListener);
         feeds.setVisibility(View.VISIBLE);
     }

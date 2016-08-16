@@ -1,8 +1,7 @@
-package com.snowdream1314.weatherhelper.main.weather;
+package com.snowdream1314.weatherhelper.main.weather.weather_detail;
 
 
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,20 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.snowdream1314.weatherhelper.R;
 import com.snowdream1314.weatherhelper.base.PullRequestMoreFragment;
-import com.snowdream1314.weatherhelper.base.TitleLayoutFragment;
-import com.snowdream1314.weatherhelper.bean.AddressComponent;
 import com.snowdream1314.weatherhelper.bean.RespWeather;
-import com.snowdream1314.weatherhelper.util.AppUtil;
+import com.snowdream1314.weatherhelper.main.weather.manage_city.ManageCityActivity;
 import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
-import com.snowdream1314.weatherhelper.util.JsonUtil;
 import com.snowdream1314.weatherhelper.util.Utility;
 import com.snowdream1314.weatherhelper.util.WHRequest;
 
@@ -32,10 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -261,6 +251,16 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         @Override
         public void onClick(View v) {
             Log.i("click", "click");
+            switch (v.getId()) {
+                case R.id.ib_left://城市管理
+                    Intent cityManageIntent = new Intent(getActivity(), ManageCityActivity.class);
+                    startActivity(cityManageIntent);
+                    break;
+                case R.id.ib_feeds://消息
+                    break;
+                case R.id.ib_share://分享
+                    break;
+            }
         }
     };
 

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.snowdream1314.weatherhelper.main.weather.WeatherDetailFragment">
+    tools:context=".main.weather.weather_detail.WeatherDetailFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ListView

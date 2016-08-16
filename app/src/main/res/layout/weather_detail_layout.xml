@@ -5,7 +5,10 @@
     android:background="@mipmap/bg_na"
     android:id="@+id/ll_weather_layout">
 
-    <include layout="@layout/layout_title"/>
+    <include layout="@layout/layout_title"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@android:color/transparent"/>
 
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
@@ -30,7 +33,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginLeft="15dp"
-                android:layout_marginBottom="10dp">
+                android:layout_marginStart="15dp"
+                android:layout_marginBottom="10dp"
+                >
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -67,13 +72,15 @@
                             android:textColor="#FFFFFF"
                             android:textSize="16sp"
                             android:layout_marginLeft="3dp"
-                            android:layout_toRightOf="@+id/iv_trend_wind"/>
+                            android:layout_marginStart="3dp"
+                            />
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@mipmap/main_icon_humidity"
-                            android:layout_marginLeft="15dp"/>
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"/>
                         <TextView
                             android:id="@+id/tv_humidity"
                             android:layout_width="wrap_content"
@@ -81,7 +88,8 @@
                             android:text="39%"
                             android:textColor="#FFFFFF"
                             android:textSize="16sp"
-                            android:layout_marginLeft="3dp"/>
+                            android:layout_marginLeft="3dp"
+                            android:layout_marginStart="3dp"/>
                     </LinearLayout>
 
                     <TextView
@@ -92,6 +100,7 @@
                         android:textColor ="#FFFFFF"
                         android:gravity="center"
                         android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
                         android:layout_below="@+id/ll_weather_detail"
                         android:layout_marginTop="20dp"
                         android:padding="3dp"
@@ -169,16 +178,6 @@
                         android:textColor="#FFFFFF"
                         android:textSize="16sp"
                         />
-                    <!--<TextView-->
-                        <!--android:id="@+id/tv_today_aqi"-->
-                        <!--android:layout_width="30dp"-->
-                        <!--android:layout_height="20dp"-->
-                        <!--android:background="@mipmap/aqi_detail_good"-->
-                        <!--android:text="良"-->
-                        <!--android:textColor ="#FFFFFF"-->
-                        <!--android:layout_toRightOf="@id/tv_today"-->
-                        <!--android:gravity="center"-->
-                        <!--android:layout_marginLeft="5dp"/>-->
 
                     <TextView
                         android:id="@+id/tv_today_temp"
@@ -188,7 +187,9 @@
                         android:textSize="16sp"
                         android:textColor="#FFFFFF"
                         android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"/>
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"/>
 
                     <TextView
                         android:id="@+id/tv_today_weather"
@@ -207,8 +208,10 @@
                         android:src="@mipmap/ww0"
                         android:layout_below="@+id/tv_today_temp"
                         android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_marginTop="5dp"
-                        android:layout_marginRight="10dp"/>
+                        android:layout_marginRight="10dp"
+                        android:layout_marginEnd="10dp"/>
 
                 </RelativeLayout>
 
@@ -232,16 +235,6 @@
                         android:textColor="#FFFFFF"
                         android:textSize="16sp"
                         />
-                    <!--<TextView-->
-                        <!--android:id="@+id/tv_tomorrow_aqi"-->
-                        <!--android:layout_width="30dp"-->
-                        <!--android:layout_height="20dp"-->
-                        <!--android:background="@mipmap/aqi_detail_good"-->
-                        <!--android:text="良"-->
-                        <!--android:textColor ="#FFFFFF"-->
-                        <!--android:layout_toRightOf="@id/tv_tomorrow"-->
-                        <!--android:gravity="center"-->
-                        <!--android:layout_marginLeft="5dp"/>-->
 
                     <TextView
                         android:id="@+id/tv_tomorrow_temp"
@@ -251,6 +244,8 @@
                         android:textSize="16sp"
                         android:textColor="#FFFFFF"
                         android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginRight="10dp"/>
 
                     <TextView
@@ -270,6 +265,8 @@
                         android:src="@mipmap/ww0"
                         android:layout_below="@+id/tv_tomorrow_temp"
                         android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginRight="10dp"/>
 

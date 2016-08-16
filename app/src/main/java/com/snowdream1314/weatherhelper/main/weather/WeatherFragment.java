@@ -19,14 +19,12 @@ import com.baidu.location.LocationClientOption;
 import com.baidu.location.Poi;
 import com.snowdream1314.weatherhelper.R;
 import com.snowdream1314.weatherhelper.base.TitleLayoutFragment;
-import com.snowdream1314.weatherhelper.bean.AddressComponent;
 import com.snowdream1314.weatherhelper.constant.WHConstant;
+import com.snowdream1314.weatherhelper.main.weather.weather_detail.WeatherDetailFragment;
 import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
 import com.snowdream1314.weatherhelper.util.MySharedPreference;
 import com.snowdream1314.weatherhelper.util.Utility;
 import com.snowdream1314.weatherhelper.util.WHRequest;
-
-import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.ArrayList;
