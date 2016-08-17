@@ -17,5 +17,11 @@ public interface TitleLayout {
     public void showFeedsButton(View view, View.OnClickListener clickListener);
     public void showShareButton(View view, int resId, View.OnClickListener clickListener);
     public void showFeedsButton(View view, int resId, View.OnClickListener clickListener);
+    public void hideShareButton();
+    public void hideFeedsButton();
+    public void hideBackButton();
+    public void hideLeftButton();
+    public void hideRightButton();
+    public void hideRightText();
     public void showCirclePageIndicator(View view);
 }

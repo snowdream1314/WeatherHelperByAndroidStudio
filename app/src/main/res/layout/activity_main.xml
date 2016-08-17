@@ -3,7 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/tabhost"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="false"
+    android:clipToPadding="true"
+    >
 
     <!-- 选用LinearLayout布局以及设置 FrameLayout的属性layout_height="0dp"、
     android:layout_weight="1"以防tab选项卡盖住listView中的内容 -->

@@ -1,5 +1,6 @@
 [{"weather":"晴", "id":0, "icon":"mipmap/ww0", "background_day":"mipmap/bg0_fine_day", "background_night":"mipmap/bg0_fine_night"},
   {"weather":"多云", "id":1, "icon":"mipmap/ww1", "background_day":"mipmap/bg0_fine_day", "background_night":"mipmap/bg0_fine_night"},
+  {"weather":"晴转多云", "id":11, "icon":"mipmap/ww1", "background_day":"mipmap/bg0_fine_day", "background_night":"mipmap/bg0_fine_night"},
   {"weather":"阴", "id":2, "icon":"mipmap/ww2", "background_day":"mipmap/bg0_fine_day", "background_night":"mipmap/bg0_fine_night"},
   {"weather":"阵雨", "id":3, "icon":"mipmap/ww3", "background_day":"mipmap/bg_moderate_rain_day", "background_night":"mipmap/bg_heavy_rain_night"},
   {"weather":"雷阵雨", "id":4, "icon":"mipmap/ww4", "background_day":"mipmap/bg_moderate_rain_day", "background_night":"mipmap/bg_heavy_rain_night"},

@@ -2,22 +2,30 @@ package com.snowdream1314.weatherhelper.main.weather.weather_detail;
 
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.snowdream1314.weatherhelper.R;
 import com.snowdream1314.weatherhelper.base.PullRequestMoreFragment;
+import com.snowdream1314.weatherhelper.bean.ChoosedCity;
 import com.snowdream1314.weatherhelper.bean.RespWeather;
 import com.snowdream1314.weatherhelper.main.weather.manage_city.ManageCityActivity;
+import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
 import com.snowdream1314.weatherhelper.util.Utility;
 import com.snowdream1314.weatherhelper.util.WHRequest;
@@ -44,6 +52,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
     private ImageView windImageView,todayWeatherImageView, tomorrowWeatherImageView;
 
     private LinearLayout weatherLinearLayout, zhishuLinearLayout;
+    private RelativeLayout titleLayout;
 
     private String title, subTitle;
     private String cityCode;
@@ -75,6 +84,11 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
             rootView = inflater.inflate(R.layout.weather_detail_layout, null);
             coolWeatherDB = CoolWeatherDB.getInstance(getContext());
 
+            titleLayout = (RelativeLayout) rootView.findViewById(R.id.rl_title);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) titleLayout.getLayoutParams();
+            params.height = params.height + AppUtil.getStatusHeight(getContext());
+            titleLayout.setLayoutParams(params);
+
             showLeftButton(rootView, clickListener);
             showShareButton(rootView, clickListener);
             showFeedsButton(rootView, clickListener);
@@ -85,7 +99,6 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
             initViews();
             initViewsData();
             initZhishu();
-
 
             //下拉刷新
             initRefreshLayout(rootView);
@@ -123,6 +136,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         if (weather == null) return;
 
         weatherTextView.setText(weather.getForecastWeathers().get(0).getDays().get(0).getType());
+
         windLevelTextView.setText(weather.getFengli());
         humidityTextView.setText(weather.getShidu());
         tempTextView.setText(weather.getWendu() + "°");
@@ -155,7 +169,9 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.getString("weather").equals(weather.getForecastWeathers().get(0).getDays().get(0).getType())) {
                     Log.i("json_weather-->", jsonObject.getString("weather"));
-                    todayWeatherImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("icon"), null, null));
+                    int resId = getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("icon"), null, null);
+                    todayWeatherImageView.setImageResource(resId);
+                    todayWeatherImageView.setTag(resId);
                     weatherLinearLayout.setBackgroundResource(getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("background_day"), null, null));
 
                 }
@@ -172,10 +188,11 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
                     windImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("icon"), null, null));
                 }
             }
+            saveCity();
 
-            for (int i = 0; i < weather.getZhishus().size(); i++) {
-                Log.i("zhishu:", weather.getZhishus().get(i).getName() + "-->" + weather.getZhishus().get(i).getValue());
-            }
+//            for (int i = 0; i < weather.getZhishus().size(); i++) {
+//                Log.i("zhishu:", weather.getZhishus().get(i).getName() + "-->" + weather.getZhishus().get(i).getValue());
+//            }
 
         }catch (Exception e) {
             e.printStackTrace();
@@ -247,6 +264,17 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         }
     }
 
+    private void saveCity() {
+        ChoosedCity choosedCity = new ChoosedCity();
+        choosedCity.setTempLow(weather.getForecastWeathers().get(0).getLow().replace("低温",""));
+        choosedCity.setTempHigh(weather.getForecastWeathers().get(0).getHigh().replace("高温",""));
+        choosedCity.setName(title);
+        choosedCity.setCode(cityCode);
+        choosedCity.setWeather(weather.getForecastWeathers().get(0).getDays().get(0).getType());
+        choosedCity.setImageId((int)todayWeatherImageView.getTag());
+        coolWeatherDB.saveChoosedCity(choosedCity);
+    }
+
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -285,6 +313,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         if (req.tag == WHRequest.Req_Tag.Tag_Weather) {
             weather = Utility.handleWeatherXMLResponse(getContext(), data);
             initViewsData();
+
             isLoading = false;
             setRefreshing(false);
         }
@@ -314,6 +343,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
     @Override
     public void onPause() {
         super.onPause();
+        Log.i("WeatherDetailFragment->", "onPause");
         toLight.cancel();
         toDark.cancel();
     }

@@ -54,6 +54,13 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
             imageButton.setOnClickListener(clickListener);
         }
         imageButton.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void hideBackButton() {
+        ImageButton imageButton = (ImageButton) findViewById(R.id.ib_back);
+        imageButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -61,6 +68,12 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
         ImageButton imageButton = (ImageButton) findViewById(R.id.ib_left);
         imageButton.setOnClickListener(clickListener);
         imageButton.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLeftButton() {
+        ImageButton imageButton = (ImageButton) findViewById(R.id.ib_left);
+        imageButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -72,11 +85,23 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     }
 
     @Override
+    public void hideRightButton() {
+        ImageButton imageButton = (ImageButton) findViewById(R.id.ib_right);
+        imageButton.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showRightText(View view, String text, View.OnClickListener clickListener) {
         TextView textView = (TextView) findViewById(R.id.tv_right);
         textView.setText(text);
         textView.setOnClickListener(clickListener);
         textView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideRightText() {
+        TextView textView = (TextView) findViewById(R.id.tv_right);
+        textView.setVisibility(View.GONE);
     }
 
     @Override
@@ -97,6 +122,12 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     }
 
     @Override
+    public void hideShareButton() {
+        ImageButton share = (ImageButton) findViewById(R.id.ib_share);
+        share.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showFeedsButton(View view, View.OnClickListener clickListener) {
         showFeedsButton(view, 0, clickListener);
     }
@@ -111,6 +142,12 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
         }
         feeds.setOnClickListener(clickListener);
         feeds.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideFeedsButton() {
+        ImageButton feeds = (ImageButton) findViewById(R.id.ib_feeds);
+        feeds.setVisibility(View.GONE);
     }
 
 

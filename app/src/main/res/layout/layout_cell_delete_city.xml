@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_manage_city"
+        android:padding="10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@mipmap/city_delete_normal"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_city_weather"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:background="@null"
+            android:layout_toRightOf="@+id/iv_delete"
+            android:layout_marginLeft="5dp"/>
+
+        <TextView
+            android:id="@+id/tv_city_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="城市"
+            android:textSize="16sp"
+            android:textColor="#FFababab"
+            android:layout_toRightOf="@+id/iv_city_weather"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:ems="6"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除"
+            android:textSize="17sp"
+            android:textColor="#FFFFFF"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/shape_delete_choosed_city"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:layout_marginRight="10dp"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>
