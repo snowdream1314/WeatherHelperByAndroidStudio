@@ -193,7 +193,7 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
             Log.i("BaiduLocationApiDem", sb.toString());
             String cityCode = coolWeatherDB.loadCity(location.getCity().replace("市","")).getCityCode();
             setTitleLayoutTitle(rootView, location.getCity() + location.getDistrict());
-            setTitleLayoutSubTitle(rootView, location.getStreet() + location.getStreetNumber().split("号")[0] + "号");
+            setTitleLayoutSubTitle(rootView, location.getStreet());
             WHRequest request = new WHRequest(getContext());
             request.setDelegate(WeatherFragment.this);
             request.queryWeather(cityCode);

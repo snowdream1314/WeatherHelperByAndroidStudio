@@ -132,139 +132,78 @@ public class Utility {
 						break;
 					case XmlPullParser.START_TAG:
 						if ("city".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setCity(xmlPullParser.getText());
                             weather.setCity(xmlPullParser.nextText());
 						}
 						else if ("updatetime".equals(nodeName)) {
-//							eventType = xmlPullParser.next();
-//							weather.setUpdatetime(xmlPullParser.getText());
                             weather.setUpdatetime(xmlPullParser.nextText());
-//							updateTime = xmlPullParser.nextText();
-//							weatherDatas.add(updateTime);
 						}
 						else if ("wendu".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setWendu(xmlPullParser.getText());
                             weather.setWendu(xmlPullParser.nextText());
-//							tempNow = xmlPullParser.nextText();
-//							weatherDatas.add(tempNow.concat("°"));
 						}
 						else if ("fengli".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setFengli(xmlPullParser.getText());
                             weather.setFengli(xmlPullParser.nextText());
-//							fengLi = xmlPullParser.nextText();
-//							weatherDatas.add(fengLi);
 						}
 						else if ("shidu".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setShidu(xmlPullParser.getText());
                             weather.setShidu(xmlPullParser.nextText());
-//							shidu = xmlPullParser.nextText();
-//							weatherDatas.add(shidu);
 						}
 						else if ("fengxiang".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setFengxiang(xmlPullParser.getText());
                             weather.setFengxiang(xmlPullParser.nextText());
-//							fengXiang = xmlPullParser.nextText();
-//							weatherDatas.add(fengXiang);
 						}
 						else if ("sunrise_1".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setSunrise(xmlPullParser.getText());
                             weather.setSunrise(xmlPullParser.nextText());
-//							sunrise_1 = xmlPullParser.nextText();
-//							weatherDatas.add(sunrise_1);
 						}
 						else if ("sunset_1".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            weather.setSunset(xmlPullParser.getText());
                             weather.setSunset(xmlPullParser.nextText());
-//							sunset_1 = xmlPullParser.nextText();
-//							weatherDatas.add(sunset_1);
 						}
                         else if ("environment".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             environment = new RespWeatherEnvironment();
                         }
 						else if ("aqi".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            environment.setAqi(xmlPullParser.getText());
                             environment.setAqi(xmlPullParser.nextText());
-//							aqi = xmlPullParser.nextText();
-//							weatherDatas.add(aqi);
 						}
 						else if ("pm25".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            environment.setPm25(xmlPullParser.getText());
                             environment.setPm25(xmlPullParser.nextText());
-//							pm25 = xmlPullParser.nextText();
-//							weatherDatas.add(pm25);
 						}
 						else if ("suggest".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            environment.setSuggest(xmlPullParser.getText());
                             environment.setSuggest(xmlPullParser.nextText());
-//							suggest = xmlPullParser.nextText();
-//							weatherDatas.add(suggest);
 						}
 						else if ("quality".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
-//                            environment.setQuality(xmlPullParser.getText());
                             environment.setQuality(xmlPullParser.nextText());
-//							quality = xmlPullParser.nextText();
-//							weatherDatas.add(quality);
 						}
 						else if ("MajorPollutants".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             environment.setMajorPollutants(xmlPullParser.nextText());
-//							MajorPollutants = xmlPullParser.nextText();
-//							weatherDatas.add(MajorPollutants);
 						}
                         else if ("o3".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             environment.setO3(xmlPullParser.nextText());
                         }
                         else if ("co".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             environment.setCo(xmlPullParser.nextText());
                         }
                         else if ("pm10".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             environment.setPm10(xmlPullParser.nextText());
                         }
                         else if ("so2".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             environment.setSo2(xmlPullParser.nextText());
                         }
                         else if ("no2".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             environment.setNo2(xmlPullParser.nextText());
                         }
                         else if ("time".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             environment.setTime(xmlPullParser.nextText());
                         }
                         else if ("alarm".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             alarm = new RespWeatherAlarm();
                         }
                         else if ("cityKey".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             alarm.setCityKey(xmlPullParser.nextText());
                         }
                         else if ("cityName".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             alarm.setCityName(xmlPullParser.nextText());
                         }
                         else if ("alarmType".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             alarm.setAlarmType(xmlPullParser.nextText());
                         }
                         else if ("alarmDegree".equals(nodeName)) {
-//                            eventType = xmlPullParser.next();
                             alarm.setAlarmDegree(xmlPullParser.nextText());
                         }
                         else if ("alarmText".equals(nodeName)) {

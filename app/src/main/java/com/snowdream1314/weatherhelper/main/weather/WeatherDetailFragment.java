@@ -81,10 +81,10 @@ public class WeatherDetailFragment extends Fragment implements WHRequest.WHReque
         windLevelTextView.setText(weather.getFengli());
         humidityTextView.setText(weather.getShidu());
 
-        todayWeatherTextView.setText(weather.getForecastWeathers().get(0).getDay().getType());
+        todayWeatherTextView.setText(weather.getForecastWeathers().get(0).getDay().getType() + "转" + weather.getForecastWeathers().get(0).getNight().getType());
         todayTempTextView.setText(weather.getForecastWeathers().get(0).getHigh().replace("高温","").replace("℃","") + "/" + weather.getForecastWeathers().get(0).getLow().replace("低温",""));
 
-        tomorrowWeatherTextView.setText(weather.getForecastWeathers().get(1).getDay().getType());
+        tomorrowWeatherTextView.setText(weather.getForecastWeathers().get(1).getDay().getType() + "转" + weather.getForecastWeathers().get(1).getNight().getType());
         tomorrowTempTextView.setText(weather.getForecastWeathers().get(1).getHigh().replace("高温","").replace("℃","") + "/" + weather.getForecastWeathers().get(1).getLow().replace("低温",""));
     }
 
