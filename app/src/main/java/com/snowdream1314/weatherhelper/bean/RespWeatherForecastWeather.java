@@ -1,5 +1,7 @@
 package com.snowdream1314.weatherhelper.bean;
 
+import java.util.List;
+
 /**
  * Created by xxq on 2016/7/29.
  */
@@ -11,6 +13,7 @@ public class RespWeatherForecastWeather {
 
     private day day = new day();
     private night night = new night();
+    private List<day> days;
 
     public String getDate() { return date; }
 
@@ -31,6 +34,10 @@ public class RespWeatherForecastWeather {
     public night getNight() { return  night; }
 
     public void setNight(night night) { this.night = night; }
+
+    public List<day> getDays() { return days; }
+
+    public void setDays(List<day> days) { this.days = days; }
 
     public class day {
         private String type;

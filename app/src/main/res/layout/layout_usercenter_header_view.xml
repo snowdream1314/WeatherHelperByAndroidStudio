@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="140dp"
+    android:background="#0099ff"
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/ll_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:paddingTop="20dp">
+
+        <ImageView
+            android:id="@+id/iv_login_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selector_login_phone"
+            />
+
+        <ImageView
+            android:id="@+id/iv_login_wechat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selector_login_wechart"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+        <ImageView
+            android:id="@+id/iv_login_qq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/selector_login_qq"
+            android:layout_centerInParent="true"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_login_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="登录发现更多内容"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        android:layout_below="@+id/ll_login"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+</RelativeLayout>

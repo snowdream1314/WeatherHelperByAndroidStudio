@@ -107,23 +107,29 @@ public class CoolWeatherDB {
     }
 
     //将choosedcity实例存储到数据库
-    public void saveChoosedCity(ChoosedCity ChoosedCity) {
-        if (ChoosedCity != null) {
+    public void saveChoosedCity(ChoosedCity choosedCity) {
+        if (choosedCity != null) {
             ContentValues values = new ContentValues();
-            values.put("choosedcity_name", ChoosedCity.getName());
-            values.put("choosedcity_code", ChoosedCity.getCode());
-            values.put("choosedcity_tempLow", ChoosedCity.getTempLow());
-            values.put("choosedcity_tempHigh", ChoosedCity.getTempHigh());
-            values.put("choosedcity_weather", ChoosedCity.getWeather());
-            values.put("choosedcity_imageID", ChoosedCity.getImageId());
-            db.insert("choosedcity", null, values);
+            values.put("choosedcity_name", choosedCity.getName());
+            values.put("choosedcity_code", choosedCity.getCode());
+            values.put("choosedcity_tempLow", choosedCity.getTempLow());
+            values.put("choosedcity_tempHigh", choosedCity.getTempHigh());
+            values.put("choosedcity_weather", choosedCity.getWeather());
+            values.put("choosedcity_imageID", choosedCity.getImageId());
+
+            Cursor cursor = db.query("ChoosedCity", null, "choosedcity_code=?", new String[] {choosedCity.getCode()}, null, null, null);
+            if (cursor.getCount() == 0) {
+                db.insert("ChoosedCity", null, values);
+            }else {
+                db.update("ChoosedCity",values, "choosedcity_code=?", new String[] {choosedCity.getCode()});
+            }
         }
     }
 
     //从数据库获取choosedcity表中的数据
     public List<ChoosedCity> loadChoosedCity() {
         List<ChoosedCity> list = new ArrayList<ChoosedCity>();
-        Cursor cursor = db.query("choosedcity", null, null, null, null, null, null);
+        Cursor cursor = db.query("ChoosedCity", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 ChoosedCity ChoosedCity = new ChoosedCity();
@@ -141,11 +147,30 @@ public class CoolWeatherDB {
     }
 
     //删除choosedcity表中的数据
-    public void delchoosedcity(ChoosedCity choosedcity) {
+    public void delChoosedCity(ChoosedCity choosedCity) {
         try {
-            db.delete("choosedcity", "choosedcity_code=?", new String[] {choosedcity.getCode()});
+            db.delete("ChoosedCity", "choosedcity_code=?", new String[] {choosedCity.getCode()});
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+    //更新choosedcity表中的数据
+    public void updateChoosedCity(ChoosedCity choosedCity) {
+        try {
+            if (choosedCity != null) {
+                ContentValues values = new ContentValues();
+                values.put("choosedcity_name", choosedCity.getName());
+                values.put("choosedcity_code", choosedCity.getCode());
+                values.put("choosedcity_tempLow", choosedCity.getTempLow());
+                values.put("choosedcity_tempHigh", choosedCity.getTempHigh());
+                values.put("choosedcity_weather", choosedCity.getWeather());
+                values.put("choosedcity_imageID", choosedCity.getImageId());
+                db.update("ChoosedCity",values, "choosedcity_code=?", new String[] {choosedCity.getCode()});
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
