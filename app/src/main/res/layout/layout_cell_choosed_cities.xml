@@ -43,6 +43,23 @@
             android:layout_marginEnd="10dp"
             android:layout_centerVertical="true"/>
 
+        <TextView
+            android:id="@+id/tv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除"
+            android:textSize="17sp"
+            android:textColor="#FFFFFF"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/shape_delete_choosed_city"
+            android:paddingLeft="15dp"
+            android:paddingTop="5dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="5dp"
+            android:layout_marginRight="11dp"
+            android:visibility="gone"/>
+
     </RelativeLayout>
 
 </LinearLayout>

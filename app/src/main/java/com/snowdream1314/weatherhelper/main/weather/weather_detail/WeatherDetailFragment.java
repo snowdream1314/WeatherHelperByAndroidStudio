@@ -2,17 +2,12 @@ package com.snowdream1314.weatherhelper.main.weather.weather_detail;
 
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -24,7 +19,7 @@ import com.snowdream1314.weatherhelper.R;
 import com.snowdream1314.weatherhelper.base.PullRequestMoreFragment;
 import com.snowdream1314.weatherhelper.bean.ChoosedCity;
 import com.snowdream1314.weatherhelper.bean.RespWeather;
-import com.snowdream1314.weatherhelper.main.weather.manage_city.ManageCityActivity;
+import com.snowdream1314.weatherhelper.main.managecity.ManageCityActivity;
 import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
 import com.snowdream1314.weatherhelper.util.Utility;
@@ -49,16 +44,17 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
 
     private TextView weatherTextView, tempTextView, windLevelTextView, humidityTextView, todayAQITextView, todayTempTextView, todayWeatherTextView,
                         tomorrowAQITextView, tomorrowTempTextView, tomorrowWeatherTextView, zhishuNameTextView, zhishuDatailTextView;
-    private ImageView windImageView,todayWeatherImageView, tomorrowWeatherImageView;
+    private ImageView windImageView,todayWeatherImageView, tomorrowWeatherImageView, humidityImageView;
 
-    private LinearLayout weatherLinearLayout, zhishuLinearLayout;
+    private LinearLayout weatherLinearLayout, zhishuLinearLayout, weatherDetailLinearLayout;
     private RelativeLayout titleLayout;
 
     private String title, subTitle;
     private String cityCode;
-    private int zhishuNum = -1;
+    private int zhishuAnimationCount = -1;
+    private int weatherAnimationCount = -1;
 
-    private AlphaAnimation toLight, toDark;
+    private AlphaAnimation ZhishuToLight, ZhishuToDark, WeatherToLight, WeatherToDark;
 
     public WeatherDetailFragment() {
         // Required empty public constructor
@@ -98,7 +94,8 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
 
             initViews();
             initViewsData();
-            initZhishu();
+            initZhishuAnimation();
+            initWeatherDetailAnimation();
 
             //下拉刷新
             initRefreshLayout(rootView);
@@ -115,12 +112,14 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         tempTextView = (TextView) rootView.findViewById(R.id.tv_temp);
         windLevelTextView = (TextView) rootView.findViewById(R.id.tv_trend_wind_level);
         humidityTextView = (TextView) rootView.findViewById(R.id.tv_humidity);
+        humidityImageView = (ImageView) rootView.findViewById(R.id.iv_humidity);
         todayAQITextView = (TextView) rootView.findViewById(R.id.tv_today_aqi);
         todayTempTextView = (TextView) rootView.findViewById(R.id.tv_today_temp);
         todayWeatherTextView = (TextView) rootView.findViewById(R.id.tv_today_weather);
         tomorrowTempTextView = (TextView) rootView.findViewById(R.id.tv_tomorrow_temp);
         tomorrowWeatherTextView = (TextView) rootView.findViewById(R.id.tv_tomorrow_weather);
         weatherLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_weather_layout);
+        weatherDetailLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_weather_detail);
         zhishuLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_zhishu);
         zhishuDatailTextView = (TextView) rootView.findViewById(R.id.tv_zhishu_detail);
         zhishuNameTextView = (TextView) rootView.findViewById(R.id.tv_zhishu_title);
@@ -136,7 +135,6 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         if (weather == null) return;
 
         weatherTextView.setText(weather.getForecastWeathers().get(0).getDays().get(0).getType());
-
         windLevelTextView.setText(weather.getFengli());
         humidityTextView.setText(weather.getShidu());
         tempTextView.setText(weather.getWendu() + "°");
@@ -164,7 +162,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
 
     private void setWeatherImageView() {
         try {
-            JSONArray jsonArray = new JSONArray(readJsonFromRaw(R.raw.weather));
+            JSONArray jsonArray = new JSONArray(AppUtil.readJsonFromRaw(getContext(), R.raw.weather));
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.getString("weather").equals(weather.getForecastWeathers().get(0).getDays().get(0).getType())) {
@@ -180,7 +178,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
                 }
             }
 
-            JSONArray winds = new JSONArray(readJsonFromRaw(R.raw.wind));
+            JSONArray winds = new JSONArray(AppUtil.readJsonFromRaw(getContext(),R.raw.wind));
             for(int i = 0; i < winds.length(); i++) {
                 JSONObject jsonObject = winds.getJSONObject(i);
                 if(jsonObject.getString("wind").equals(weather.getFengxiang())) {
@@ -188,6 +186,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
                     windImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("icon"), null, null));
                 }
             }
+
             saveCity();
 
 //            for (int i = 0; i < weather.getZhishus().size(); i++) {
@@ -196,71 +195,6 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
 
         }catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private void initZhishu() {
-        if (weather == null) return;
-        if (weather.getZhishus().size() == 0) return;
-
-        if (!initZhishu) {
-            initZhishu = true;
-            zhishuNum = 0;
-            toLight = new AlphaAnimation(1, 0);//透明度动画
-            toLight.setDuration(2000);//动画持续时间
-            toLight.setFillAfter(true);//执行完停留在执行完的状态
-            toLight.setStartOffset(1000);//开始前等待时间
-            toLight.setRepeatCount(0);//动画重复次数
-
-            toDark = new AlphaAnimation(0, 1);
-            toDark.setDuration(1500);//动画持续时间
-            toDark.setFillAfter(true);//执行完停留在执行完的状态
-            toDark.setStartOffset(1000);//开始前等待时间
-            toDark.setRepeatCount(0);//动画重复次数
-
-            zhishuNameTextView.setText(weather.getZhishus().get(zhishuNum).getName() + "：" + weather.getZhishus().get(zhishuNum).getValue());
-            zhishuDatailTextView.setText(weather.getZhishus().get(zhishuNum).getDetail());
-            zhishuLinearLayout.setAnimation(toLight);
-            toLight.startNow();
-
-            toLight.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    zhishuNum += 1;
-                    if (zhishuNum == 11) zhishuNum = 0;
-                    zhishuLinearLayout.setAnimation(toDark);
-                    zhishuNameTextView.setText(weather.getZhishus().get(zhishuNum).getName() + "：" + weather.getZhishus().get(zhishuNum).getValue());
-                    zhishuDatailTextView.setText(weather.getZhishus().get(zhishuNum).getDetail());
-                    toDark.startNow();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
-
-            toDark.setAnimationListener(new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    zhishuLinearLayout.setAnimation(toLight);
-                    toLight.startNow();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            });
         }
     }
 
@@ -274,6 +208,139 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         choosedCity.setImageId((int)todayWeatherImageView.getTag());
         coolWeatherDB.saveChoosedCity(choosedCity);
     }
+
+    private void initZhishuAnimation() {
+        if (weather == null) return;
+        if (weather.getZhishus().size() == 0) return;
+
+        if (!initZhishu) {
+            initZhishu = true;
+            zhishuAnimationCount = 0;
+            ZhishuToLight = new AlphaAnimation(1, 0);//透明度动画
+            ZhishuToLight.setDuration(2000);//动画持续时间
+            ZhishuToLight.setFillAfter(true);//执行完停留在执行完的状态
+            ZhishuToLight.setStartOffset(1000);//开始前等待时间
+            ZhishuToLight.setRepeatCount(0);//动画重复次数
+
+            ZhishuToDark = new AlphaAnimation(0, 1);
+            ZhishuToDark.setDuration(1500);//动画持续时间
+            ZhishuToDark.setFillAfter(true);//执行完停留在执行完的状态
+            ZhishuToDark.setStartOffset(1000);//开始前等待时间
+            ZhishuToDark.setRepeatCount(0);//动画重复次数
+
+            zhishuNameTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getName() + "：" + weather.getZhishus().get(zhishuAnimationCount).getValue());
+            zhishuDatailTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getDetail());
+            zhishuLinearLayout.setAnimation(ZhishuToLight);
+
+            ZhishuToLight.start();
+
+            ZhishuToLight.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    zhishuAnimationCount += 1;
+                    if (zhishuAnimationCount == 11) zhishuAnimationCount = 0;
+                    zhishuLinearLayout.setAnimation(ZhishuToDark);
+                    zhishuNameTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getName() + "：" + weather.getZhishus().get(zhishuAnimationCount).getValue());
+                    zhishuDatailTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getDetail());
+                    ZhishuToDark.startNow();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+
+            ZhishuToDark.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    zhishuLinearLayout.setAnimation(ZhishuToLight);
+                    ZhishuToLight.startNow();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
+            });
+        }
+
+    }
+    
+    private void initWeatherDetailAnimation() {
+        weatherAnimationCount = 0;
+        WeatherToLight = new AlphaAnimation(1, 0);//透明度动画
+        WeatherToLight.setDuration(2000);//动画持续时间
+        WeatherToLight.setFillAfter(true);//执行完停留在执行完的状态
+        WeatherToLight.setStartOffset(1000);//开始前等待时间
+        WeatherToLight.setRepeatCount(0);//动画重复次数
+
+        WeatherToDark = new AlphaAnimation(0, 1);
+        WeatherToDark.setDuration(1500);//动画持续时间
+        WeatherToDark.setFillAfter(true);//执行完停留在执行完的状态
+        WeatherToDark.setStartOffset(1000);//开始前等待时间
+        WeatherToDark.setRepeatCount(0);//动画重复次数
+
+        weatherDetailLinearLayout.setAnimation(WeatherToLight);
+        WeatherToLight.startNow();
+
+        WeatherToLight.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                weatherAnimationCount += 1;
+                if (weatherAnimationCount == 11) weatherAnimationCount = 0;
+                weatherDetailLinearLayout.setAnimation(WeatherToDark);
+                if (weatherAnimationCount%2 == 0) {
+                    windLevelTextView.setText(weather.getFengli());
+                    humidityTextView.setText(weather.getShidu());
+                    windImageView.setVisibility(View.VISIBLE);
+                    humidityImageView.setVisibility(View.VISIBLE);
+                }else {
+                    windLevelTextView.setText("日出:" + weather.getSunrise());
+                    humidityTextView.setText("日落:" + weather.getSunset());
+                    windImageView.setVisibility(View.GONE);
+                    humidityImageView.setVisibility(View.GONE);
+                }
+                WeatherToDark.startNow();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        WeatherToDark.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                weatherDetailLinearLayout.setAnimation(WeatherToLight);
+                WeatherToLight.startNow();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
@@ -344,8 +411,10 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
     public void onPause() {
         super.onPause();
         Log.i("WeatherDetailFragment->", "onPause");
-        toLight.cancel();
-        toDark.cancel();
+        ZhishuToLight.cancel();
+        ZhishuToDark.cancel();
+        WeatherToLight.cancel();
+        WeatherToDark.cancel();
     }
 
 }

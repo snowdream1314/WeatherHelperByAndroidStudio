@@ -58,7 +58,7 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     }
 
     @Override
-    public void hideBackButton() {
+    public void hideBackButton(View view) {
         ImageButton imageButton = (ImageButton) findViewById(R.id.ib_back);
         imageButton.setVisibility(View.GONE);
     }
@@ -71,7 +71,7 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     }
 
     @Override
-    public void hideLeftButton() {
+    public void hideLeftButton(View view) {
         ImageButton imageButton = (ImageButton) findViewById(R.id.ib_left);
         imageButton.setVisibility(View.GONE);
     }
@@ -85,7 +85,7 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     }
 
     @Override
-    public void hideRightButton() {
+    public void hideRightButton(View view) {
         ImageButton imageButton = (ImageButton) findViewById(R.id.ib_right);
         imageButton.setVisibility(View.GONE);
     }
@@ -99,7 +99,7 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     }
 
     @Override
-    public void hideRightText() {
+    public void hideRightText(View view) {
         TextView textView = (TextView) findViewById(R.id.tv_right);
         textView.setVisibility(View.GONE);
     }
@@ -122,9 +122,9 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     }
 
     @Override
-    public void hideShareButton() {
+    public void hideShareButton(View view) {
         ImageButton share = (ImageButton) findViewById(R.id.ib_share);
-        share.setVisibility(View.GONE);
+        share.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     }
 
     @Override
-    public void hideFeedsButton() {
+    public void hideFeedsButton(View view) {
         ImageButton feeds = (ImageButton) findViewById(R.id.ib_feeds);
         feeds.setVisibility(View.GONE);
     }
@@ -155,6 +155,12 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     public void showCirclePageIndicator(View view) {
         CirclePageIndicator circlePageIndicator = (CirclePageIndicator) findViewById(R.id.cpi);
         circlePageIndicator.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideCirclePageIndicator(View view) {
+        CirclePageIndicator circlePageIndicator = (CirclePageIndicator) findViewById(R.id.cpi);
+        circlePageIndicator.setVisibility(View.GONE);
     }
 
 }

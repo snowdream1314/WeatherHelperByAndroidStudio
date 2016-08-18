@@ -45,7 +45,7 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="REuEBdAfaRPsHVrzL89ko9PoYnsxzCmC " />
         //key:开发者申请的key
-        <activity android:name=".main.weather.manage_city.ManageCityActivity"></activity>
+        <activity android:name=".main.managecity.ManageCityActivity"></activity>
     </application>
 
 </manifest>

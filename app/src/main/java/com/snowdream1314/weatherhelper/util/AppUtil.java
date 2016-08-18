@@ -27,6 +27,7 @@ import android.widget.AbsListView;
 import com.snowdream1314.weatherhelper.R;
 import com.snowdream1314.weatherhelper.constant.WHConstant;
 
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -381,6 +382,26 @@ public class AppUtil {
     	} 
     	return null;
     }
+
+	/*
+	* 从raw文件读取Json资源
+	* @param context
+	* @param file
+	* @return
+	* */
+	public static String readJsonFromRaw(Context context, int file) {
+		try {
+			InputStream is  = context.getResources().openRawResource(file);
+			byte [] buffer = new byte[is.available()] ;
+			is.read(buffer);
+			is.close();
+			String json = new String(buffer);
+			return json;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
     /**
 	 * 程序是否在运行

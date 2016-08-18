@@ -1,18 +1,12 @@
-package com.snowdream1314.weatherhelper.main.weather.manage_city;
+package com.snowdream1314.weatherhelper.main.managecity;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ActionBarContextView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -91,8 +85,12 @@ public class ManageCityActivity extends TitleLayoutActivity {
                     manageClick = !manageClick;
                     if (manageClick) {
                         showFeedsButton(null, R.mipmap.ok, clickListener);
+                        hideBackButton(null);
+                        hideShareButton(null);
                     }else {
                         showFeedsButton(null, R.mipmap.edit, clickListener);
+                        showShareButton(null, R.mipmap.add_normal, clickListener);
+                        showBackButton(null);
                     }
                     adapter.notifyDataSetChanged();
 
@@ -129,62 +127,29 @@ public class ManageCityActivity extends TitleLayoutActivity {
             return position;
         }
 
-        @Override
-        public int getItemViewType(int position) {
-            if (manageClick) {
-                return Type_Delete;
-            }else {
-                return Type_Normal;
-            }
-        }
 
         @Override
         public View getView(final int position, View convertView, ViewGroup  parent) {
 
-            int type  = getItemViewType(position);
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.layout_cell_choosed_cities, null);
+            }
 
-            if (type == Type_Normal) {
+            ImageView cityWeatherImageView = (ImageView) ViewHolder.get(convertView, R.id.iv_city_weather);
+            TextView cityNameTextView = (TextView) ViewHolder.get(convertView, R.id.tv_city_name);
+            TextView cityTempTextView = (TextView) ViewHolder.get(convertView, R.id.tv_city_temp);
+            final TextView deleteTextView = (TextView) ViewHolder.get(convertView, R.id.tv_delete);
 
-                if (convertView == null) {
-                    convertView = LayoutInflater.from(context).inflate(R.layout.layout_cell_choosed_cities, null);
-                }
 
-                ImageView cityWeatherImageView = (ImageView) ViewHolder.get(convertView, R.id.iv_city_weather);
-                TextView cityNameTextView = (TextView) ViewHolder.get(convertView, R.id.tv_city_name);
-                TextView cityTempTextView = (TextView) ViewHolder.get(convertView, R.id.tv_city_temp);
+            final ChoosedCity choosedCity = choosedCities.get(position);
 
-                ChoosedCity choosedCity = choosedCities.get(position);
+            cityNameTextView.setText(choosedCity.getName());
+            cityTempTextView.setText(choosedCity.getTempHigh().replace("℃","") + " /" + choosedCity.getTempLow());
+            cityWeatherImageView.setImageResource(choosedCity.getImageId());
 
-                cityNameTextView.setText(choosedCity.getName());
-                cityTempTextView.setText(choosedCity.getTempHigh().replace("℃","") + " /" + choosedCity.getTempLow());
-                cityWeatherImageView.setImageResource(choosedCity.getImageId());
-
-            }else if (type == Type_Delete){
-                Log.i("getView", "Type_Delete");
-
-//                if (convertView ==  null) {
-                    convertView = LayoutInflater.from(context).inflate(R.layout.layout_cell_delete_city, null);
-//                }
-
-                ImageView cityWeatherImageView = (ImageView) ViewHolder.get(convertView, R.id.iv_city_weather);
-                final ImageView deleteImageView = (ImageView) ViewHolder.get(convertView, R.id.iv_delete);
-                TextView cityNameTextView = (TextView) ViewHolder.get(convertView, R.id.tv_city_name);
-                final TextView deleteTextView = (TextView) ViewHolder.get(convertView, R.id.tv_delete);
-
-                final ChoosedCity choosedCity = choosedCities.get(position);
-
-                cityNameTextView.setText(choosedCity.getName());
-                cityWeatherImageView.setImageResource(choosedCity.getImageId());
-
-                deleteImageView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (position >= choosedCities.size()) return;
-                        choosedCities.remove(position);
-                        coolWeatherDB.delChoosedCity(choosedCity);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+            if (manageClick) {
+                cityTempTextView.setVisibility(View.INVISIBLE);
+                deleteTextView.setVisibility(View.VISIBLE);
                 deleteTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -194,6 +159,11 @@ public class ManageCityActivity extends TitleLayoutActivity {
                         adapter.notifyDataSetChanged();
                     }
                 });
+            }
+            else {
+                cityTempTextView.setVisibility(View.VISIBLE);
+                deleteTextView.setVisibility(View.GONE);
+                deleteTextView.setOnClickListener(null);
             }
 
             return convertView;
