@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.snowdream1314.weatherhelper.R;
@@ -94,9 +95,16 @@ public class AddCityActivity extends AppCompatActivity {
 
             TextView cityNameTextView  = (TextView) ViewHolder.get(convertView, R.id.tv_hot_city_name);
 
-            City city = cities.get(position);
+            final City city = cities.get(position);
 
             cityNameTextView.setText(city.getCityName() + "市");
+
+            cityNameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, city.getCityName(), Toast.LENGTH_SHORT).show();
+                }
+            });
 
             return convertView;
         }
