@@ -166,7 +166,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 if (jsonObject.getString("weather").equals(weather.getForecastWeathers().get(0).getDays().get(0).getType())) {
-                    Log.i("json_weather-->", jsonObject.getString("weather"));
+//                    Log.i("json_weather-->", jsonObject.getString("weather"));
                     int resId = getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("icon"), null, null);
                     todayWeatherImageView.setImageResource(resId);
                     todayWeatherImageView.setTag(resId);
@@ -182,7 +182,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
             for(int i = 0; i < winds.length(); i++) {
                 JSONObject jsonObject = winds.getJSONObject(i);
                 if(jsonObject.getString("wind").equals(weather.getFengxiang())) {
-                    Log.i("json_wind-->", jsonObject.getString("wind"));
+//                    Log.i("json_wind-->", jsonObject.getString("wind"));
                     windImageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + jsonObject.getString("icon"), null, null));
                 }
             }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.snowdream1314.weatherhelper.main.managecity.AddCityActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="热门城市"
+            android:textColor="#FF996699"
+            android:textSize="12sp"
+            android:layout_marginBottom="10dp"/>
+
+        <GridView
+            android:id="@+id/gv_hot_cities"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:numColumns="3"
+            android:scrollbars="none"
+            android:gravity="center"
+            android:verticalSpacing="10dp"
+            android:layout_gravity="center">
+
+        </GridView>
+
+    </LinearLayout>
+
+</RelativeLayout>

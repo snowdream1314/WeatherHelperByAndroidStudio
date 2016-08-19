@@ -1,6 +1,7 @@
 package com.snowdream1314.weatherhelper.main.managecity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -87,6 +88,8 @@ public class ManageCityActivity extends TitleLayoutActivity {
 
                     break;
                 case R.id.ib_share://添加
+                    Intent add = new Intent(ManageCityActivity.this, AddCityActivity.class);
+                    startActivity(add);
                     break;
 
             }

@@ -191,7 +191,7 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
 
             cityCode = coolWeatherDB.loadCity(location.getCity().replace("市","")).getCityCode();
             title = location.getCity() + location.getDistrict();
-            subTitle = location.getStreet() + (location.getStreetNumber() != null ? (location.getStreetNumber().split("号")[0] + "号"):"");
+            subTitle = location.getStreet() + (location.getStreetNumber() != null && !"".equals(location.getStreetNumber()) ? (location.getStreetNumber().split("号")[0] + "号"):"");
 
             WHRequest request = new WHRequest(getContext());
             request.setDelegate(WeatherFragment.this);

@@ -7,7 +7,7 @@ public class City {
 	private String cityPyName;
 	private String cityCode;
 	private String cityNum;
-	private int provinceId;
+	private String provinceId;
 	private String provinceName;
 	
 	public int getId() {
@@ -50,11 +50,11 @@ public class City {
 		this.cityNum = cityNum;
 	}
 	
-	public int getProvinceId() {
+	public String getProvinceId() {
 		return provinceId;
 	}
 	
-	public void setProvinceId(int provinceId) {
+	public void setProvinceId(String provinceId) {
 		this.provinceId = provinceId;
 	}
 

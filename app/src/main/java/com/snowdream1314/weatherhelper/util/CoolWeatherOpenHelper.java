@@ -14,7 +14,8 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 			+ "city_pyname text,"
 			+ "city_code text, "
 			+ "city_num text, "
-			+ "province_name text)";
+			+ "province_name text,"
+			+ "province_id text)";
 
 	//ChoosedCity建表语句
 	public static final String CREATE_CHOOSEDCITY = "create table ChoosedCity ("

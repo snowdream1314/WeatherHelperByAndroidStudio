@@ -46,7 +46,8 @@
             android:value="REuEBdAfaRPsHVrzL89ko9PoYnsxzCmC " />
         //key:开发者申请的key
         <activity android:name=".main.managecity.ManageCityActivity" />
-        <activity android:name=".main.usercenter.setting.UserCenterSettingActivity"></activity>
+        <activity android:name=".main.usercenter.setting.UserCenterSettingActivity" />
+        <activity android:name=".main.managecity.AddCityActivity"></activity>
     </application>
 
 </manifest>

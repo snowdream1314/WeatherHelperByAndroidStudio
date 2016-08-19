@@ -43,10 +43,11 @@ public class Utility {
 					if (array[0].startsWith("101")) {
 						City city= new City();
 						city.setCityCode(array[0]);
-						city.setCityNum(array[0].substring(5, 7));
+						city.setCityNum(array[0].substring(6, 7));
 						city.setCityName(array[1]);
 						city.setCityPyName(array[2]);
 						city.setProvinceName(array[3]);
+                        city.setProvinceId(array[0].substring(4, 5));
 						//将解析出来的数据存储到City表
 						coolWeatherDB.saveCity(city);
 					}
