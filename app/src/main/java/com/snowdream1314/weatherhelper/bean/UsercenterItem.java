@@ -9,6 +9,7 @@ public class UsercenterItem {
     private String title;
     private String icon;
     private String note;
+    private String arrow;
 
 //    public UsercenterItem(String title, int imageId, String note) {
 //        this.title = title;
@@ -31,4 +32,8 @@ public class UsercenterItem {
     public String getNote() { return note; }
 
     public void setNote(String note) { this.note = note; }
+
+    public String getArrow() { return arrow; }
+
+    public void setArrow(String arrow) { this.arrow = arrow; }
 }

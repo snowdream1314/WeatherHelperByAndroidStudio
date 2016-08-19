@@ -46,32 +46,15 @@
             android:layout_marginRight="10dp"
             />
 
-        <LinearLayout
-            android:id="@+id/ll_user_info"
+        <ImageView
+            android:id="@+id/iv_arrow"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:orientation="horizontal"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/setting_arrow"
             android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:layout_marginRight="10dp"
-            android:visibility="gone">
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"/>
 
-            <ImageView
-                android:id="@+id/iv_user_avatar"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                />
-
-            <TextView
-                android:id="@+id/tv_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="立即授权"
-                android:textSize="14sp"
-                android:textColor="#FF797979"
-                android:layout_marginLeft="5dp"/>
-
-        </LinearLayout>
 
     </RelativeLayout>
 

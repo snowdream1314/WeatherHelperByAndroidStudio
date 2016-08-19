@@ -33,9 +33,6 @@ public class ManageCityActivity extends TitleLayoutActivity {
     private List<ChoosedCity> choosedCities = new ArrayList<ChoosedCity>();
     private CoolWeatherDB coolWeatherDB;
 
-    public static final int Type_Delete = -1;
-    public static final int Type_Normal = 1;
-
     private boolean manageClick = false;
 
     @Override
@@ -51,21 +48,15 @@ public class ManageCityActivity extends TitleLayoutActivity {
         setContentView(R.layout.activity_manage_city);
         coolWeatherDB = CoolWeatherDB.getInstance(ManageCityActivity.this);
 
-
-        titleLayout = (RelativeLayout) findViewById(R.id.rl_title);
-        titleLayout.setBackgroundColor(Color.parseColor("#FF996699"));
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) titleLayout.getLayoutParams();
-        params.height = params.height + AppUtil.getStatusHeight(ManageCityActivity.this);
-        titleLayout.setLayoutParams(params);
-
         setTitleLayoutTitle(null, "城市管理");
         showBackButton(null);
         showShareButton(null, R.mipmap.add_normal, clickListener);
         showFeedsButton(null, R.mipmap.edit, clickListener);
+        setTitleLayoutParams(null, Color.parseColor("#FF996699"), AppUtil.getStatusHeight(ManageCityActivity.this));
 
         initDatas();
 
-        mListView = (ListView) findViewById(R.id.lv_citys);
+        mListView = (ListView) findViewById(R.id.lv_cities);
         adapter = new Adapter(ManageCityActivity.this, choosedCities);
         mListView.setAdapter(adapter);
 

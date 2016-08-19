@@ -1,4 +1,4 @@
-package com.snowdream1314.weatherhelper.main.usercenter;
+package com.snowdream1314.weatherhelper.main.usercenter.view;
 
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;

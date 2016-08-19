@@ -1,0 +1,9 @@
+[{"title":"墨迹公告", "id":1, "icon":"mipmap/icon_me_mo_message", "note":"", "arrow":""},
+  {"title":"墨圈", "id":2, "icon":"mipmap/icon_me_circle", "note":"", "arrow":""},
+  {"title":"活动中心", "id":3, "icon":"mipmap/icon_me_activity_center", "note":"", "arrow":""},
+  {"title":"皮肤小镇", "id":4, "icon":"mipmap/icon_me_skin_shop", "note":"", "arrow":""},
+  {"title":"个性助手", "id":5, "icon":"mipmap/icon_me_assist_shop", "note":"", "arrow":""},
+  {"title":"墨迹商城", "id":6, "icon":"mipmap/icon_me_shopping", "note":"", "arrow":""},
+  {"title":"空气果", "id":7, "icon":"mipmap/icon_me_airnut", "note":"", "arrow":""},
+  {"title":"设置", "id":8, "icon":"mipmap/icon_me_setting", "note":"", "arrow":""},
+  {"title":"清理缓存", "id":9, "icon":"mipmap/me_clear", "note":"", "arrow":""}]

@@ -1,14 +1,15 @@
-package com.snowdream1314.weatherhelper.main.usercenter;
-
+package com.snowdream1314.weatherhelper.main.usercenter.setting;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -19,8 +20,8 @@ import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.snowdream1314.weatherhelper.R;
+import com.snowdream1314.weatherhelper.base.TitleLayoutActivity;
 import com.snowdream1314.weatherhelper.bean.UsercenterItem;
-import com.snowdream1314.weatherhelper.main.usercenter.setting.UserCenterSettingActivity;
 import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.snowdream1314.weatherhelper.util.JsonUtil;
 import com.snowdream1314.weatherhelper.viewholder.ViewHolder;
@@ -29,66 +30,40 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class UserCenterFragment extends Fragment {
+public class UserCenterSettingActivity extends TitleLayoutActivity {
 
-    private View rootView;
     private ListView mListView;
     private MyAdapter myAdapter;
     private List<UsercenterItem> items = new ArrayList<UsercenterItem>();
 
-    private ImageView phoneImageView, wechartImageView, qqImageView;
-    private TextView tipTextView;
-
-    public UserCenterFragment() {
-        // Required empty public constructor
-    }
-
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-
-        if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_user_center, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            //透明导航栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
+        setContentView(R.layout.activity_usercenter_setting);
 
-        initHeaderView();
+        setTitleLayoutTitle(null, "设置");
+        showBackButton(null);
+        setTitleLayoutParams(null, Color.parseColor("#993366"), AppUtil.getStatusHeight(UserCenterSettingActivity.this));
+
         initData();
 
-
-        mListView = (ListView) rootView.findViewById(R.id.lv_usercenter_items);
-        myAdapter = new MyAdapter(getContext(), items);
+        mListView = (ListView) findViewById(R.id.lv_settings);
+        myAdapter = new MyAdapter(UserCenterSettingActivity.this, items);
         mListView.setAdapter(myAdapter);
         mListView.setOnItemClickListener(itemClickListener);
-
-        ViewGroup parent = (ViewGroup) rootView.getParent();
-        if (parent != null) {
-            parent.removeView(rootView);
-        }
-
-        return rootView;
-    }
-
-    private void initHeaderView() {
-        phoneImageView = (ImageView) rootView.findViewById(R.id.iv_login_phone);
-        wechartImageView = (ImageView) rootView.findViewById(R.id.iv_login_wechat);
-        qqImageView = (ImageView) rootView.findViewById(R.id.iv_login_qq);
-        tipTextView = (TextView) rootView.findViewById(R.id.tv_login_tip);
-
-        phoneImageView.setOnClickListener(clickListener);
-        wechartImageView.setOnClickListener(clickListener);
-        qqImageView.setOnClickListener(clickListener);
     }
 
     private void initData() {
         items.clear();
 
         try {
-            String json = AppUtil.readJsonFromRaw(getContext(), R.raw.usercenter_config);
+            String json = AppUtil.readJsonFromRaw(UserCenterSettingActivity.this, R.raw.usercenter_setting_config);
 
             Type itemsType = new TypeToken<List<UsercenterItem>>() {}.getType();
             items = JsonUtil.json2Any(json, itemsType);
@@ -96,46 +71,29 @@ public class UserCenterFragment extends Fragment {
         }catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
-    private View.OnClickListener clickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.iv_login_phone:
-                    break;
-                case R.id.iv_login_wechat:
-                    break;
-                case R.id.iv_login_qq:
-                    break;
-            }
-        }
-    };
 
     private ListView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (position) {
-                case 0://公告
+                case 0://账号管理
                     break;
-                case 1://圈子
+                case 1://消息通知
                     break;
-                case 2://活动中心
+                case 2://个性功能
                     break;
-                case 3://皮肤
+                case 3://通用
                     break;
-                case 4://个性助手
+                case 4://赏个好评
                     break;
-                case 5://商城
+                case 5://意见反馈
                     break;
-                case 6://空气果
+                case 6://检查新版本
                     break;
-                case 7://设置
-                    Intent setting = new Intent(getActivity(), UserCenterSettingActivity.class);
-                    startActivity(setting);
+                case 7://使用教程
                     break;
-                case 8://清理缓存
+                case 8://关于
                     break;
 
             }
@@ -179,31 +137,27 @@ public class UserCenterFragment extends Fragment {
             TextView noteTextView = (TextView) ViewHolder.get(convertView, R.id.tv_usercenter_item_note);
             ImageView imageView = (ImageView) ViewHolder.get(convertView, R.id.iv_usercenter_item_image);
             RelativeLayout itemLayout = (RelativeLayout) ViewHolder.get(convertView, R.id.rl_usercenter_item);
-            ImageView arrowImageView = (ImageView) ViewHolder.get(convertView, R.id.iv_arrow);
 
             UsercenterItem item = items.get(position);
 
             titleTextView.setText(item.getTitle());
-            imageView.setImageResource(getResources().getIdentifier(getContext().getPackageName() + ":" + item.getIcon(), null, null));
+            imageView.setImageResource(getResources().getIdentifier(UserCenterSettingActivity.this.getPackageName() + ":" + item.getIcon(), null, null));
 
             if (item.getNote() == null || "".equals(item.getNote())) {
                 noteTextView.setVisibility(View.GONE);
             }else {noteTextView.setText(item.getNote());
-                noteTextView
-                .setVisibility(View.VISIBLE);
+                noteTextView.setVisibility(View.VISIBLE);
             }
 
-            if ("".equals(item.getArrow())) {
-                arrowImageView.setVisibility(View.GONE);
-            }else {
-                arrowImageView.setVisibility(View.VISIBLE);
-            }
-
-            if (position == 0 || position == 4 || position == 6 || position == 7 || position == 8) {
+            if (position == 0) {
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) itemLayout.getLayoutParams();
-                params.setMargins(0, 0, 0, AppUtil.dip2px(getActivity(),20));
+                params.setMargins(0, AppUtil.dip2px(UserCenterSettingActivity.this,20), 0, AppUtil.dip2px(UserCenterSettingActivity.this,20));
                 itemLayout.setLayoutParams(params);
 
+            }else if (position == 3){
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) itemLayout.getLayoutParams();
+                params.setMargins(0, 0, 0, AppUtil.dip2px(UserCenterSettingActivity.this,20));
+                itemLayout.setLayoutParams(params);
             }else {
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) itemLayout.getLayoutParams();
                 params.setMargins(0, 0, 0, 0);

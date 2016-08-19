@@ -1,13 +1,17 @@
 package com.snowdream1314.weatherhelper.base;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.snowdream1314.weatherhelper.R;
+import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.viewpagerindicator.CirclePageIndicator;
 
 public class TitleLayoutActivity extends Activity implements TitleLayout{
@@ -161,6 +165,18 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
     public void hideCirclePageIndicator(View view) {
         CirclePageIndicator circlePageIndicator = (CirclePageIndicator) findViewById(R.id.cpi);
         circlePageIndicator.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setTitleLayoutParams(View view, int backgroundColor, int height) {
+        RelativeLayout titleLayout = (RelativeLayout) findViewById(R.id.rl_layout_title);
+        titleLayout.setBackgroundColor(backgroundColor);
+
+        if (height != 0) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) titleLayout.getLayoutParams();
+            params.height = params.height + height;
+            titleLayout.setLayoutParams(params);
+        }
     }
 
 }

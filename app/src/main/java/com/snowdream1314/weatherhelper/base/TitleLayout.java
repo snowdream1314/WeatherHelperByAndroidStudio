@@ -25,4 +25,7 @@ public interface TitleLayout {
     public void hideRightText(View view);
     public void showCirclePageIndicator(View view);
     public void hideCirclePageIndicator(View view);
+
+    public void setTitleLayoutParams(View view, int backgroundColor, int height);
+
 }

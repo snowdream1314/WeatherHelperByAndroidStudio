@@ -1,9 +1,9 @@
-[{"title":"墨迹公告", "id":1, "icon":"mipmap/icon_me_mo_message", "note":""},
-  {"title":"墨圈", "id":2, "icon":"mipmap/icon_me_circle", "note":""},
-  {"title":"活动中心", "id":3, "icon":"mipmap/icon_me_activity_center", "note":""},
-  {"title":"皮肤小镇", "id":4, "icon":"mipmap/icon_me_skin_shop", "note":""},
-  {"title":"个性助手", "id":6, "icon":"mipmap/icon_me_assist_shop", "note":""},
-  {"title":"墨迹商城", "id":9, "icon":"mipmap/icon_me_shopping", "note":""},
-  {"title":"空气果", "id":8, "icon":"mipmap/icon_me_airnut", "note":""},
-  {"title":"设置", "id":5, "icon":"mipmap/icon_me_setting", "note":""},
-  {"title":"清理缓存", "id":7, "icon":"mipmap/me_clear", "note":""}]
+[{"title":"账号管理", "id":1, "icon":"mipmap/setting_icon_account_manage", "note":"", "arrow":"mipmap/setting_arrow"},
+  {"title":"消息通知", "id":2, "icon":"mipmap/setting_icon_message", "note":"", "arrow":"mipmap/setting_arrow"},
+  {"title":"个性功能", "id":3, "icon":"mipmap/setting_icon_personality_function", "note":"", "arrow":"mipmap/setting_arrow"},
+  {"title":"通用", "id":4, "icon":"mipmap/setting_icon_common", "note":"", "arrow":"mipmap/setting_arrow"},
+  {"title":"赏个好评", "id":5, "icon":"mipmap/setting_icon_goto_score", "note":"", "arrow":"mipmap/setting_arrow"},
+  {"title":"意见反馈", "id":6, "icon":"mipmap/setting_icon_feed_back", "note":"", "arrow":"mipmap/setting_arrow"},
+  {"title":"检查新版本", "id":7, "icon":"mipmap/setting_icon_check_app_update", "note":"", "arrow":"mipmap/setting_arrow"},
+  {"title":"使用教程", "id":8, "icon":"mipmap/setting_icon_user_help", "note":"", "arrow":"mipmap/setting_arrow"},
+  {"title":"关于", "id":9, "icon":"mipmap/setting_icon_about_moji", "note":"", "arrow":"mipmap/setting_arrow"}]

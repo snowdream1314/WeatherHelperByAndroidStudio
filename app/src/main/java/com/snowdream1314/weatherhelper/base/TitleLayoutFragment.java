@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.snowdream1314.weatherhelper.R;
@@ -152,7 +154,6 @@ public class TitleLayoutFragment extends Fragment implements TitleLayout{
         feeds.setVisibility(View.GONE);
     }
 
-
     @Override
     public void showCirclePageIndicator(View view) {
         circlePageIndicator = (CirclePageIndicator) view.findViewById(R.id.cpi);
@@ -163,6 +164,19 @@ public class TitleLayoutFragment extends Fragment implements TitleLayout{
     public void hideCirclePageIndicator(View view) {
         CirclePageIndicator circlePageIndicator = (CirclePageIndicator) view.findViewById(R.id.cpi);
         circlePageIndicator.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    public void setTitleLayoutParams(View view, int backgroundColor, int height) {
+        RelativeLayout titleLayout = (RelativeLayout) view.findViewById(R.id.rl_layout_title);
+        titleLayout.setBackgroundColor(backgroundColor);
+
+        if (height != 0) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) titleLayout.getLayoutParams();
+            params.height = params.height + height;
+            titleLayout.setLayoutParams(params);
+        }
     }
 
 

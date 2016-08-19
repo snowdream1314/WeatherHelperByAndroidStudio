@@ -53,8 +53,8 @@ public class MainActivity extends FragmentActivity {
         FragmentTabHost.TabSpec weather = tabHost.newTabSpec("天气").setIndicator(initView("天气", R.drawable.selector_tabhost_image_weather));
         tabHost.addTab(weather, WeatherFragment.class, null);
 
-        FragmentTabHost.TabSpec group = tabHost.newTabSpec("圈子").setIndicator(initView("圈子", R.drawable.selector_tabhost_image_group));
-        tabHost.addTab(group, UserCenterFragment.class, null);
+//        FragmentTabHost.TabSpec group = tabHost.newTabSpec("圈子").setIndicator(initView("圈子", R.drawable.selector_tabhost_image_group));
+//        tabHost.addTab(group, UserCenterFragment.class, null);
 
         FragmentTabHost.TabSpec user = tabHost.newTabSpec("我").setIndicator(initView("我", R.drawable.selector_tabhost_image_user));
         tabHost.addTab(user, UserCenterFragment.class, null);

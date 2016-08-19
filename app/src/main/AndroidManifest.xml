@@ -39,13 +39,14 @@
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="REuEBdAfaRPsHVrzL89ko9PoYnsxzCmC " />
         //key:开发者申请的key
-        <activity android:name=".main.managecity.ManageCityActivity"></activity>
+        <activity android:name=".main.managecity.ManageCityActivity" />
+        <activity android:name=".main.usercenter.setting.UserCenterSettingActivity"></activity>
     </application>
 
 </manifest>
