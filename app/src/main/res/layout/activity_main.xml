@@ -9,7 +9,7 @@
     >
 
     <!-- 选用LinearLayout布局以及设置 FrameLayout的属性layout_height="0dp"、
-    android:layout_weight="1"以防tab选项卡盖住listView中的内容 -->
+    android:layout_weight="1"以防tab选项  卡盖住listView中的内容 -->
    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"

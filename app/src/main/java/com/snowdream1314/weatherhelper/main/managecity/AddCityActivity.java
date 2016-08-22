@@ -1,6 +1,7 @@
 package com.snowdream1314.weatherhelper.main.managecity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.LinearLayout;
@@ -16,17 +18,25 @@ import android.widget.Toast;
 
 import com.google.gson.reflect.TypeToken;
 import com.snowdream1314.weatherhelper.R;
+import com.snowdream1314.weatherhelper.bean.ChoosedCity;
 import com.snowdream1314.weatherhelper.bean.City;
 import com.snowdream1314.weatherhelper.bean.UsercenterItem;
+import com.snowdream1314.weatherhelper.constant.WHConstant;
+import com.snowdream1314.weatherhelper.main.MainActivity;
+import com.snowdream1314.weatherhelper.main.weather.WeatherFragment;
 import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.snowdream1314.weatherhelper.util.JsonUtil;
+import com.snowdream1314.weatherhelper.util.WHRequest;
 import com.snowdream1314.weatherhelper.viewholder.ViewHolder;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddCityActivity extends AppCompatActivity {
+public class AddCityActivity extends AppCompatActivity implements WHRequest.WHRequestDelegate{
 
     private GridView gridView;
     private List<City> cities = new ArrayList<City>();
@@ -42,6 +52,24 @@ public class AddCityActivity extends AppCompatActivity {
         gridView = (GridView) findViewById(R.id.gv_hot_cities);
         adapter = new GridViewAdapter(AddCityActivity.this, cities);
         gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= cities.size()) return;
+                City city = cities.get(position);
+                Intent intent = new Intent(WHConstant.Broadcast_ChangeTab);
+                intent.putExtra("isFromAddCityActivity", true);
+                intent.putExtra("cityName", city.getCityName());
+                intent.putExtra("cityCode", city.getCityCode());
+                intent.putExtra("tab", 0);
+                sendBroadcast(intent);
+
+//                WHRequest request = new WHRequest(AddCityActivity.this);
+//                request.setDelegate(AddCityActivity.this);
+//                request.queryTemperature(city.getCityCode());
+
+            }
+        });
     }
 
     private void initData() {
@@ -56,6 +84,43 @@ public class AddCityActivity extends AppCompatActivity {
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public void requestSuccess(WHRequest req, String data) {
+        if (req.tag == WHRequest.Req_Tag.Tag_Temperature) {
+
+            try {
+
+                JSONObject jsonObject = new JSONObject(data);
+                JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("forecast");
+
+//                ChoosedCity choosedCity = new ChoosedCity();
+//                choosedCity.setTempLow(jsonArray.getJSONObject(0).getString("low"));
+//                choosedCity.setTempHigh(jsonArray.getJSONObject(0).getString("high"));
+//                choosedCity.setName(jsonObject.getJSONObject("data").getString("city"));
+//                choosedCity.setCode(cityCode);
+//                choosedCity.setWeather(jsonArray.getJSONObject(0).getString("type"));
+//                choosedCity.setImageId((int)todayWeatherImageView.getTag());
+//                coolWeatherDB.saveChoosedCity(choosedCity);
+
+
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+//            Intent intent = new Intent(AddCityActivity.this, ManageCityActivity.class);
+//            intent.putExtra("cityName", city.getCityName());
+//            intent.putExtra("cityCode", city.getCityCode());
+//            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void requestFail(WHRequest req, String message) {
+
     }
 
     private class GridViewAdapter extends BaseAdapter {
@@ -85,9 +150,10 @@ public class AddCityActivity extends AppCompatActivity {
             }
 
             try {
-                AbsListView.LayoutParams layoutParams = (AbsListView.LayoutParams) convertView.getLayoutParams();
-                layoutParams.width = AppUtil.getSreenWidth(AddCityActivity.this)/3;
-                convertView.setLayoutParams(layoutParams);
+//                AbsListView.LayoutParams layoutParams = (AbsListView.LayoutParams) convertView.getLayoutParams();
+                AbsListView.LayoutParams params = new AbsListView.LayoutParams(AppUtil.getSreenWidth(AddCityActivity.this)/3, ViewGroup.LayoutParams.MATCH_PARENT);
+//                layoutParams.width = AppUtil.getSreenWidth(AddCityActivity.this)/3;
+                convertView.setLayoutParams(params);
 
             }catch (Exception e) {
                 e.printStackTrace();
@@ -99,12 +165,12 @@ public class AddCityActivity extends AppCompatActivity {
 
             cityNameTextView.setText(city.getCityName() + "市");
 
-            cityNameTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, city.getCityName(), Toast.LENGTH_SHORT).show();
-                }
-            });
+//            cityNameTextView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(context, city.getCityName(), Toast.LENGTH_SHORT).show();
+//                }
+//            });
 
             return convertView;
         }

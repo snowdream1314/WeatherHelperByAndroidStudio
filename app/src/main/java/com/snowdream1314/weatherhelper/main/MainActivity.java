@@ -1,5 +1,9 @@
 package com.snowdream1314.weatherhelper.main;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
@@ -27,6 +31,9 @@ public class MainActivity extends FragmentActivity {
 
     private FragmentTabHost tabHost;
     private CoolWeatherDB coolWeatherDB;
+    private ChangeTabBroadcastReceiver changeTabBroadcastReceiver;
+    private boolean onResumeCalled = false;
+    private int changeTabIndex = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +65,11 @@ public class MainActivity extends FragmentActivity {
 
         FragmentTabHost.TabSpec user = tabHost.newTabSpec("我").setIndicator(initView("我", R.drawable.selector_tabhost_image_user));
         tabHost.addTab(user, UserCenterFragment.class, null);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WHConstant.Broadcast_ChangeTab);
+        changeTabBroadcastReceiver = new ChangeTabBroadcastReceiver();
+        this.registerReceiver(changeTabBroadcastReceiver, intentFilter);
     }
 
     private View initView(String name, int resId) {
@@ -68,6 +80,57 @@ public class MainActivity extends FragmentActivity {
         title.setText(name);
         return view;
 
+    }
+
+    private class ChangeTabBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(WHConstant.Broadcast_ChangeTab)) {
+                int tabIndex = intent.getIntExtra("tab", -1);
+                Log.i("tabIndex", String.valueOf(tabIndex));
+                if (onResumeCalled) {
+                    try {
+                        tabHost.setCurrentTab(tabIndex);
+                    }catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    changeTabIndex = tabIndex;
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("mainactivity:","resume");
+
+        onResumeCalled = true;
+
+        if (changeTabIndex != -1) {
+            try {
+                tabHost.setCurrentTab(changeTabIndex);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }finally {
+                changeTabIndex = -1;
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        onResumeCalled = false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.unregisterReceiver(changeTabBroadcastReceiver);
     }
 
 }

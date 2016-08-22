@@ -20,4 +20,6 @@ public class WHConstant {
 
     public static final String SharePreference_ShortcutCreated = "share_preference_shortcut_created";
 
+    public static final String Broadcast_ChangeTab = "com.snowdream1314.weatherhelper.broadcast.changetab";
+
 }

@@ -8,6 +8,7 @@ import android.view.View;
 public interface TitleLayout {
     public void setTitleLayoutTitle(View view, String title);
     public void setTitleLayoutSubTitle(View view, String title);
+    public void hideTitleLayoutSubTitle(View view);
     public void showBackButton(View view);
     public void showBackButton(View view, View.OnClickListener clickListener);
     public void showLeftButton(View view, View.OnClickListener clickListener);

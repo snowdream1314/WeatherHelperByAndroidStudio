@@ -40,6 +40,12 @@ public class TitleLayoutFragment extends Fragment implements TitleLayout{
     }
 
     @Override
+    public void hideTitleLayoutSubTitle(View view) {
+        TextView textView = (TextView) view.findViewById(R.id.tv_subTitle);
+        textView.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showBackButton(View view) {
         showBackButton(view, null);
     }
@@ -170,7 +176,9 @@ public class TitleLayoutFragment extends Fragment implements TitleLayout{
     @Override
     public void setTitleLayoutParams(View view, int backgroundColor, int height) {
         RelativeLayout titleLayout = (RelativeLayout) view.findViewById(R.id.rl_layout_title);
-        titleLayout.setBackgroundColor(backgroundColor);
+//        if (backgroundColor != 0) {
+//            titleLayout.setBackgroundColor(backgroundColor);
+//        }
 
         if (height != 0) {
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) titleLayout.getLayoutParams();

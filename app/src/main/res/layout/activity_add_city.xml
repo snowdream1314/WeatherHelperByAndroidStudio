@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.snowdream1314.weatherhelper.main.managecity.AddCityActivity">
+    tools:context="com.snowdream1314.weatherhelper.main.managecity.AddCityActivity"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,10 +27,10 @@
             android:layout_height="match_parent"
             android:numColumns="3"
             android:scrollbars="none"
-            android:verticalSpacing="10dp"
-            android:listSelector="#00000000"
-            android:stretchMode="spacingWidth"
-            android:descendantFocusability="blocksDescendants">
+            android:verticalSpacing="15dp"
+            android:stretchMode="columnWidth"
+            android:paddingLeft="20dp"
+            >
 
         </GridView>
 

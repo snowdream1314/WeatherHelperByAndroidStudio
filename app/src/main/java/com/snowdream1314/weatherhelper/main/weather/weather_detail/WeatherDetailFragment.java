@@ -80,17 +80,18 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
             rootView = inflater.inflate(R.layout.weather_detail_layout, null);
             coolWeatherDB = CoolWeatherDB.getInstance(getContext());
 
-            titleLayout = (RelativeLayout) rootView.findViewById(R.id.rl_title);
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) titleLayout.getLayoutParams();
-            params.height = params.height + AppUtil.getStatusHeight(getContext());
-            titleLayout.setLayoutParams(params);
+            setTitleLayoutParams(rootView, 0, AppUtil.getStatusHeight(getContext()));
 
             showLeftButton(rootView, clickListener);
             showShareButton(rootView, clickListener);
             showFeedsButton(rootView, clickListener);
 
             setTitleLayoutTitle(rootView, title);
-            setTitleLayoutSubTitle(rootView, subTitle);
+            if ("".equals(subTitle)) {
+                hideTitleLayoutSubTitle(rootView);
+            }else {
+                setTitleLayoutSubTitle(rootView, subTitle);
+            }
 
             initViews();
             initViewsData();

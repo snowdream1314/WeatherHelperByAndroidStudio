@@ -5,11 +5,7 @@
     android:background="@mipmap/bg_na"
     android:id="@+id/ll_weather_layout">
 
-    <include layout="@layout/layout_title"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@android:color/transparent"
-        android:id="@+id/rl_title"/>
+    <include layout="@layout/layout_title"/>
 
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"

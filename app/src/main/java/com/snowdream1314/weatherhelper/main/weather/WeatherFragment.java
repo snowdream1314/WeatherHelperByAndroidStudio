@@ -48,6 +48,8 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
     private String title, subTitle;
     private String cityCode;
 
+    private boolean isFromAddCityActivity = false;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,18 +95,21 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
 
             View view = rootView;
 
-            initLocation();
-            mLocationClient.start();
+            isFromAddCityActivity = getActivity().getIntent().getBooleanExtra("isFromAddCityActivity", false);
+            if (isFromAddCityActivity) {
+                cityCode = getActivity().getIntent().getStringExtra("cityCode");
+                loadData(cityCode);
+            }else {
+                initLocation();
+                mLocationClient.start();
+            }
 
             viewPager = (ViewPager) rootView.findViewById(R.id.vp_weather);
             WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
             viewPager.setAdapter(adapter);
 
-            if (fragments.size() > 1) {
-                showCirclePageIndicator(view);
-                circlePageIndicator.setViewPager(viewPager);
-            }
         }
+
         return rootView;
 
     }
@@ -193,10 +198,14 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
             title = location.getCity() + location.getDistrict();
             subTitle = location.getStreet() + (location.getStreetNumber() != null && !"".equals(location.getStreetNumber()) ? (location.getStreetNumber().split("号")[0] + "号"):"");
 
-            WHRequest request = new WHRequest(getContext());
-            request.setDelegate(WeatherFragment.this);
-            request.queryWeather(cityCode);
+            loadData(cityCode);
         }
+    }
+
+    private void loadData(String cityCode) {
+        WHRequest request = new WHRequest(getContext());
+        request.setDelegate(WeatherFragment.this);
+        request.queryWeather(cityCode);
     }
 
     @Override
@@ -207,8 +216,19 @@ public class WeatherFragment extends TitleLayoutFragment implements WHRequest.WH
             Log.i("weather_data", data);
 
             try {
-                WeatherDetailFragment fragment = WeatherDetailFragment.instance(Utility.handleWeatherXMLResponse(getContext(), data), title, subTitle, cityCode);
+                WeatherDetailFragment fragment = null;
+                if (isFromAddCityActivity) {
+                    String cityName = getActivity().getIntent().getStringExtra("cityName");
+                    fragment = WeatherDetailFragment.instance(Utility.handleWeatherXMLResponse(getContext(), data), cityName, "", cityCode);
+                }else {
+                    fragment = WeatherDetailFragment.instance(Utility.handleWeatherXMLResponse(getContext(), data), title, subTitle, cityCode);
+                }
                 fragments.add(fragment);
+
+                if (fragments.size() > 1) {
+                    showCirclePageIndicator(rootView);
+                    circlePageIndicator.setViewPager(viewPager);
+                }
 
                 WeatherAdapter adapter = new WeatherAdapter(getFragmentManager(), fragments);
                 viewPager.setAdapter(adapter);
