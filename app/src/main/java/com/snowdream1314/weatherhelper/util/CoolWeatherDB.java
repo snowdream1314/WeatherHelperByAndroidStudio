@@ -114,6 +114,7 @@ public class CoolWeatherDB {
         if (choosedCity != null) {
             ContentValues values = new ContentValues();
             values.put("choosedcity_name", choosedCity.getName());
+            values.put("choosedcity_subname", choosedCity.getSubName());
             values.put("choosedcity_code", choosedCity.getCode());
             values.put("choosedcity_tempLow", choosedCity.getTempLow());
             values.put("choosedcity_tempHigh", choosedCity.getTempHigh());
@@ -135,19 +136,33 @@ public class CoolWeatherDB {
         Cursor cursor = db.query("ChoosedCity", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                ChoosedCity ChoosedCity = new ChoosedCity();
-                ChoosedCity.setCode(cursor.getString(cursor.getColumnIndex("choosedcity_code")));
-                ChoosedCity.setName(cursor.getString(cursor.getColumnIndex("choosedcity_name")));
-                ChoosedCity.setTempLow(cursor.getString(cursor.getColumnIndex("choosedcity_tempLow")));
-                ChoosedCity.setTempHigh(cursor.getString(cursor.getColumnIndex("choosedcity_tempHigh")));
-                ChoosedCity.setWeather(cursor.getString(cursor.getColumnIndex("choosedcity_weather")));
-                ChoosedCity.setImageId(cursor.getInt(cursor.getColumnIndex("choosedcity_imageID")));
-                list.add(ChoosedCity);
+                ChoosedCity choosedCity = new ChoosedCity();
+                choosedCity.setCode(cursor.getString(cursor.getColumnIndex("choosedcity_code")));
+                choosedCity.setName(cursor.getString(cursor.getColumnIndex("choosedcity_name")));
+                choosedCity.setSubName(cursor.getString(cursor.getColumnIndex("choosedcity_subname")));
+                choosedCity.setTempLow(cursor.getString(cursor.getColumnIndex("choosedcity_tempLow")));
+                choosedCity.setTempHigh(cursor.getString(cursor.getColumnIndex("choosedcity_tempHigh")));
+                choosedCity.setWeather(cursor.getString(cursor.getColumnIndex("choosedcity_weather")));
+                choosedCity.setImageId(cursor.getInt(cursor.getColumnIndex("choosedcity_imageID")));
+                list.add(choosedCity);
             } while (cursor.moveToNext());
         }
         cursor.close();
         return list;
     }
+
+    //判断数据库中是否已经存在
+    public boolean isChoosedCityExist(String cityCode) {
+        Cursor cursor = db.query("ChoosedCity", null, "choosedcity_code=?", new String[]{cityCode}, null, null, null);
+        if (cursor.getCount() == 0) {
+            cursor.close();
+            return false;
+        }else {
+            cursor.close();
+            return true;
+        }
+    }
+
 
     //删除choosedcity表中的数据
     public void delChoosedCity(ChoosedCity choosedCity) {
@@ -164,6 +179,7 @@ public class CoolWeatherDB {
             if (choosedCity != null) {
                 ContentValues values = new ContentValues();
                 values.put("choosedcity_name", choosedCity.getName());
+                values.put("choosedcity_subname", choosedCity.getSubName());
                 values.put("choosedcity_code", choosedCity.getCode());
                 values.put("choosedcity_tempLow", choosedCity.getTempLow());
                 values.put("choosedcity_tempHigh", choosedCity.getTempHigh());

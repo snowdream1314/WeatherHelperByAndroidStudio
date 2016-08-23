@@ -1,5 +1,6 @@
 package com.snowdream1314.weatherhelper.main;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -31,7 +32,7 @@ public class MainActivity extends FragmentActivity {
 
     private FragmentTabHost tabHost;
     private CoolWeatherDB coolWeatherDB;
-    private ChangeTabBroadcastReceiver changeTabBroadcastReceiver;
+//    private ChangeTabBroadcastReceiver changeTabBroadcastReceiver;
     private boolean onResumeCalled = false;
     private int changeTabIndex = -1;
 
@@ -66,10 +67,10 @@ public class MainActivity extends FragmentActivity {
         FragmentTabHost.TabSpec user = tabHost.newTabSpec("我").setIndicator(initView("我", R.drawable.selector_tabhost_image_user));
         tabHost.addTab(user, UserCenterFragment.class, null);
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(WHConstant.Broadcast_ChangeTab);
-        changeTabBroadcastReceiver = new ChangeTabBroadcastReceiver();
-        this.registerReceiver(changeTabBroadcastReceiver, intentFilter);
+//        IntentFilter intentFilter = new IntentFilter();
+//        intentFilter.addAction(WHConstant.Broadcast_ChangeTab);
+//        changeTabBroadcastReceiver = new ChangeTabBroadcastReceiver();
+//        this.registerReceiver(changeTabBroadcastReceiver, intentFilter);
     }
 
     private View initView(String name, int resId) {
@@ -82,34 +83,61 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-    private class ChangeTabBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(WHConstant.Broadcast_ChangeTab)) {
-                int tabIndex = intent.getIntExtra("tab", -1);
-                Log.i("tabIndex", String.valueOf(tabIndex));
-                if (onResumeCalled) {
-                    try {
-                        tabHost.setCurrentTab(tabIndex);
-                    }catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }else {
-                    changeTabIndex = tabIndex;
-                }
-            }
-
-        }
-    }
+//    private class ChangeTabBroadcastReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            String action = intent.getAction();
+//            if (action.equals(WHConstant.Broadcast_ChangeTab)) {
+//                int tabIndex = intent.getIntExtra("tab", -1);
+//                Log.i("tabIndex", String.valueOf(tabIndex));
+//                if (onResumeCalled) {
+//                    try {
+//                        tabHost.setCurrentTab(tabIndex);
+//                    }catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }else {
+//                    changeTabIndex = tabIndex;
+//                }
+//            }
+//
+//        }
+//    }
 
     @Override
     public void onResume() {
         super.onResume();
         Log.i("mainactivity:","resume");
 
-        onResumeCalled = true;
+//        onResumeCalled = true;
 
+        changeTabIndex();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        Log.i("onNewIntent", " called");
+        getIntent().putExtras(intent);//将最新的intent共享出去
+        changeTabIndex();
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        onResumeCalled = false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        this.unregisterReceiver(changeTabBroadcastReceiver);
+    }
+
+    private void changeTabIndex() {
+        changeTabIndex = getIntent().getIntExtra("tab", -1);
         if (changeTabIndex != -1) {
             try {
                 tabHost.setCurrentTab(changeTabIndex);
@@ -122,15 +150,14 @@ public class MainActivity extends FragmentActivity {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        onResumeCalled = false;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.unregisterReceiver(changeTabBroadcastReceiver);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("mainactivity-->", "onActivityResult");
+        if (resultCode == Activity.RESULT_OK) {
+            Intent intent = new Intent();
+            intent.putExtra("update", true);
+            getIntent().putExtras(intent);
+        }
     }
 
 }

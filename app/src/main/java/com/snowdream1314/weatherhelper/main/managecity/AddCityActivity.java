@@ -28,6 +28,7 @@ import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.snowdream1314.weatherhelper.util.JsonUtil;
 import com.snowdream1314.weatherhelper.util.WHRequest;
 import com.snowdream1314.weatherhelper.viewholder.ViewHolder;
+import com.squareup.haha.perflib.Main;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -56,18 +57,21 @@ public class AddCityActivity extends AppCompatActivity implements WHRequest.WHRe
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (position >= cities.size()) return;
-                City city = cities.get(position);
-                Intent intent = new Intent(WHConstant.Broadcast_ChangeTab);
-                intent.putExtra("isFromAddCityActivity", true);
-                intent.putExtra("cityName", city.getCityName());
-                intent.putExtra("cityCode", city.getCityCode());
-                intent.putExtra("tab", 0);
-                sendBroadcast(intent);
 
-//                WHRequest request = new WHRequest(AddCityActivity.this);
-//                request.setDelegate(AddCityActivity.this);
-//                request.queryTemperature(city.getCityCode());
-
+                if (position == 0) {//定位
+                    Intent intent = new Intent(AddCityActivity.this, MainActivity.class);
+                    intent.putExtra("isFromAddCityActivity", true);
+                    intent.putExtra("getLocation", true);
+                    startActivity(intent);
+                }else {
+                    City city = cities.get(position);
+                    Intent intent = new Intent(AddCityActivity.this, MainActivity.class);
+                    intent.putExtra("isFromAddCityActivity", true);
+                    intent.putExtra("cityName", city.getCityName());
+                    intent.putExtra("cityCode", city.getCityCode());
+                    intent.putExtra("tab", 0);
+                    startActivity(intent);
+                }
             }
         });
     }

@@ -3,9 +3,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@mipmap/bg_na"
-    android:id="@+id/ll_weather_layout">
-
-    <include layout="@layout/layout_title"/>
+    android:id="@+id/ll_weather_layout"
+    android:fitsSystemWindows="false"
+    android:clipToPadding="true">
 
     <in.srain.cube.views.ptr.PtrClassicFrameLayout
         xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"

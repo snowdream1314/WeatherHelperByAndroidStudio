@@ -1,7 +1,9 @@
 package com.snowdream1314.weatherhelper.main.managecity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +22,7 @@ import android.widget.TextView;
 import com.snowdream1314.weatherhelper.R;
 import com.snowdream1314.weatherhelper.base.TitleLayoutActivity;
 import com.snowdream1314.weatherhelper.bean.ChoosedCity;
+import com.snowdream1314.weatherhelper.main.MainActivity;
 import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
 import com.snowdream1314.weatherhelper.viewholder.ViewHolder;
@@ -35,6 +39,8 @@ public class ManageCityActivity extends TitleLayoutActivity {
     private CoolWeatherDB coolWeatherDB;
 
     private boolean manageClick = false;
+
+    public static final int ManageCityActivityRequestCode = 10001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +66,17 @@ public class ManageCityActivity extends TitleLayoutActivity {
         mListView = (ListView) findViewById(R.id.lv_cities);
         adapter = new Adapter(ManageCityActivity.this, choosedCities);
         mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position >= choosedCities.size()) return;
+                Intent intent = new Intent(ManageCityActivity.this, MainActivity.class);
+                intent.putExtra("tab", 0);
+                intent.putExtra("isFromManageCityActivity", true);
+                intent.putExtra("position", position);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -85,6 +102,10 @@ public class ManageCityActivity extends TitleLayoutActivity {
                         showBackButton(null);
                     }
                     adapter.notifyDataSetChanged();
+                    if (choosedCities.size() == 0) {
+                        Intent intent = new Intent(ManageCityActivity.this, AddCityActivity.class);
+                        startActivity(intent);
+                    }
 
                     break;
                 case R.id.ib_share://添加
@@ -151,6 +172,7 @@ public class ManageCityActivity extends TitleLayoutActivity {
                         choosedCities.remove(position);
                         coolWeatherDB.delChoosedCity(choosedCity);
                         adapter.notifyDataSetChanged();
+                        setResult(Activity.RESULT_OK);
                     }
                 });
             }

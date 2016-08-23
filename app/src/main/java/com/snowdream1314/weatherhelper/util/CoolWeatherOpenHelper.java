@@ -21,6 +21,7 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 	public static final String CREATE_CHOOSEDCITY = "create table ChoosedCity ("
 			+ "id integer primary key autoincrement, "
 			+ "choosedcity_name text, "
+			+ "choosedcity_subname text, "
 			+ "choosedcity_code text, "
 			+ "choosedcity_tempLow text, "
 			+ "choosedcity_tempHigh text, "

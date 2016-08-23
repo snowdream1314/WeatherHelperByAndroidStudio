@@ -3,6 +3,7 @@ package com.snowdream1314.weatherhelper.bean;
 public class ChoosedCity {
 	
 	private String name;
+	private String subName;
 	private String code;
 	private int imageId;
 	private String tempLow;
@@ -16,6 +17,10 @@ public class ChoosedCity {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public String getSubName() { return subName; }
+
+	public void setSubName(String subName) { this.subName = subName; }
 	
 	public String getCode() {
 		return code;

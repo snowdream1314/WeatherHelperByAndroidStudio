@@ -38,6 +38,14 @@
         </activity>
         <activity android:name=".base.TitleLayoutActivity" />
 
+
+        <!--<receiver android:name=".main.MainActivity$ChangeTabBroadcastReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.snowdream1314.weatherhelper.broadcast.changetab"/>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"

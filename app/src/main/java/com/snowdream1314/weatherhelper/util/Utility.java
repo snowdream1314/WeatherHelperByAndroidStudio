@@ -244,7 +244,6 @@ public class Utility {
                         }
 
                         else if ("yesterday".equals(nodeName)) {
-                            Log.i("yesterday", "yesterday");
 //                            eventType = xmlPullParser.next();
                             yesterday = new RespWeatherYesterday();
                         }
@@ -281,7 +280,6 @@ public class Utility {
                         }
 
                         else if ("weather".equals(nodeName)) {
-                            Log.i("forecast", "forecast");
 //                            eventType = xmlPullParser.next();
                             forecastWeather = new RespWeatherForecastWeather();
                             days = new ArrayList<RespWeatherForecastWeather.day>();
@@ -326,7 +324,6 @@ public class Utility {
 //                        }
 
                         else if ("zhishu".equals(nodeName)) {
-                            Log.i("zhishu", "zhishu");
 //                            eventType = xmlPullParser.next();
                             zhishu = new RespWeatherZhishu();
                         }
