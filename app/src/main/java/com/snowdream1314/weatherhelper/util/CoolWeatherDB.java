@@ -109,6 +109,25 @@ public class CoolWeatherDB {
         }
     }
 
+    public List<City> searchCity(String cityName) {
+        List<City> list = new ArrayList<City>();
+        Cursor cursor = db.query("City", null, "city_name like ?", new String[] {"%" + cityName + "%"}, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                City city = new City();
+                city.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
+                city.setCityNum(cursor.getString(cursor.getColumnIndex("city_num")));
+                city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
+                city.setProvinceId(cursor.getString(cursor.getColumnIndex("province_id")));
+                city.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
+                list.add(city);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return list;
+    }
+
     //将choosedcity实例存储到数据库
     public void saveChoosedCity(ChoosedCity choosedCity) {
         if (choosedCity != null) {
@@ -127,7 +146,9 @@ public class CoolWeatherDB {
             }else {
                 db.update("ChoosedCity",values, "choosedcity_code=?", new String[] {choosedCity.getCode()});
             }
+            cursor.close();
         }
+
     }
 
     //从数据库获取choosedcity表中的数据
@@ -156,6 +177,7 @@ public class CoolWeatherDB {
         Cursor cursor = db.query("ChoosedCity", null, "choosedcity_code=?", new String[]{cityCode}, null, null, null);
         if (cursor.getCount() == 0) {
             cursor.close();
+            db.close();
             return false;
         }else {
             cursor.close();
