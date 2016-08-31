@@ -117,6 +117,11 @@ public class WeatherFragment extends TitleLayoutFragment{
 
         }
 
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+
         return rootView;
 
     }

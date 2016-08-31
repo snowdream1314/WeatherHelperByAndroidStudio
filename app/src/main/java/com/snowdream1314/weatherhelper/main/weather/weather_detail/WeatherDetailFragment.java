@@ -88,6 +88,12 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
             initRefreshLayout(rootView);
 
         }
+
+        ViewGroup parent = (ViewGroup) rootView.getParent();
+        if (parent != null) {
+            parent.removeView(rootView);
+        }
+
         return rootView;
     }
 

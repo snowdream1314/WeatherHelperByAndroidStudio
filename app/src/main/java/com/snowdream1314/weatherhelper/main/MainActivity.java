@@ -67,10 +67,6 @@ public class MainActivity extends FragmentActivity {
         FragmentTabHost.TabSpec user = tabHost.newTabSpec("我").setIndicator(initView("我", R.drawable.selector_tabhost_image_user));
         tabHost.addTab(user, UserCenterFragment.class, null);
 
-//        IntentFilter intentFilter = new IntentFilter();
-//        intentFilter.addAction(WHConstant.Broadcast_ChangeTab);
-//        changeTabBroadcastReceiver = new ChangeTabBroadcastReceiver();
-//        this.registerReceiver(changeTabBroadcastReceiver, intentFilter);
     }
 
     private View initView(String name, int resId) {
@@ -83,26 +79,6 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-//    private class ChangeTabBroadcastReceiver extends BroadcastReceiver {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getAction();
-//            if (action.equals(WHConstant.Broadcast_ChangeTab)) {
-//                int tabIndex = intent.getIntExtra("tab", -1);
-//                Log.i("tabIndex", String.valueOf(tabIndex));
-//                if (onResumeCalled) {
-//                    try {
-//                        tabHost.setCurrentTab(tabIndex);
-//                    }catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }else {
-//                    changeTabIndex = tabIndex;
-//                }
-//            }
-//
-//        }
-//    }
 
     @Override
     public void onResume() {

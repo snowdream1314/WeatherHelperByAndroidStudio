@@ -41,112 +41,154 @@ public class CoolWeatherDB {
 
     //将City实例存储到数据库
     public void saveCity(City city) {
-        if (city != null) {
-            ContentValues values = new ContentValues();
-            values.put("city_name", city.getCityName());
-            values.put("city_pyname",city.getCityPyName());
-            values.put("city_code", city.getCityCode());
-            values.put("city_num", city.getCityNum());
-            values.put("province_name", city.getProvinceName());
-            values.put("province_id", city.getProvinceId());
-            db.insert("City", null, values);
-        }
-    }
+        try {
+            synchronized (db) {
+                if (city != null) {
+                    ContentValues values = new ContentValues();
+                    values.put("city_name", city.getCityName());
+                    values.put("city_pyname",city.getCityPyName());
+                    values.put("city_code", city.getCityCode());
+                    values.put("city_num", city.getCityNum());
+                    values.put("province_name", city.getProvinceName());
+                    values.put("province_id", city.getProvinceId());
+                    db.insert("City", null, values);
+                }
+            }
 
-//    public List<City> loadCities(String provinceId) {
-//        List<City> list = new ArrayList<City>();
-//        Cursor cursor = db.query("City", null, "province_id= ?", new String[] {provinceId}, null, null, null);
-//        if (cursor.moveToFirst()) {
-//            do {
-//                City city = new City();
-//                city.setId(cursor.getInt(cursor.getColumnIndex("id")));
-//                city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
-//                city.setCityNum(cursor.getString(cursor.getColumnIndex("city_num")));
-//                city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
-//                city.setProvinceId(provinceId);
-//                list.add(city);
-//            } while (cursor.moveToNext());
-//        }
-//        cursor.close();
-//        return list;
-//    }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+//            if (db != null && db.isOpen()) {
+//                db.close();
+//            }
+        }
+
+    }
 
     public List<City> loadCities(String provinceName) {
         List<City> list = new ArrayList<City>();
-        Cursor cursor = db.query("City", null, "province_name= ?", new String[] {provinceName}, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                City city = new City();
-                city.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
-                city.setCityNum(cursor.getString(cursor.getColumnIndex("city_num")));
-                city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
-                city.setProvinceId(cursor.getString(cursor.getColumnIndex("province_id")));
-                city.setProvinceName(provinceName);
-                list.add(city);
-            } while (cursor.moveToNext());
+        try {
+            synchronized (db) {
+                Cursor cursor = db.query("City", null, "province_name= ?", new String[] {provinceName}, null, null, null);
+                if (cursor.moveToFirst()) {
+                    do {
+                        City city = new City();
+                        city.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                        city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
+                        city.setCityNum(cursor.getString(cursor.getColumnIndex("city_num")));
+                        city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
+                        city.setProvinceId(cursor.getString(cursor.getColumnIndex("province_id")));
+                        city.setProvinceName(provinceName);
+                        list.add(city);
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
+//                db.close();
+                return list;
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+//            if (db != null && db.isOpen()) {
+//                db.close();
+//            }
+            return list == null ? null : list;
         }
-        cursor.close();
-        return list;
     }
 
     public City loadCity(String cityName) {
-        Cursor cursor = db.query("City", null, "city_name= ?", new String[] {cityName}, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            City city = new City();
-            city.setId(cursor.getInt(cursor.getColumnIndex("id")));
-            city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
-            city.setCityNum(cursor.getString(cursor.getColumnIndex("city_num")));
-            city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
-            city.setProvinceId(cursor.getString(cursor.getColumnIndex("province_id")));
-            city.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
-            cursor.close();
-            return city;
-        }
-        else {
-            cursor.close();
-            return null;
+        City city = new City();
+        try {
+            synchronized (db) {
+                Cursor cursor = db.query("City", null, "city_name= ?", new String[] {cityName}, null, null, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    city.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                    city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
+                    city.setCityNum(cursor.getString(cursor.getColumnIndex("city_num")));
+                    city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
+                    city.setProvinceId(cursor.getString(cursor.getColumnIndex("province_id")));
+                    city.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
+                    cursor.close();
+//                    db.close();
+                    return city;
+                }
+                else {
+                    cursor.close();
+//                    db.close();
+                    return null;
+                }
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+//            if (db != null && db.isOpen()) {
+//                db.close();
+//            }
+            return city == null ? null : city;
         }
     }
 
     public List<City> searchCity(String cityName) {
         List<City> list = new ArrayList<City>();
-        Cursor cursor = db.query("City", null, "city_name like ?", new String[] {"%" + cityName + "%"}, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                City city = new City();
-                city.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
-                city.setCityNum(cursor.getString(cursor.getColumnIndex("city_num")));
-                city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
-                city.setProvinceId(cursor.getString(cursor.getColumnIndex("province_id")));
-                city.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
-                list.add(city);
-            } while (cursor.moveToNext());
+        try {
+            synchronized (db) {
+                Cursor cursor = db.query("City", null, "city_name like ?", new String[] {"%" + cityName + "%"}, null, null, null);
+                if (cursor.moveToFirst()) {
+                    do {
+                        City city = new City();
+                        city.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                        city.setCityCode(cursor.getString(cursor.getColumnIndex("city_code")));
+                        city.setCityNum(cursor.getString(cursor.getColumnIndex("city_num")));
+                        city.setCityName(cursor.getString(cursor.getColumnIndex("city_name")));
+                        city.setProvinceId(cursor.getString(cursor.getColumnIndex("province_id")));
+                        city.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
+                        list.add(city);
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
+//                db.close();
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+//            if (db != null && db.isOpen()) {
+//                db.close();
+//            }
+            return list;
         }
-        cursor.close();
-        return list;
     }
 
     //将choosedcity实例存储到数据库
     public void saveChoosedCity(ChoosedCity choosedCity) {
-        if (choosedCity != null) {
-            ContentValues values = new ContentValues();
-            values.put("choosedcity_name", choosedCity.getName());
-            values.put("choosedcity_subname", choosedCity.getSubName());
-            values.put("choosedcity_code", choosedCity.getCode());
-            values.put("choosedcity_tempLow", choosedCity.getTempLow());
-            values.put("choosedcity_tempHigh", choosedCity.getTempHigh());
-            values.put("choosedcity_weather", choosedCity.getWeather());
-            values.put("choosedcity_imageID", choosedCity.getImageId());
+        try {
+            synchronized (db) {
+                if (choosedCity != null) {
+                    ContentValues values = new ContentValues();
+                    values.put("choosedcity_name", choosedCity.getName());
+                    values.put("choosedcity_subname", choosedCity.getSubName());
+                    values.put("choosedcity_code", choosedCity.getCode());
+                    values.put("choosedcity_tempLow", choosedCity.getTempLow());
+                    values.put("choosedcity_tempHigh", choosedCity.getTempHigh());
+                    values.put("choosedcity_weather", choosedCity.getWeather());
+                    values.put("choosedcity_imageID", choosedCity.getImageId());
 
-            Cursor cursor = db.query("ChoosedCity", null, "choosedcity_code=?", new String[] {choosedCity.getCode()}, null, null, null);
-            if (cursor.getCount() == 0) {
-                db.insert("ChoosedCity", null, values);
-            }else {
-                db.update("ChoosedCity",values, "choosedcity_code=?", new String[] {choosedCity.getCode()});
+                    Cursor cursor = db.query("ChoosedCity", null, "choosedcity_code=?", new String[] {choosedCity.getCode()}, null, null, null);
+                    if (cursor.getCount() == 0) {
+                        db.insert("ChoosedCity", null, values);
+                    }else {
+                        db.update("ChoosedCity",values, "choosedcity_code=?", new String[] {choosedCity.getCode()});
+                    }
+                    cursor.close();
+//                    db.close();
+                }
             }
-            cursor.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+//            if (db != null && db.isOpen()) {
+//                db.close();
+//            }
         }
 
     }
@@ -154,34 +196,49 @@ public class CoolWeatherDB {
     //从数据库获取choosedcity表中的数据
     public List<ChoosedCity> loadChoosedCity() {
         List<ChoosedCity> list = new ArrayList<ChoosedCity>();
-        Cursor cursor = db.query("ChoosedCity", null, null, null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                ChoosedCity choosedCity = new ChoosedCity();
-                choosedCity.setCode(cursor.getString(cursor.getColumnIndex("choosedcity_code")));
-                choosedCity.setName(cursor.getString(cursor.getColumnIndex("choosedcity_name")));
-                choosedCity.setSubName(cursor.getString(cursor.getColumnIndex("choosedcity_subname")));
-                choosedCity.setTempLow(cursor.getString(cursor.getColumnIndex("choosedcity_tempLow")));
-                choosedCity.setTempHigh(cursor.getString(cursor.getColumnIndex("choosedcity_tempHigh")));
-                choosedCity.setWeather(cursor.getString(cursor.getColumnIndex("choosedcity_weather")));
-                choosedCity.setImageId(cursor.getInt(cursor.getColumnIndex("choosedcity_imageID")));
-                list.add(choosedCity);
-            } while (cursor.moveToNext());
+        try {
+            synchronized(db) {
+                Cursor cursor = db.query("ChoosedCity", null, null, null, null, null, null);
+                if (cursor.moveToFirst()) {
+                    do {
+                        ChoosedCity choosedCity = new ChoosedCity();
+                        choosedCity.setCode(cursor.getString(cursor.getColumnIndex("choosedcity_code")));
+                        choosedCity.setName(cursor.getString(cursor.getColumnIndex("choosedcity_name")));
+                        choosedCity.setSubName(cursor.getString(cursor.getColumnIndex("choosedcity_subname")));
+                        choosedCity.setTempLow(cursor.getString(cursor.getColumnIndex("choosedcity_tempLow")));
+                        choosedCity.setTempHigh(cursor.getString(cursor.getColumnIndex("choosedcity_tempHigh")));
+                        choosedCity.setWeather(cursor.getString(cursor.getColumnIndex("choosedcity_weather")));
+                        choosedCity.setImageId(cursor.getInt(cursor.getColumnIndex("choosedcity_imageID")));
+                        list.add(choosedCity);
+                    } while (cursor.moveToNext());
+                }
+                cursor.close();
+//                db.close();
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+//            if (db != null && db.isOpen()) {
+//                db.close();
+//            }
         }
-        cursor.close();
         return list;
     }
 
     //判断数据库中是否已经存在
     public boolean isChoosedCityExist(String cityCode) {
-        Cursor cursor = db.query("ChoosedCity", null, "choosedcity_code=?", new String[]{cityCode}, null, null, null);
-        if (cursor.getCount() == 0) {
-            cursor.close();
-            db.close();
-            return false;
-        }else {
-            cursor.close();
-            return true;
+        synchronized(db) {
+            Cursor cursor = db.query("ChoosedCity", null, "choosedcity_code=?", new String[]{cityCode}, null, null, null);
+            if (cursor.getCount() == 0) {
+                cursor.close();
+//                db.close();
+                return false;
+            }else {
+                cursor.close();
+//                db.close();
+                return true;
+            }
         }
     }
 
@@ -189,28 +246,40 @@ public class CoolWeatherDB {
     //删除choosedcity表中的数据
     public void delChoosedCity(ChoosedCity choosedCity) {
         try {
-            db.delete("ChoosedCity", "choosedcity_code=?", new String[] {choosedCity.getCode()});
+            synchronized (db) {
+                db.delete("ChoosedCity", "choosedcity_code=?", new String[] {choosedCity.getCode()});
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+//            if (db != null && db.isOpen()) {
+//                db.close();
+//            }
         }
     }
 
     //更新choosedcity表中的数据
     public void updateChoosedCity(ChoosedCity choosedCity) {
         try {
-            if (choosedCity != null) {
-                ContentValues values = new ContentValues();
-                values.put("choosedcity_name", choosedCity.getName());
-                values.put("choosedcity_subname", choosedCity.getSubName());
-                values.put("choosedcity_code", choosedCity.getCode());
-                values.put("choosedcity_tempLow", choosedCity.getTempLow());
-                values.put("choosedcity_tempHigh", choosedCity.getTempHigh());
-                values.put("choosedcity_weather", choosedCity.getWeather());
-                values.put("choosedcity_imageID", choosedCity.getImageId());
-                db.update("ChoosedCity",values, "choosedcity_code=?", new String[] {choosedCity.getCode()});
+            synchronized (db) {
+                if (choosedCity != null) {
+                    ContentValues values = new ContentValues();
+                    values.put("choosedcity_name", choosedCity.getName());
+                    values.put("choosedcity_subname", choosedCity.getSubName());
+                    values.put("choosedcity_code", choosedCity.getCode());
+                    values.put("choosedcity_tempLow", choosedCity.getTempLow());
+                    values.put("choosedcity_tempHigh", choosedCity.getTempHigh());
+                    values.put("choosedcity_weather", choosedCity.getWeather());
+                    values.put("choosedcity_imageID", choosedCity.getImageId());
+                    db.update("ChoosedCity",values, "choosedcity_code=?", new String[] {choosedCity.getCode()});
+                }
             }
         } catch(Exception e) {
             e.printStackTrace();
+        }finally {
+//            if (db != null && db.isOpen()) {
+//                db.close();
+//            }
         }
     }
 

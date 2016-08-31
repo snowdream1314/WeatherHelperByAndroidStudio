@@ -2,6 +2,8 @@ package com.snowdream1314.weatherhelper.main.managecity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,12 +12,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +37,7 @@ import com.snowdream1314.weatherhelper.main.MainActivity;
 import com.snowdream1314.weatherhelper.main.weather.WeatherFragment;
 import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
+import com.snowdream1314.weatherhelper.util.ImeUtil;
 import com.snowdream1314.weatherhelper.util.JsonUtil;
 import com.snowdream1314.weatherhelper.util.WHRequest;
 import com.snowdream1314.weatherhelper.viewholder.ViewHolder;
@@ -51,17 +59,43 @@ public class AddCityActivity extends TitleLayoutActivity{
     private EditText searchEditText;
     private CoolWeatherDB coolWeatherDB;
     private List<City> cities = new ArrayList<City>();
+    private ImageView closeImageView;
+    private ImageButton searchImageButton;
+    private TextView cancelTextView;
+    private LinearLayout hotCitiesLinearLayout;
+    private RelativeLayout searchTipsRelativeLayout;
+    private ListView tipCitiesListView;
+    private ListViewAdapter listViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            //透明状态栏
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        }
         setContentView(R.layout.activity_add_city);
+        if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
 
         coolWeatherDB = CoolWeatherDB.getInstance(AddCityActivity.this);
+        closeImageView = (ImageView) findViewById(R.id.iv_close);
+        searchImageButton = (ImageButton) findViewById(R.id.ib_search);
+        cancelTextView = (TextView) findViewById(R.id.tv_right);
+        closeImageView.setOnClickListener(clickListener);
+        searchImageButton.setOnClickListener(clickListener);
+        cancelTextView.setOnClickListener(clickListener);
 
-        showBackButton(null);
+        hotCitiesLinearLayout = (LinearLayout) findViewById(R.id.ll_hot_cities);
+        searchTipsRelativeLayout = (RelativeLayout) findViewById(R.id.rl_search_tips);
 
         searchEditText = (EditText) findViewById(R.id.et_search);
+        searchEditText.setOnClickListener(clickListener);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -74,11 +108,21 @@ public class AddCityActivity extends TitleLayoutActivity{
             @Override
             public void afterTextChanged(Editable s) {
                 String searchString = searchEditText.getText().toString().trim();
-                Log.e("searchString-->", searchString);
-                cities = coolWeatherDB.searchCity(searchString);
-                Log.e("search_result-->", String.valueOf(cities.size()));
-                if (cities.size() != 0)  {
-                    Log.e("search_city-->", cities.get(0).getCityName());
+                if (!"".equals(searchString)) {
+                    cities = coolWeatherDB.searchCity(searchString);
+                    if (cities.size() != 0) {
+                        Log.e("city_size", String.valueOf(cities.size()));
+                        hotCitiesLinearLayout.setVisibility(View.GONE);
+                        searchTipsRelativeLayout.setVisibility(View.GONE);
+                        tipCitiesListView.setVisibility(View.VISIBLE);
+                        listViewAdapter = new ListViewAdapter(AddCityActivity.this, cities);
+                        tipCitiesListView.setAdapter(listViewAdapter);
+                        listViewAdapter.notifyDataSetChanged();
+                    }
+                }else {
+                    hotCitiesLinearLayout.setVisibility(View.GONE);
+                    searchTipsRelativeLayout.setVisibility(View.VISIBLE);
+                    tipCitiesListView.setVisibility(View.GONE);
                 }
             }
         });
@@ -91,7 +135,7 @@ public class AddCityActivity extends TitleLayoutActivity{
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position >= cities.size()) return;
+                if (position >= hotCities.size()) return;
 
                 if (position == 0) {//定位
                     Intent intent = new Intent(AddCityActivity.this, MainActivity.class);
@@ -99,7 +143,7 @@ public class AddCityActivity extends TitleLayoutActivity{
                     intent.putExtra("getLocation", true);
                     startActivity(intent);
                 }else {
-                    City city = cities.get(position);
+                    City city = hotCities.get(position);
                     Intent intent = new Intent(AddCityActivity.this, MainActivity.class);
                     intent.putExtra("isFromAddCityActivity", true);
                     intent.putExtra("cityName", city.getCityName());
@@ -109,10 +153,15 @@ public class AddCityActivity extends TitleLayoutActivity{
                 }
             }
         });
+
+
+        tipCitiesListView = (ListView) findViewById(R.id.lv_search_tip_cities);
+        listViewAdapter = new ListViewAdapter(AddCityActivity.this, cities);
+        tipCitiesListView.setAdapter(listViewAdapter);
     }
 
     private void initData() {
-        cities.clear();
+        hotCities.clear();
 
         try {
             String json = AppUtil.readJsonFromRaw(AddCityActivity.this, R.raw.hot_cities);
@@ -176,12 +225,83 @@ public class AddCityActivity extends TitleLayoutActivity{
 
     }
 
+    private class ListViewAdapter extends BaseAdapter {
+
+        private List<City> cities;
+        private Context context;
+
+        public ListViewAdapter (Context context, List<City> cities) {
+            this.cities = cities;
+            this.context = context;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public int getCount() { return cities.size(); }
+
+        @Override
+        public Object getItem(int position) {
+            return cities.get(position);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.add_city_cell_cities_tip, null);
+            }
+
+            TextView nameTextView = (TextView) ViewHolder.get(convertView, R.id.tv_city_name);
+
+            City city = cities.get(position);
+            Log.i("city_name", city.getCityName());
+
+            nameTextView.setText(city.getCityName() + ", " + city.getProvinceName() + ", " + "中国");
+            nameTextView.setTag(city);
+            nameTextView.setOnClickListener(clickListener);
+
+            return convertView;
+        }
+
+    }
+
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.ib_back:
-
+                case R.id.iv_close:
+                    finish();
+                    break;
+                case R.id.ib_search:
+                    searchImageButton.setVisibility(View.GONE);
+                    ImeUtil.showSoftKeyboard(searchEditText);
+                    hotCitiesLinearLayout.setVisibility(View.GONE);
+                    searchTipsRelativeLayout.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.tv_right:
+                    searchImageButton.setVisibility(View.VISIBLE);
+                    hotCitiesLinearLayout.setVisibility(View.VISIBLE);
+                    searchTipsRelativeLayout.setVisibility(View.GONE);
+                    ImeUtil.hideSoftKeyboard(searchEditText);
+                    break;
+                case R.id.et_search:
+                    Log.i("et_search_clicked", "true");
+                    searchImageButton.setVisibility(View.GONE);
+                    hotCitiesLinearLayout.setVisibility(View.GONE);
+                    searchTipsRelativeLayout.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.tv_city_name:
+                    City city = (City) v.getTag();
+                    Intent intent = new Intent(AddCityActivity.this, MainActivity.class);
+                    intent.putExtra("isFromAddCityActivity", true);
+                    intent.putExtra("cityName", city.getCityName());
+                    intent.putExtra("cityCode", city.getCityCode());
+                    intent.putExtra("tab", 0);
+                    startActivity(intent);
                     break;
             }
         }
