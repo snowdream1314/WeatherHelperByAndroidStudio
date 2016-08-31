@@ -281,11 +281,13 @@ public class AddCityActivity extends TitleLayoutActivity{
                     ImeUtil.showSoftKeyboard(searchEditText);
                     hotCitiesLinearLayout.setVisibility(View.GONE);
                     searchTipsRelativeLayout.setVisibility(View.VISIBLE);
+                    tipCitiesListView.setVisibility(View.GONE);
                     break;
                 case R.id.tv_right:
                     searchImageButton.setVisibility(View.VISIBLE);
                     hotCitiesLinearLayout.setVisibility(View.VISIBLE);
                     searchTipsRelativeLayout.setVisibility(View.GONE);
+                    tipCitiesListView.setVisibility(View.GONE);
                     ImeUtil.hideSoftKeyboard(searchEditText);
                     break;
                 case R.id.et_search:
@@ -293,6 +295,7 @@ public class AddCityActivity extends TitleLayoutActivity{
                     searchImageButton.setVisibility(View.GONE);
                     hotCitiesLinearLayout.setVisibility(View.GONE);
                     searchTipsRelativeLayout.setVisibility(View.VISIBLE);
+                    tipCitiesListView.setVisibility(View.GONE);
                     break;
                 case R.id.tv_city_name:
                     City city = (City) v.getTag();
