@@ -9,14 +9,17 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.snowdream1314.weatherhelper.R;
 import com.snowdream1314.weatherhelper.constant.WHConstant;
@@ -43,14 +46,14 @@ public class MainActivity extends FragmentActivity {
             //透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
-        Rect outRect = new Rect();
+//        Rect outRect = new Rect();
 
         setContentView(R.layout.activity_main);
 
         tabHost = (FragmentTabHost) findViewById(R.id.tabhost);
-        tabHost.setPadding(0, outRect.top, 0, 0);
+//        tabHost.setPadding(0, outRect.top, 0, 0);
         tabHost.setup(this, getSupportFragmentManager(), android.R.id.tabcontent);
 
         initTabHost();
@@ -83,7 +86,7 @@ public class MainActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("mainactivity:","resume");
+        Log.e("mainactivity:","resume");
 
 //        onResumeCalled = true;
 
@@ -93,8 +96,8 @@ public class MainActivity extends FragmentActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        Log.e("onNewIntent", " called");
         setIntent(intent);
-        Log.i("onNewIntent", " called");
         getIntent().putExtras(intent);//将最新的intent共享出去
         changeTabIndex();
 
@@ -125,6 +128,37 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    //双击退出程序
+    private static boolean isExit = false;
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+
+            if(!isExit){
+                isExit = true;
+                Toast.makeText(this, "再按一次后退键退出程序!", Toast.LENGTH_SHORT).show();
+                new CountDownTimer(2200,2200){
+
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        isExit = false;
+                    }
+                }.start();
+            }else{
+                finish();
+            }
+
+            return false;
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -132,6 +166,8 @@ public class MainActivity extends FragmentActivity {
         if (resultCode == Activity.RESULT_OK) {
             Intent intent = new Intent();
             intent.putExtra("update", true);
+            intent.putExtra("del_position", data.getIntExtra("del_position", -1));
+            intent.putExtra("isFromManageCityActivity", true);
             getIntent().putExtras(intent);
         }
     }

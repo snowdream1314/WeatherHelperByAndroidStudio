@@ -75,19 +75,16 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         // Inflate the layout for this fragment
         Log.e("detailfragment-->", "onCreateView");
 
-        if(rootView == null) {
-            rootView = inflater.inflate(R.layout.weather_detail_layout, null);
-            coolWeatherDB = CoolWeatherDB.getInstance(getContext());
+        rootView = inflater.inflate(R.layout.weather_detail_layout, null);
+        coolWeatherDB = CoolWeatherDB.getInstance(getContext());
 
-            initViews();
-            initViewsData();
-            initZhishuAnimation();
-            initWeatherDetailAnimation();
+        initViews();
+        initViewsData();
+        initZhishuAnimation();
+        initWeatherDetailAnimation();
 
-            //下拉刷新
-            initRefreshLayout(rootView);
-
-        }
+        //下拉刷新
+        initRefreshLayout(rootView);
 
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
@@ -241,7 +238,10 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
 
     private void initZhishuAnimation() {
         if (weather == null) return;
-        if (weather.getZhishus().size() == 0) return;
+        if (weather.getZhishus().size() == 0) {
+            zhishuLinearLayout.setVisibility(View.GONE);
+            return;
+        }
 
         if (!initZhishu) {
             initZhishu = true;

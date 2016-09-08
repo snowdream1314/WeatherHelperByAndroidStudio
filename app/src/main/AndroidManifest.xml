@@ -38,12 +38,9 @@
         </activity>
         <activity android:name=".base.TitleLayoutActivity" />
 
-
-        <!--<receiver android:name=".main.MainActivity$ChangeTabBroadcastReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.snowdream1314.weatherhelper.broadcast.changetab"/>-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <activity android:name=".main.managecity.ManageCityActivity" />
+        <activity android:name=".main.usercenter.setting.UserCenterSettingActivity" />
+        <activity android:name=".main.managecity.AddCityActivity"></activity>
 
 
         <service
@@ -55,9 +52,7 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="REuEBdAfaRPsHVrzL89ko9PoYnsxzCmC " />
         //key:开发者申请的key
-        <activity android:name=".main.managecity.ManageCityActivity" />
-        <activity android:name=".main.usercenter.setting.UserCenterSettingActivity" />
-        <activity android:name=".main.managecity.AddCityActivity"></activity>
+
     </application>
 
 </manifest>

@@ -28,5 +28,6 @@ public interface TitleLayout {
     public void hideCirclePageIndicator(View view);
 
     public void setTitleLayoutParams(View view, int backgroundColor, int height);
+    public void setTitleActionBar(View view, int backgroundColor, int height);
 
 }

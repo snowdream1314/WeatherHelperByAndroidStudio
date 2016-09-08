@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -67,21 +69,23 @@ public class AddCityActivity extends TitleLayoutActivity{
     private ListView tipCitiesListView;
     private ListViewAdapter listViewAdapter;
 
+    private String searchString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//            //透明状态栏
-//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-//        }
-        setContentView(R.layout.activity_add_city);
-        if (Build.VERSION.SDK_INT >= 21) {
-            View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            //透明状态栏
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+        setContentView(R.layout.activity_add_city);
+//        if (Build.VERSION.SDK_INT >= 21) {
+//            View decorView = getWindow().getDecorView();
+//            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+//            decorView.setSystemUiVisibility(option);
+//            getWindow().setStatusBarColor(Color.TRANSPARENT);
+//        }
 
         coolWeatherDB = CoolWeatherDB.getInstance(AddCityActivity.this);
         closeImageView = (ImageView) findViewById(R.id.iv_close);
@@ -107,25 +111,22 @@ public class AddCityActivity extends TitleLayoutActivity{
 
             @Override
             public void afterTextChanged(Editable s) {
-                String searchString = searchEditText.getText().toString().trim();
-                if (!"".equals(searchString)) {
-                    cities = coolWeatherDB.searchCity(searchString);
-                    if (cities.size() != 0) {
-                        Log.e("city_size", String.valueOf(cities.size()));
-                        hotCitiesLinearLayout.setVisibility(View.GONE);
-                        searchTipsRelativeLayout.setVisibility(View.GONE);
-                        tipCitiesListView.setVisibility(View.VISIBLE);
-                        listViewAdapter = new ListViewAdapter(AddCityActivity.this, cities);
-                        tipCitiesListView.setAdapter(listViewAdapter);
-                        listViewAdapter.notifyDataSetChanged();
-                    }
-                }else {
-                    hotCitiesLinearLayout.setVisibility(View.GONE);
-                    searchTipsRelativeLayout.setVisibility(View.VISIBLE);
-                    tipCitiesListView.setVisibility(View.GONE);
-                }
+                searchString = searchEditText.getText().toString().trim();
+                searchCities();
             }
         });
+        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchString = searchEditText.getText().toString().trim();
+                    searchCities();
+                }
+                return false;
+            }
+        });
+
 
         initData();
 
@@ -158,6 +159,26 @@ public class AddCityActivity extends TitleLayoutActivity{
         tipCitiesListView = (ListView) findViewById(R.id.lv_search_tip_cities);
         listViewAdapter = new ListViewAdapter(AddCityActivity.this, cities);
         tipCitiesListView.setAdapter(listViewAdapter);
+
+    }
+
+    private void searchCities() {
+        if (!"".equals(searchString)) {
+            cities = coolWeatherDB.searchCity(searchString);
+            if (cities.size() != 0) {
+                Log.e("city_size", String.valueOf(cities.size()));
+                hotCitiesLinearLayout.setVisibility(View.GONE);
+                searchTipsRelativeLayout.setVisibility(View.GONE);
+                tipCitiesListView.setVisibility(View.VISIBLE);
+                listViewAdapter = new ListViewAdapter(AddCityActivity.this, cities);
+                tipCitiesListView.setAdapter(listViewAdapter);
+                listViewAdapter.notifyDataSetChanged();
+            }
+        }else {
+            hotCitiesLinearLayout.setVisibility(View.GONE);
+            searchTipsRelativeLayout.setVisibility(View.VISIBLE);
+            tipCitiesListView.setVisibility(View.GONE);
+        }
     }
 
     private void initData() {
@@ -258,7 +279,6 @@ public class AddCityActivity extends TitleLayoutActivity{
             TextView nameTextView = (TextView) ViewHolder.get(convertView, R.id.tv_city_name);
 
             City city = cities.get(position);
-            Log.i("city_name", city.getCityName());
 
             nameTextView.setText(city.getCityName() + ", " + city.getProvinceName() + ", " + "中国");
             nameTextView.setTag(city);

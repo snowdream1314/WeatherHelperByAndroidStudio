@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +50,7 @@ public class ManageCityActivity extends TitleLayoutActivity {
             //透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //透明导航栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
 
         setContentView(R.layout.activity_manage_city);
@@ -60,6 +61,7 @@ public class ManageCityActivity extends TitleLayoutActivity {
         showShareButton(null, R.mipmap.add_normal, clickListener);
         showFeedsButton(null, R.mipmap.edit, clickListener);
         setTitleLayoutParams(null, Color.parseColor("#FF996699"), AppUtil.getStatusHeight(ManageCityActivity.this));
+        setTitleActionBar(null, Color.parseColor("#FF996699"), AppUtil.getStatusHeight(ManageCityActivity.this));
 
         initDatas();
 
@@ -172,7 +174,11 @@ public class ManageCityActivity extends TitleLayoutActivity {
                         choosedCities.remove(position);
                         coolWeatherDB.delChoosedCity(choosedCity);
                         adapter.notifyDataSetChanged();
-                        setResult(Activity.RESULT_OK);
+                        Intent intent = new Intent();
+                        intent.putExtra("del_position", position);
+                        Log.e("del_position", String.valueOf(position));
+                        intent.putExtra("isFromManageCityActivity", true);
+                        setResult(Activity.RESULT_OK, intent);
                     }
                 });
             }

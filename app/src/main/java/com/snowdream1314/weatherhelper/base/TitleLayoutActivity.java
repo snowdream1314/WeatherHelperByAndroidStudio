@@ -187,4 +187,18 @@ public class TitleLayoutActivity extends Activity implements TitleLayout{
         }
     }
 
+    @Override
+    public void setTitleActionBar(View view, int backgroundColor, int height) {
+        View actionbar = (View) findViewById(R.id.v_actionbar);
+        if (backgroundColor != 0) {
+            actionbar.setBackgroundColor(backgroundColor);
+        }
+
+        if (height != 0) {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) actionbar.getLayoutParams();
+            params.height = params.height + height;
+            actionbar.setLayoutParams(params);
+        }
+    }
+
 }

@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".main.managecity.ManageCityActivity"
-    android:fitsSystemWindows="false"
-    android:clipToPadding="true"
     android:id="@+id/ll_manage_city"
     >
 

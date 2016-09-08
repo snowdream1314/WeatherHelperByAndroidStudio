@@ -58,6 +58,7 @@ public class WeatherFragment extends TitleLayoutFragment{
     private boolean isFromAddCityActivity = false;
     private boolean isFromManageCityActivity = false;
     private boolean initLocation = false;
+    private boolean update = false;
 
     private List<ChoosedCity> choosedCities = new ArrayList<ChoosedCity>();
 
@@ -110,6 +111,7 @@ public class WeatherFragment extends TitleLayoutFragment{
             showShareButton(rootView, clickListener);
             showFeedsButton(rootView, clickListener);
             setTitleLayoutParams(rootView, 0, AppUtil.getStatusHeight(getContext()));
+            setTitleActionBar(rootView, 0, AppUtil.getStatusHeight(getContext()));
 
             viewPager = (ViewPager) rootView.findViewById(R.id.vp_weather);
 
@@ -127,6 +129,7 @@ public class WeatherFragment extends TitleLayoutFragment{
     }
 
     private void initData() {
+        Log.e("WeatherFragment-->", "initData");
         choosedCities = coolWeatherDB.loadChoosedCity();
         if (choosedCities.size() == 0) {
             Intent intent = new Intent(getActivity(), AddCityActivity.class);
@@ -166,21 +169,17 @@ public class WeatherFragment extends TitleLayoutFragment{
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("WeatherFragment-->", "onResume");
-        boolean update = getActivity().getIntent().getBooleanExtra("update", false);
-        if (update) {
-            initData();
-        }else {
-            isFromAddCityActivity = getActivity().getIntent().getBooleanExtra("isFromAddCityActivity", false);
-            isFromManageCityActivity = getActivity().getIntent().getBooleanExtra("isFromManageCityActivity", false);
-            if (isFromManageCityActivity || isFromAddCityActivity) {
-                updateData();
-            }
+        Log.e("WeatherFragment-->", "onResume");
+        update = getActivity().getIntent().getBooleanExtra("update", false);
+        isFromAddCityActivity = getActivity().getIntent().getBooleanExtra("isFromAddCityActivity", false);
+        isFromManageCityActivity = getActivity().getIntent().getBooleanExtra("isFromManageCityActivity", false);
+        if (isFromManageCityActivity || isFromAddCityActivity || update) {
+            updateData();
         }
     }
 
     private void updateData() {
-
+        Log.e("WeatherFragment-->", "updateData");
         if (isFromAddCityActivity) {
             boolean getLocation = getActivity().getIntent().getBooleanExtra("getLocation", false);
             if (getLocation) {
@@ -197,7 +196,9 @@ public class WeatherFragment extends TitleLayoutFragment{
 
                     String choosedCityName = getActivity().getIntent().getStringExtra("cityName");
                     fragments.add(WeatherDetailFragment.instance(choosedCityName, "", choosedCityCode));
-                    adapter.notifyDataSetChanged();
+                    adapter = new WeatherAdapter(getFragmentManager(), fragments);
+                    viewPager.setAdapter(adapter);
+//                    adapter.notifyDataSetChanged();
                     fragments.get(fragments.size() -1).loadData();
                     viewPager.setCurrentItem(fragments.size());
                     setTitleLayoutTitle(rootView, fragments.get(fragments.size() - 1).getTitle());
@@ -210,9 +211,24 @@ public class WeatherFragment extends TitleLayoutFragment{
             }
 
         }else if (isFromManageCityActivity) {
-            int position = getActivity().getIntent().getIntExtra("position", -1);
-            if (position != -1 && position < fragments.size()) {
-                viewPager.setCurrentItem(position);
+            Log.e("FromManageCityActivity", "true");
+            if (update) {
+                Log.e("update", "true");
+                int position = getActivity().getIntent().getIntExtra("del_position", -1);
+                Log.e("del_position", String.valueOf(position));
+                if (position != -1 && position < fragments.size()) {
+                    fragments.remove(position);
+                    adapter = new WeatherAdapter(getFragmentManager(), fragments);
+                    viewPager.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                    fragments.get(fragments.size() -1).loadData();
+                    viewPager.setCurrentItem(fragments.size());
+                }
+            }else {
+                int position = getActivity().getIntent().getIntExtra("position", -1);
+                if (position != -1 && position < fragments.size()) {
+                    viewPager.setCurrentItem(position);
+                }
             }
         }
         if (fragments.size() > 1) {
