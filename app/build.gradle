@@ -31,20 +31,19 @@ dependencies {
     compile('com.githang:viewpagerindicator:2.4.2@aar') {
         exclude module: 'support-v4'
     }
-
     compile(project(':library-UltraPullToRefresh')) {
         exclude module: 'support-v4'
     }
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
-
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
-
     compile files('../libs/gson-2.3.1.jar')
     compile files('libs/baidumapapi_v3_5_0.jar')
     compile files('libs/locSDK_6.23.jar')
     compile files('../libs/okhttp-3.2.0.jar')
     compile files('../libs/okio-1.7.0.jar')
+    compile files('../libs/umeng_social_sdk.jar')
+
 
     //内存泄漏检测
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'

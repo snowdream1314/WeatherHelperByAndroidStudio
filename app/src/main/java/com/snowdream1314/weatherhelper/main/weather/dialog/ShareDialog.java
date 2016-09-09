@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -55,6 +56,21 @@ public class ShareDialog extends Dialog{
         gridView = (GridView) view.findViewById(R.id.gv_share_opts);
         gridViewAdapter = new GridViewAdapter(mContext, shareOpts);
         gridView.setAdapter(gridViewAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0://微信
+                        break;
+                    case 1://朋友圈
+                        break;
+                    case 2://QQ
+                        break;
+                    case 3://sina
+                        break;
+                }
+            }
+        });
 
         dialog.setContentView(view);
         dialog.show();
