@@ -35,7 +35,7 @@ import java.io.InputStream;
  */
 public class WeatherDetailFragment extends PullRequestMoreFragment implements WHRequest.WHRequestDelegate{
 
-    private View rootView;
+//    private View rootView;
     private CoolWeatherDB coolWeatherDB;
 
     private boolean initial = false;
@@ -43,7 +43,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
     private RespWeather weather;
 
     private TextView weatherTextView, tempTextView, windLevelTextView, humidityTextView, todayAQITextView, todayTempTextView, todayWeatherTextView,
-                        tomorrowAQITextView, tomorrowTempTextView, tomorrowWeatherTextView, zhishuNameTextView, zhishuDatailTextView;
+                        tomorrowAQITextView, tomorrowTempTextView, tomorrowWeatherTextView, zhishuNameTextView, zhishuDetailTextView;
     private ImageView windImageView,todayWeatherImageView, tomorrowWeatherImageView, humidityImageView;
 
     private LinearLayout weatherLinearLayout, zhishuLinearLayout, weatherDetailLinearLayout;
@@ -75,51 +75,64 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         // Inflate the layout for this fragment
         Log.e("detailfragment-->", "onCreateView");
 
-        rootView = inflater.inflate(R.layout.weather_detail_layout, null);
         coolWeatherDB = CoolWeatherDB.getInstance(getContext());
 
-        initViews();
-        initViewsData();
-        initZhishuAnimation();
-        initWeatherDetailAnimation();
+        View view = inflater.inflate(R.layout.weather_detail_layout, null);
+
+        weatherTextView = (TextView) view.findViewById(R.id.tv_weather);
+        tempTextView = (TextView) view.findViewById(R.id.tv_temp);
+        windLevelTextView = (TextView) view.findViewById(R.id.tv_trend_wind_level);
+        humidityTextView = (TextView) view.findViewById(R.id.tv_humidity);
+        humidityImageView = (ImageView) view.findViewById(R.id.iv_humidity);
+        todayAQITextView = (TextView) view.findViewById(R.id.tv_today_aqi);
+        todayTempTextView = (TextView) view.findViewById(R.id.tv_today_temp);
+        todayWeatherTextView = (TextView) view.findViewById(R.id.tv_today_weather);
+        tomorrowTempTextView = (TextView) view.findViewById(R.id.tv_tomorrow_temp);
+        tomorrowWeatherTextView = (TextView) view.findViewById(R.id.tv_tomorrow_weather);
+        weatherLinearLayout = (LinearLayout) view.findViewById(R.id.ll_weather_layout);
+        weatherDetailLinearLayout = (LinearLayout) view.findViewById(R.id.ll_weather_detail);
+        zhishuLinearLayout = (LinearLayout) view.findViewById(R.id.ll_zhishu);
+        zhishuDetailTextView = (TextView) view.findViewById(R.id.tv_zhishu_detail);
+        zhishuNameTextView = (TextView) view.findViewById(R.id.tv_zhishu_title);
+
+        windImageView = (ImageView) view.findViewById(R.id.iv_trend_wind);
+        todayWeatherImageView = (ImageView) view.findViewById(R.id.iv_today_weather);
+        tomorrowWeatherImageView = (ImageView) view.findViewById(R.id.iv_tomorrow_weather);
+
+        loadData();
 
         //下拉刷新
-        initRefreshLayout(rootView);
+        initRefreshLayout(view);
 
-        ViewGroup parent = (ViewGroup) rootView.getParent();
-        if (parent != null) {
-            parent.removeView(rootView);
-        }
 
-        return rootView;
+        return view;
     }
 
     private void initViews() {
 
-        Log.i("detail_fragment", "initView");
+        Log.e("detail_fragment", "initView");
 
-        weatherTextView = (TextView) rootView.findViewById(R.id.tv_weather);
-        tempTextView = (TextView) rootView.findViewById(R.id.tv_temp);
-        windLevelTextView = (TextView) rootView.findViewById(R.id.tv_trend_wind_level);
-        humidityTextView = (TextView) rootView.findViewById(R.id.tv_humidity);
-        humidityImageView = (ImageView) rootView.findViewById(R.id.iv_humidity);
-        todayAQITextView = (TextView) rootView.findViewById(R.id.tv_today_aqi);
-        todayTempTextView = (TextView) rootView.findViewById(R.id.tv_today_temp);
-        todayWeatherTextView = (TextView) rootView.findViewById(R.id.tv_today_weather);
-        tomorrowTempTextView = (TextView) rootView.findViewById(R.id.tv_tomorrow_temp);
-        tomorrowWeatherTextView = (TextView) rootView.findViewById(R.id.tv_tomorrow_weather);
-        weatherLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_weather_layout);
-        weatherDetailLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_weather_detail);
-        zhishuLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_zhishu);
-        zhishuDatailTextView = (TextView) rootView.findViewById(R.id.tv_zhishu_detail);
-        zhishuNameTextView = (TextView) rootView.findViewById(R.id.tv_zhishu_title);
-
-        windImageView = (ImageView) rootView.findViewById(R.id.iv_trend_wind);
-        todayWeatherImageView = (ImageView) rootView.findViewById(R.id.iv_today_weather);
-        tomorrowWeatherImageView = (ImageView) rootView.findViewById(R.id.iv_tomorrow_weather);
+//        weatherTextView = (TextView) rootView.findViewById(R.id.tv_weather);
+//        tempTextView = (TextView) rootView.findViewById(R.id.tv_temp);
+//        windLevelTextView = (TextView) rootView.findViewById(R.id.tv_trend_wind_level);
+//        humidityTextView = (TextView) rootView.findViewById(R.id.tv_humidity);
+//        humidityImageView = (ImageView) rootView.findViewById(R.id.iv_humidity);
+//        todayAQITextView = (TextView) rootView.findViewById(R.id.tv_today_aqi);
+//        todayTempTextView = (TextView) rootView.findViewById(R.id.tv_today_temp);
+//        todayWeatherTextView = (TextView) rootView.findViewById(R.id.tv_today_weather);
+//        tomorrowTempTextView = (TextView) rootView.findViewById(R.id.tv_tomorrow_temp);
+//        tomorrowWeatherTextView = (TextView) rootView.findViewById(R.id.tv_tomorrow_weather);
+//        weatherLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_weather_layout);
+//        weatherDetailLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_weather_detail);
+//        zhishuLinearLayout = (LinearLayout) rootView.findViewById(R.id.ll_zhishu);
+//        zhishuDatailTextView = (TextView) rootView.findViewById(R.id.tv_zhishu_detail);
+//        zhishuNameTextView = (TextView) rootView.findViewById(R.id.tv_zhishu_title);
+//
+//        windImageView = (ImageView) rootView.findViewById(R.id.iv_trend_wind);
+//        todayWeatherImageView = (ImageView) rootView.findViewById(R.id.iv_today_weather);
+//        tomorrowWeatherImageView = (ImageView) rootView.findViewById(R.id.iv_tomorrow_weather);
 
     }
-
 
     public void loadData() {
         if (!isLoading) {
@@ -154,7 +167,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
     public void  requestFail(WHRequest req, String message) {
         isLoading = false;
         setRefreshing(false);
-        Log.i("requestFail", message);
+        Log.e("requestFail", message);
     }
 
 
@@ -177,7 +190,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
         if (weather.getForecastWeathers().get(1).getDays().get(0).getType().equals(weather.getForecastWeathers().get(1).getDays().get(1).getType())) {
             tomorrowWeatherTextView.setText(weather.getForecastWeathers().get(1).getDays().get(0).getType());
         }else {
-            tomorrowWeatherTextView.setText(weather.getForecastWeathers().get(1).getDays().get(0).getType() + "转" + weather.getForecastWeathers().get(1).getDays().get(1).getType());
+            tomorrowWeatherTextView.setText(weather.getForecastWeathers().get(1).getDays().get(0).getType());
         }
         tomorrowTempTextView.setText(weather.getForecastWeathers().get(1).getHigh().replace("高温","").replace("℃","") + " / " + weather.getForecastWeathers().get(1).getLow().replace("低温",""));
 
@@ -224,7 +237,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
     }
 
     private void saveCity() {
-
+        Log.e("detail_fragment", "savecity");
         ChoosedCity choosedCity = new ChoosedCity();
         choosedCity.setTempLow(weather.getForecastWeathers().get(0).getLow().replace("低温",""));
         choosedCity.setTempHigh(weather.getForecastWeathers().get(0).getHigh().replace("高温",""));
@@ -259,7 +272,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
             ZhishuToDark.setRepeatCount(0);//动画重复次数
 
             zhishuNameTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getName() + "：" + weather.getZhishus().get(zhishuAnimationCount).getValue());
-            zhishuDatailTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getDetail());
+            zhishuDetailTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getDetail());
             zhishuLinearLayout.setAnimation(ZhishuToLight);
 
             ZhishuToLight.start();
@@ -275,7 +288,7 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
                     if (zhishuAnimationCount == 11) zhishuAnimationCount = 0;
                     zhishuLinearLayout.setAnimation(ZhishuToDark);
                     zhishuNameTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getName() + "：" + weather.getZhishus().get(zhishuAnimationCount).getValue());
-                    zhishuDatailTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getDetail());
+                    zhishuDetailTextView.setText(weather.getZhishus().get(zhishuAnimationCount).getDetail());
                     ZhishuToDark.startNow();
                 }
 
@@ -397,6 +410,8 @@ public class WeatherDetailFragment extends PullRequestMoreFragment implements WH
     public String getSubTitle() {
         return subTitle;
     }
+
+    public String getCityCode() { return cityCode; }
 
     @Override
     public void onResume() {

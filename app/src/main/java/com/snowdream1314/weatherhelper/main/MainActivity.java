@@ -87,6 +87,9 @@ public class MainActivity extends FragmentActivity {
     public void onResume() {
         super.onResume();
         Log.e("mainactivity:","resume");
+        if (getIntent().getBooleanExtra("exit", false)) {
+            finish();
+        }
 
 //        onResumeCalled = true;
 
@@ -166,7 +169,7 @@ public class MainActivity extends FragmentActivity {
         if (resultCode == Activity.RESULT_OK) {
             Intent intent = new Intent();
             intent.putExtra("update", true);
-            intent.putExtra("del_position", data.getIntExtra("del_position", -1));
+//            intent.putExtra("del_position", data.getIntExtra("del_position", -1));
             intent.putExtra("isFromManageCityActivity", true);
             getIntent().putExtras(intent);
         }

@@ -174,11 +174,11 @@ public class ManageCityActivity extends TitleLayoutActivity {
                         choosedCities.remove(position);
                         coolWeatherDB.delChoosedCity(choosedCity);
                         adapter.notifyDataSetChanged();
-                        Intent intent = new Intent();
-                        intent.putExtra("del_position", position);
-                        Log.e("del_position", String.valueOf(position));
-                        intent.putExtra("isFromManageCityActivity", true);
-                        setResult(Activity.RESULT_OK, intent);
+//                        Intent intent = new Intent();
+//                        intent.putExtra("del_position", position);
+//                        Log.e("del_position", String.valueOf(position));
+//                        intent.putExtra("isFromManageCityActivity", true);
+                        setResult(Activity.RESULT_OK);
                     }
                 });
             }

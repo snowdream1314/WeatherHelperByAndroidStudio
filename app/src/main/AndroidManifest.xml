@@ -40,7 +40,8 @@
 
         <activity android:name=".main.managecity.ManageCityActivity" />
         <activity android:name=".main.usercenter.setting.UserCenterSettingActivity" />
-        <activity android:name=".main.managecity.AddCityActivity"></activity>
+        <activity android:name=".main.managecity.AddCityActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
 
 
         <service

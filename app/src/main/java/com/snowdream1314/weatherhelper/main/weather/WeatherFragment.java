@@ -25,6 +25,7 @@ import com.snowdream1314.weatherhelper.bean.ChoosedCity;
 import com.snowdream1314.weatherhelper.constant.WHConstant;
 import com.snowdream1314.weatherhelper.main.managecity.AddCityActivity;
 import com.snowdream1314.weatherhelper.main.managecity.ManageCityActivity;
+import com.snowdream1314.weatherhelper.main.weather.dialog.ShareDialog;
 import com.snowdream1314.weatherhelper.main.weather.weather_detail.WeatherDetailFragment;
 import com.snowdream1314.weatherhelper.util.AppUtil;
 import com.snowdream1314.weatherhelper.util.CoolWeatherDB;
@@ -105,8 +106,6 @@ public class WeatherFragment extends TitleLayoutFragment{
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_weather, null);
 
-            View view = rootView;
-
             showLeftButton(rootView, clickListener);
             showShareButton(rootView, clickListener);
             showFeedsButton(rootView, clickListener);
@@ -138,9 +137,8 @@ public class WeatherFragment extends TitleLayoutFragment{
 
             fragments.clear();
             for (ChoosedCity choosedCity : choosedCities) {
-
                 String choosedCityName = choosedCity.getName();
-                String choosedCitySubName = choosedCity.getSubName();
+                String choosedCitySubName =choosedCity.getSubName();
                 String choosedCityCode = choosedCity.getCode();
                 fragments.add(WeatherDetailFragment.instance(choosedCityName, choosedCitySubName, choosedCityCode));
             }
@@ -171,10 +169,14 @@ public class WeatherFragment extends TitleLayoutFragment{
         super.onResume();
         Log.e("WeatherFragment-->", "onResume");
         update = getActivity().getIntent().getBooleanExtra("update", false);
-        isFromAddCityActivity = getActivity().getIntent().getBooleanExtra("isFromAddCityActivity", false);
-        isFromManageCityActivity = getActivity().getIntent().getBooleanExtra("isFromManageCityActivity", false);
-        if (isFromManageCityActivity || isFromAddCityActivity || update) {
-            updateData();
+        if (update) {
+            initData();
+        }else {
+            isFromAddCityActivity = getActivity().getIntent().getBooleanExtra("isFromAddCityActivity", false);
+            isFromManageCityActivity = getActivity().getIntent().getBooleanExtra("isFromManageCityActivity", false);
+            if (isFromManageCityActivity || isFromAddCityActivity || update) {
+                updateData();
+            }
         }
     }
 
@@ -198,8 +200,7 @@ public class WeatherFragment extends TitleLayoutFragment{
                     fragments.add(WeatherDetailFragment.instance(choosedCityName, "", choosedCityCode));
                     adapter = new WeatherAdapter(getFragmentManager(), fragments);
                     viewPager.setAdapter(adapter);
-//                    adapter.notifyDataSetChanged();
-                    fragments.get(fragments.size() -1).loadData();
+                    adapter.notifyDataSetChanged();
                     viewPager.setCurrentItem(fragments.size());
                     setTitleLayoutTitle(rootView, fragments.get(fragments.size() - 1).getTitle());
                     if ("".equals(fragments.get(fragments.size() - 1).getSubTitle())) {
@@ -212,24 +213,10 @@ public class WeatherFragment extends TitleLayoutFragment{
 
         }else if (isFromManageCityActivity) {
             Log.e("FromManageCityActivity", "true");
-            if (update) {
-                Log.e("update", "true");
-                int position = getActivity().getIntent().getIntExtra("del_position", -1);
-                Log.e("del_position", String.valueOf(position));
-                if (position != -1 && position < fragments.size()) {
-                    fragments.remove(position);
-                    adapter = new WeatherAdapter(getFragmentManager(), fragments);
-                    viewPager.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                    fragments.get(fragments.size() -1).loadData();
-                    viewPager.setCurrentItem(fragments.size());
-                }
-            }else {
                 int position = getActivity().getIntent().getIntExtra("position", -1);
                 if (position != -1 && position < fragments.size()) {
                     viewPager.setCurrentItem(position);
                 }
-            }
         }
         if (fragments.size() > 1) {
             showCirclePageIndicator(rootView);
@@ -335,6 +322,8 @@ public class WeatherFragment extends TitleLayoutFragment{
                     showCirclePageIndicator(rootView);
                     circlePageIndicator.setViewPager(viewPager);
                 }
+                adapter = new WeatherAdapter(getFragmentManager(), fragments);
+                viewPager.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
                 viewPager.setCurrentItem(fragments.size() - 1);
             }
@@ -355,7 +344,7 @@ public class WeatherFragment extends TitleLayoutFragment{
     private View.OnClickListener clickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.i("click", "click");
+            Log.e("click", "click");
             switch (v.getId()) {
                 case R.id.ib_left://城市管理
                     Intent cityManageIntent = new Intent(getActivity(), ManageCityActivity.class);
@@ -364,6 +353,7 @@ public class WeatherFragment extends TitleLayoutFragment{
                 case R.id.ib_feeds://消息
                     break;
                 case R.id.ib_share://分享
+                    new ShareDialog(getContext());
                     break;
             }
         }

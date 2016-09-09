@@ -58,6 +58,8 @@ public class AddCityActivity extends TitleLayoutActivity{
     private List<City> hotCities = new ArrayList<City>();
     private GridViewAdapter adapter;
 
+    private List<ChoosedCity> choosedCities = new ArrayList<ChoosedCity>();
+
     private EditText searchEditText;
     private CoolWeatherDB coolWeatherDB;
     private List<City> cities = new ArrayList<City>();
@@ -115,18 +117,6 @@ public class AddCityActivity extends TitleLayoutActivity{
                 searchCities();
             }
         });
-        searchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    searchString = searchEditText.getText().toString().trim();
-                    searchCities();
-                }
-                return false;
-            }
-        });
-
 
         initData();
 
@@ -294,7 +284,15 @@ public class AddCityActivity extends TitleLayoutActivity{
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.iv_close:
-                    finish();
+                    choosedCities = coolWeatherDB.loadChoosedCity();
+                    if (choosedCities.size() == 0) {
+                        Intent intent = new Intent(AddCityActivity.this, MainActivity.class);
+                        intent.putExtra("exit", true);
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        finish();
+                    }
                     break;
                 case R.id.ib_search:
                     searchImageButton.setVisibility(View.GONE);
@@ -329,4 +327,23 @@ public class AddCityActivity extends TitleLayoutActivity{
             }
         }
     };
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            choosedCities = coolWeatherDB.loadChoosedCity();
+            if (choosedCities.size() == 0) {
+                Intent intent = new Intent(AddCityActivity.this, MainActivity.class);
+                intent.putExtra("exit", true);
+                startActivity(intent);
+                finish();
+            }else {
+                finish();
+            }
+
+            return false;
+        }
+        return super.onKeyUp(keyCode, event);
+    }
 }
