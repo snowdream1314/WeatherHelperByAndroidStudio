@@ -353,7 +353,7 @@ public class WeatherFragment extends TitleLayoutFragment{
                 case R.id.ib_feeds://消息
                     break;
                 case R.id.ib_share://分享
-                    new ShareDialog(getContext());
+                    new ShareDialog(getActivity());
                     break;
             }
         }

@@ -17,6 +17,8 @@ public class WHConstant {
     public static final String Weather_Mini_Url = "http://wthrcdn.etouch.cn/weather_mini";
     public static final String Weather_APi = "http://wthrcdn.etouch.cn/WeatherApi";
 
+    public static final String Share_Url = "";
+
 
     public static final String SharePreference_ShortcutCreated = "share_preference_shortcut_created";
 

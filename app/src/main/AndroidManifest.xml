@@ -76,7 +76,7 @@
             android:excludeFromRecents="true"/>
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="4eaee02c527015373b000003" >
+            android:value="57d3a6efe0f55a3f3a001702" >
         </meta-data>
         //微信
         <activity
