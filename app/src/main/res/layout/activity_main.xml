@@ -4,8 +4,6 @@
     android:id="@+id/tabhost"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fitsSystemWindows="false"
-    android:clipToPadding="true"
     >
 
     <!-- 选用LinearLayout布局以及设置 FrameLayout的属性layout_height="0dp"、

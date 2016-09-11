@@ -48,7 +48,7 @@ public class ManageCityActivity extends TitleLayoutActivity {
         super.onCreate(savedInstanceState);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //透明状态栏
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             //透明导航栏
 //            getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
@@ -60,8 +60,7 @@ public class ManageCityActivity extends TitleLayoutActivity {
         showBackButton(null);
         showShareButton(null, R.mipmap.add_normal, clickListener);
         showFeedsButton(null, R.mipmap.edit, clickListener);
-        setTitleLayoutParams(null, Color.parseColor("#FF996699"), AppUtil.getStatusHeight(ManageCityActivity.this));
-        setTitleActionBar(null, Color.parseColor("#FF996699"), AppUtil.getStatusHeight(ManageCityActivity.this));
+        setTitleLayoutParams(null, Color.parseColor("#FF996699"), 0);
 
         initDatas();
 

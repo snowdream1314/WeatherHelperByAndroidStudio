@@ -109,8 +109,7 @@ public class WeatherFragment extends TitleLayoutFragment{
             showLeftButton(rootView, clickListener);
             showShareButton(rootView, clickListener);
             showFeedsButton(rootView, clickListener);
-            setTitleLayoutParams(rootView, 0, AppUtil.getStatusHeight(getContext()));
-            setTitleActionBar(rootView, 0, AppUtil.getStatusHeight(getContext()));
+            setTitleLayoutParams(rootView, 0, 0);
 
             viewPager = (ViewPager) rootView.findViewById(R.id.vp_weather);
 

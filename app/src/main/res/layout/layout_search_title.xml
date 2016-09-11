@@ -3,8 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="160dp"
     android:background="@mipmap/search_city_bg"
-    android:fitsSystemWindows="true"
-    android:clipToPadding="true"
     >
 
     <ImageView
@@ -13,7 +11,7 @@
         android:layout_height="20dp"
         android:src="@mipmap/search_tag_close"
         android:layout_marginLeft="12dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:layout_marginStart="12dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
